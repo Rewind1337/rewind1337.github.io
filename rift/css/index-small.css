@@ -1,0 +1,127 @@
+/*  CSS written by Nicolai Krechel @ Rewind1337@hotmail.com, 2020
+		using Bootstrap 4 */
+/*  Since this is for a a smaller screensize, its a much different layout and i need to improvise,
+		all Rows are equally-sized and behave as if they were one panel. Switching trough the sidebar on the left. */
+
+@media (max-width: 767.98px) {
+	/* Modals */
+	.modal- {
+		position: absolute;
+		z-index: 1010;
+		top: 0px;
+		left: 0px;
+		right: 0px;
+		bottom: 0px;
+		height: auto;
+		background-color: rgba(0, 0, 0, 0.433);
+		border: 1px solid white;
+	}
+	#modal-saveload {
+		position: absolute;
+		z-index: 1005;
+		top: 0px;
+		left: 0px;
+		right: 0px;
+		bottom: 0px;
+	}
+	#modal-save, #modal-load, #modal-progress, #modal-settings, #modal-changelog {
+		position: absolute;
+		z-index: 1005;
+		top: 10px;
+		left: 10px;
+		right: 10px;
+		background-color: rgba(0, 0, 0, 1);	
+		border: 1px solid white;
+	}
+	.-modal-header {text-align: left;border-bottom: 1px solid white;}
+	.-modal-header-text {color: white;font-size: 3vw;margin-left: 1.4vw;}
+	.-modal-content {text-align: center;border-bottom: 1px solid white;}
+	.-modal-content-field {width: 80%;height: 15vw;text-align: center;font-size: 12px;line-height: 16px;}
+	h3.-modal-content-text {color: white;font-size: calc(5px + 1.8vw);}
+	h4.-modal-content-text {color: white;font-size: calc(5px + 1.35vw);}
+	.-modal-footer {text-align: right;color: white;}
+	.button-modal {line-height: 4vw;font-size: 1.5vw;}
+	/* Min Cap on Screenwidth */
+	html, body {min-width: 480px; overflow-y: hidden;}
+	/* Unneeded Buttons on Mobile, aswell as resizing the needed ones */
+	.mobile-hide {display: none;}
+	.mobile-show {display: block;}
+	.show-extrasmall {display: none;}
+	.hide-extrasmall {display: block;}
+	.button-title {flex-basis: 100%; max-width: 100%; line-height: 36px; font-size: 26px;}
+	/* The Body */
+	#mainContainer {padding: 0px !important;}
+	/* Different Rows */
+	.row-top > .col > * {height: calc(100vh - 34px);}
+	.row-mid > .col > * {height: calc(100vh - 34px);}
+	.row-bot > .col > * {height: auto;}
+	/* ALL Columns */
+	#mainContainer > .row-top > div{display: none; flex-basis: 100%; max-width: 100%;}
+	#mainContainer > .row-mid > div{display: none; flex-basis: 100%; max-width: 100%;}
+	#clicker {display: block !important;}
+	/* Enabling Log Button on bottom toolbar */
+	#toolbar-log-button {display: block;}
+	.medium-show {display: hide;}
+	.mobile-show.medium-show {display: show};
+	/* Bottom-Row Toolbar */
+	.row-bot {
+		position: absolute;
+		bottom: -66px;
+		height: 66px;
+		left: 0px;
+		right: 0px;
+		min-width: 480px;
+	}
+	#bottom-toolbar > .col-1 {
+		flex-basis: 25%; max-width: 25%;
+	}
+	/* Left-Hand Quickbar */
+	#mobile-toolbar {
+		display: block;
+		position: absolute;
+		top: 0px;
+		width: 158px;
+		margin: auto;
+		border: 1px solid white;
+		z-index: 1000;
+	}
+	/* list group item overwrite */
+	#mobile-toolbar > ul > li{
+		padding: 0px !important;
+		margin: 0px !important;
+		border-radius: 0px;
+		border: none;
+	}
+	/* Most Text on the UI */
+	.stats-, .population-, .resource-, .building- {
+		padding: 0;
+		margin: 0;
+		line-height: 20px;
+		font-size: 16px;
+		color: white;
+	}
+	/* Quickbar Buttons */
+	.button-mobile-toolbar {
+		line-height: 20px;
+		font-size: 16px;
+		border: 1px solid white;
+		padding: 2px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		border: none;
+	}
+	/* Quickbar Toggle Button */
+	.button-mobile-toolbar-showhide {
+		font-size: 18px;
+		line-height: 35.5px;
+		border: none;
+	}
+	/* Buttons at the bottom of the Screen */
+	.button-toolbar {
+		font-size: 18px;
+		line-height: 18px;
+		padding: 2px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+}

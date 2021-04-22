@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=1" />
+    <link rel="icon" href="./img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/index.min.css" />
+    <link rel="stylesheet" href="./css/textgradients.min.css" />
+  </head>
+
+  <body>
+    <!-- Container -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col col-8">
+          <span class="gradient gradient-animated" id="textgradient-title">textgradients.css</span><br/>
+          <span class="gradient gradient-animated">A lightweight, bootstrap-esque Look and Feel for Buttons</span>
+          <div class="btn btn-gradient" id="btn-editable">
+            <span class="gradient gradient-orange" contenteditable="true">Edit Me!</span>
+          </div>
+          <hr />
+          <div class="section">
+            <h4 class="gradient gradient-animated">gradients / colors</h4>
+            <div class="btn btn-dark-gray btn-preview">
+              <span class="gradient gradient-orange">orange</span>
+            </div>
+            <div class="btn btn-dark-gray btn-preview">
+              <span class="gradient gradient-blue">blue</span>
+            </div>
+            <div class="btn btn-dark-gray btn-preview">
+              <span class="gradient gradient-green">green</span>
+            </div>
+            <div class="btn btn-dark-gray btn-preview">
+              <span class="gradient gradient-pink">pink</span>
+            </div>
+            <div class="btn btn-dark-gray btn-preview">
+              <span class="gradient gradient-animated">animated</span>
+            </div>
+            <div class="btn btn-dark-gray btn-preview">
+              <span class="gradient gradient-white">white</span>
+            </div>
+            <div class="btn btn-dark-gray btn-preview">
+              <span class="gradient gradient-black">black</span>
+            </div>
+          </div>
+          <hr />
+          <div class="section">
+            <h4 class="gradient gradient-animated">buttons</h4>
+            <div class="btn btn-light-gray btn-preview">
+              <span class="gradient gradient-orange">light-gray</span>
+            </div>
+            <div class="btn btn-preview">
+              <span class="gradient gradient-orange">default</span>
+            </div>
+            <div class="btn btn-dark-gray btn-preview">
+              <span class="gradient gradient-orange">dark-gray</span>
+            </div>
+            <div class="btn btn-outline btn-preview">
+              <span class="gradient gradient-orange">outline</span>
+            </div>
+            <div class="btn btn-transparent btn-preview">
+              <span class="gradient gradient-orange">transparent</span>
+            </div>
+          </div>
+          <hr />
+          <div class="section">
+            <h4 class="gradient gradient-animated">full-color buttons</h4>
+            <div class="btn gradient-orange btn-preview">
+              <span class="gradient gradient-white">orange</span>
+            </div>
+            <div class="btn gradient-blue btn-preview">
+              <span class="gradient gradient-white">blue</span>
+            </div>
+            <div class="btn gradient-green btn-preview">
+              <span class="gradient gradient-black">green</span>
+            </div>
+            <div class="btn gradient-pink btn-preview">
+              <span class="gradient gradient-black">pink</span>
+            </div>
+            <div class="btn gradient-white btn-preview">
+              <span class="gradient gradient-black">white</span>
+            </div>
+            <div class="btn gradient-black btn-preview">
+              <span class="gradient gradient-white">black</span>
+            </div>
+          </div>
+          <hr />
+          <div class="section section-sizes">
+            <h4 class="gradient gradient-animated">sizes</h4>
+            <div class="btn btn-gradient btn-preview">
+              <span class="gradient gradient-orange">default</span>
+            </div>
+            <div class="btn btn-gradient btn-preview">
+              <span class="gradient gradient-sm gradient-orange">small</span>
+            </div>
+            <div class="btn btn-gradient btn-preview">
+              <span class="gradient gradient-lg gradient-orange">large</span>
+            </div>
+            <div class="btn btn-gradient btn-preview">
+              <span class="gradient gradient-xs gradient-orange">x-small</span>
+            </div>
+            <div class="btn btn-gradient btn-preview">
+              <span class="gradient gradient-xl gradient-orange">x-large</span>
+            </div>
+          </div>
+          <hr />
+          <div class="section">
+            <h4 class="gradient gradient-animated">border radius</h4>
+            <div class="btn btn-gradient btn-preview">
+              <span class="gradient gradient-orange">default</span>
+            </div>
+            <div class="btn btn-gradient border-sharp btn-preview">
+              <span class="gradient gradient-orange">sharp</span>
+            </div>
+            <div class="btn btn-gradient border-round btn-preview">
+              <span class="gradient gradient-orange">round</span>
+            </div>
+            <div class="btn btn-gradient border-tlbr btn-preview">
+              <span class="gradient gradient-orange">TLBR</span>
+            </div>
+            <div class="btn btn-gradient border-trbl btn-preview">
+              <span class="gradient gradient-orange">TRBL</span>
+            </div>
+            <div class="btn btn-gradient border-pill btn-preview">
+              <span class="gradient gradient-orange">pill</span>
+            </div>
+          </div>
+          <hr />
+          <div class="section">
+            <h4 class="gradient gradient-animated">text styles</h4>
+            <div class="btn btn-gradient btn-preview">
+              <span class="gradient gradient-orange">default</span>
+            </div>
+            <div class="btn btn-gradient btn-preview">
+              <span class="gradient uppercase gradient-orange">uppercase</span>
+            </div>
+            <div class="btn btn-gradient btn-preview">
+              <span class="gradient lowercase gradient-orange">lowercase</span>
+            </div>
+            <div class="btn btn-gradient btn-preview">
+              <span class="gradient monospace gradient-orange">monospace</span>
+            </div>
+            <div class="btn btn-gradient btn-preview">
+              <span class="gradient fullwidth gradient-orange">fullwidth</span>
+            </div>
+          </div>
+          <hr />
+        </div>
+        <div class="col col-4" style="text-align: center;">
+          <span class="h3 gradient gradient-animated">Click a Button to see the HTML Markup</span>
+          <hr />
+          <textarea id="output-html"></textarea>
+          <div class="btn btn-gradient" id="btn-liveedit"></div>
+          <hr/>
+          <span class="h3 gradient gradient-animated">Download the files here:</span>
+          <br />
+          <div class="text-left">
+            <span><a href="./css/textgradients.css" download><span class="gradient gradient-animated link monospace" id="file.css">textgradients.css</span></a><span></span> (5.77 KB)</span><br />
+            <span><a href="./css/textgradients.min.css" download><span class="gradient gradient-animated link monospace" id="file.min.css">textgradients.min.css</span></a><span></span> (4.23 KB)</span><br />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END Container -->
+  </body>
+
+  <script src="./src/jquery.min.js"></script>
+  <script src="./src/popper.min.js"></script>
+  <script src="./src/bootstrap.min.js"></script>
+  <script defer src="./src/main.js"></script>
+</html>

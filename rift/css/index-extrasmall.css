@@ -1,0 +1,40 @@
+/*  CSS written by Nicolai Krechel @ Rewind1337@hotmail.com, 2020
+		using Bootstrap 4 */
+/*  This just contains smaller changes like the Modal-placement and sizes. 
+																(as of 26.01) */
+
+@media (max-width: 479.997px) {
+	/* Modals */
+	#modal-saveload, #modal-save, #modal-load, #modal-progress, #modal-settings, #modal-changelog {
+		position: absolute;
+		z-index: 1005;
+		top: 0px !important;
+		left: 0px !important;
+		right: 0px !important;
+		bottom: 0px !important;
+		background-color: rgba(0, 0, 0, 1);	
+		border: 1px solid white;
+		min-width: 240px;
+	}
+	.-modal-header {text-align: center !important;}
+	.-modal-header-text {color: white;font-size: 26px !important;}
+	.-modal-content {text-align: center;border-bottom: 1px solid white;}
+	.-modal-content-field {width: 80%;height: 15vw;text-align: center;font-size: 12px;line-height: 16px;}
+	h3.-modal-content-text {color: white;font-size: 20px !important;}
+	h4.-modal-content-text {color: white;font-size: 17px !important;}
+	.-modal-footer {
+		position: absolute;
+		bottom: 0px;
+		left: 0px;
+		right: 0px;
+		z-index: 1015;
+		text-align: center;
+		color: white;
+	}
+	.button-modal {line-height: 50px !important; font-size: 35px !important;}
+	.medium-show {display: hide;}
+	.show-extrasmall {display: block !important;}
+	.hide-extrasmall {display: none !important;}
+	/* Min Cap on Screenwidth */
+	html, body {min-width: 385px !important; overflow-y: hidden;}
+}

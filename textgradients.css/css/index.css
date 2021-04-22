@@ -1,0 +1,135 @@
+/* Created by Nicolai Krechel, 2021, rewind1337.github.io */
+/*                           */
+/*      GENERAL MARKUP       */
+/*                           */
+* {font-family: "Work Sans", sans-serif !important;}
+.row, .section {display: flex; flex-direction: row; flex-wrap: wrap;}
+.section h4 {display: block; width: 100%;}
+.section-sizes {display: block;}
+span.h3 {display: block; width: 80%;}
+.col-8 {width: calc(100% / 1.5);}
+.col-4 {width: calc(100% / 3);}
+.col-8, .col-4 {overflow: auto;height: 98vh;}
+body, html {margin: 0 !important;padding: 0 !important;overflow: hidden;box-sizing: border-box !important;}
+.container-fluid {
+  margin: 0 !important;
+  padding: 16px !important;
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(70deg, #333 0%, #444 35%, #222 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+#btn-editable {
+  display: inline-block;
+  transform: translate(50px, -26.5px);
+  width: auto;
+}
+#btn-liveedit {
+  width: auto;
+  display: block;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  margin-left: 20%;
+}
+#output-html {
+  width: 95%;
+  margin-left: 1%;
+  height: 25vh;
+  margin-top: 12px;
+  font-family: "Courier New", Courier, monospace !important;
+  font-size: 16px;
+  border: 1px solid black;
+}
+span, a {
+  color: white;
+}
+.link {
+  text-decoration: none;
+}
+.link:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+#textgradient-title {
+  font-size: 2.6rem;
+  width: 50%;
+}
+.textgradient-sectiontitle {
+  font-size: 1.8rem;
+}
+
+/*                          */
+/*      OTHER MARKUP        */
+/*                          */
+
+hr {
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.4);
+}
+@font-face {
+  font-family: "Material Icons";
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/materialicons/v78/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format("woff2");
+}
+.material-icons {
+  font-family: "Material Icons";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* latin */
+@font-face {
+  font-family: "Work Sans";
+  font-style: normal;
+  font-weight: 300;
+  src: url(https://fonts.gstatic.com/s/worksans/v9/QGY_z_wNahGAdqQ43RhVcIgYT2Xz5u32KxfXBi8Jpg.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: "Work Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/worksans/v9/QGY_z_wNahGAdqQ43RhVcIgYT2Xz5u32K0nXBi8Jpg.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: "Work Sans";
+  font-style: normal;
+  font-weight: 500;
+  src: url(https://fonts.gstatic.com/s/worksans/v9/QGY_z_wNahGAdqQ43RhVcIgYT2Xz5u32K3vXBi8Jpg.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: "Work Sans";
+  font-style: normal;
+  font-weight: 600;
+  src: url(https://fonts.gstatic.com/s/worksans/v9/QGY_z_wNahGAdqQ43RhVcIgYT2Xz5u32K5fQBi8Jpg.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: "Work Sans";
+  font-style: normal;
+  font-weight: 700;
+  src: url(https://fonts.gstatic.com/s/worksans/v9/QGY_z_wNahGAdqQ43RhVcIgYT2Xz5u32K67QBi8Jpg.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}

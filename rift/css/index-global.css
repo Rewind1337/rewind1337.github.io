@@ -1,0 +1,231 @@
+/*  CSS written by Nicolai Krechel @ Rewind1337@hotmail.com, 2020
+		using Bootstrap 4 */
+
+#modal-saveload {display: none;}
+#modal-saveload > * {display: none;}
+
+/* General Looks */
+.progress-bar {box-shadow: 0px 0px 3px white !important; border-right: 1px solid black !important;}
+* { box-sizing: border-box;}
+#mainContainer {width: 100%; touch-action: manipulation;}
+#clickerNoGraphics {display: none;}
+html, body {background-color: rgb(30, 30, 30) !important; touch-action: manipulation;}
+.progress {margin: 4px;}
+.progress-bar {padding: 0px; margin: 0px; border-radius: inherit;}
+.col, .row { margin: 0px !important; padding: 0px !important; background-color: inherit !important;}
+
+.row-top > .col > .bordered {display: none;}
+.row-mid > .col > .bordered {display: none;}
+#bottom-toolbar {display: none;}
+
+.hide-large {display: show;}
+
+#clicker {padding-right: 1px;}
+
+/* Log Buttons */
+.log-toggle.log-active {background-color: rgb(60, 160, 60);font-size: 14px !important; color: white; text-shadow: none;}
+.log-toggle:not(.log-active) {background-color: rgb(100, 20, 20);font-size: 14px !important; color: white; text-shadow: none;}
+
+/* Log Entries */
+.log-entry {line-height: 14px !important;padding: 2px !important;margin: 1px; margin-top: 2px;margin-bottom: 3.5px;font-size: 12px !important;font: monospace !important;}
+
+.log-story {background: -moz-linear-gradient(-45deg, #feffff 0%, #ddf1f9 30%, #a0d8ef 100%) !important; border: 1px solid white !important; text-shadow: 1px 1px 1px white !important;}
+.log-resource {background: -moz-linear-gradient(-45deg, #feffff 0%, #e3ffe2 30%, #b3ffaa 100%) !important; border: 1px solid purple !important; text-shadow: 1px 1px 1px white !important; color: rgb(50, 0, 50);}
+.log-combat {background: -moz-linear-gradient(-45deg, #feffff 0%, #ffe2e2 30%, #ffaaaa 100%) !important; border: 1px solid red !important; text-shadow: 1px 1px 1px white !important; color: rgb(50, 0, 0);}
+.log-upgrade {background: -moz-linear-gradient(-45deg, #feffff 0%, #fdffe2 30%, #f7ffaa 100%) !important; border: 1px solid yellow !important; text-shadow: 1px 1px 1px white !important; color: rgb(50, 50, 0);}
+.log-other {background-color: rgb(255, 255, 255) !important; border: 1px solid white !important; text-shadow: 1px 1px 1px white !important; color: rgb(0, 0, 0);}
+
+/* Text Glow on Buttons */
+.-glow:active {color: rgb(0, 235, 255);text-shadow: 0px 0px 6px rgb(255, 255, 255);}
+.-glow:hover {color: rgb(0, 235, 255);}
+
+/* Buttons */
+#tab-buildings-button {background-color: rgb(0, 50, 0);}
+#tab-upgrades-button {background-color: rgb(50, 50, 0);}
+#tab-workers-button {background-color: rgb(0, 0, 50);}
+.stats- {transition: color 15s linear;}
+
+#tooltip {
+	display: none;
+	position: absolute;
+	text-align: center;
+	top: 0px;
+	left: 0px;
+	width: 310px;
+	border: 1px solid white;
+	background-color: rgb(20, 20, 20);
+	padding: 2px;
+	margin-left: 5px;
+	margin-top: 5px;
+	z-index: 1000;
+	color: white;
+	box-shadow: 0px 0px 6px 1px black;
+}
+#tooltip > div {padding: 6px;}
+.tooltip-title {
+	line-height: 1.2vw;
+	font-size: 1.4vw;
+}
+.tooltip-description {
+	line-height: 1.2vw;
+	font-size: 1.4vw;
+	font-weight: lighter;
+}
+.tooltip-extra {
+	line-height: 1vw;
+	font-size: 1vw;
+	font-weight: lighter;
+}
+
+/* Canvas */
+canvas {padding: 0px;margin: 0px;}
+
+/* Canvas Overlay (Text) */
+#canvasOverlay, .stats-overview {padding: 4px;position: relative;top: calc(-100% + 1.5rem);width: 100%;}
+#canvasOverlay > .row, #canvasOverlay > .row > .col {background-color: rgba(0, 0, 0, 0);}
+
+/* Alignment Helpers */
+.colLeft {text-align: left;color: white;}
+.colMiddle {text-align: middle;color: white;}
+.colRight {text-align: right;color: white;}
+.text-left {text-align: left; padding-left: 3px !important;}
+.text-right {text-align: right; padding-right: 3px !important;}
+
+/* Border Helper */
+.bordered {border: 1px solid rgb(255, 255, 255);}
+.medium-show {display: hide;}
+
+/* Noselect Helper */
+.noselect {-moz-user-select: none;-ms-user-select: none;user-select: none;}
+
+.bg-black {background-color: black;}
+.flexbox {display: flex;flex-direction: row;flex-wrap: wrap;scrollbar-color: white black;}
+.clicker-ng-padding {
+	padding: 4px !important;
+	padding-top: 0px !important;
+}
+/* Clearfix */
+.clearfix { overflow: auto; }
+.clearfix::after { content: ""; clear: both; display: table;}
+
+#riftButton {
+	margin-top: 2vw;
+	line-height: 3vw;
+}
+/* Generalized Button Looks */
+.button-MC {
+	background-color: black !important;
+}
+
+.button- {
+	margin: 1px;
+	cursor: pointer;
+	color: white;
+	text-shadow: 0px 0px 2px black;
+	text-align: center;
+	font-weight: normal;
+	border: 1px solid white;
+	background-color: black;
+
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.button-title {
+	cursor: default;
+}
+.button-title:active {
+	text-shadow: none;
+}
+textarea {
+	user-select: all;
+}
+.dropdown-menu, .dropdown-menu-right {
+	margin: 0px !important;
+	padding: 0px !important;
+	border: 1px solid white !important;
+	border-radius: 0px !important;
+	width: 20px !important;
+}
+.dropdown-menu > .button- {
+	border: none !important;
+	margin: 0px !important;
+	padding: 0px !important;
+	padding-top: 2px !important;
+	padding-bottom: 2px !important;
+	width: 100% !important;
+}
+
+.progress-list, .settings-list {
+	width: 50%;
+	margin: auto;
+	margin-top: 1vw;
+	margin-bottom: 0.85vw !important;
+	border-radius: 4px !important;
+}
+
+.progress-list-item, .settings-list-item {
+	margin: 2px !important;
+	padding: 0px !important;
+	border-radius: 4px !important;
+	color: white;
+	text-shadow: 0px 0px 1px black;
+}
+
+#clickerNoGraphics > .bordered {display: block;}
+
+.version-list {
+	display: flex;
+	max-height: 50vh;
+	overflow: auto;
+	padding: 8px;
+}
+
+.version-breakdown {
+	width: calc(50% - 32px);
+	float: left;
+	margin: 16px;
+	margin-top: 0px;
+	margin-bottom: 3px;
+	padding: 2px;
+	border: 1px solid white;
+	float: left;
+	max-height: 220px;
+	overflow: auto;
+}
+.version-name {
+	text-align: center;
+	font-size: 1.5vw;
+}
+.version-topic {
+	font-size: 1.2vw;
+	text-align: left;
+	text-indent: 1vw;
+	color: white;
+}
+.version-subtopic {
+	font-size: 1.05vw;
+	text-align: left;
+	text-indent: 2vw;
+	color: white;
+}
+.fff-border {border: 1px solid white;}
+.fff-sb {scrollbar-color: white black;}
+.v-c {
+	color: rgb(176,72,211);
+}
+.v-1-border {border: 1px solid rgb(176,72,211);}
+.v-1-sb {scrollbar-color: rgb(176,72,211) black;}
+.v-1 {
+	color: rgb(176,72,211);
+}
+.v-2-border {border: 1px solid rgb(72,176,211);}
+.v-2-sb {scrollbar-color: rgb(72,176,211) black;}
+.v-2 {
+	color: rgb(72,176,211);
+}
+.v-3-border {border: 1px solid rgb(211,176,72);}
+.v-3-sb {scrollbar-color: rgb(211,176,72) black;}
+.v-3 {
+	color: rgb(211,176,72);
+}

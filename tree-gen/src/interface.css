@@ -1,0 +1,30 @@
+.clearfix {overflow: auto;}
+.clearfix::after {content: "";clear: both;display: table;}
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* supported by Chrome and Opera */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0px;
+    padding: 0px;
+}
+
+html, body, canvas {
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    font-family: 'Slabo 27px', serif;
+    text-align: center;
+}
+
+canvas {
+    margin-top: 0.0%;
+    width: 800px;
+    height: 800px;
+    border: 1px solid black;
+}

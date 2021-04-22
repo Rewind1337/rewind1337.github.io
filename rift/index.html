@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<title>RIFT</title>
+	<link rel="stylesheet" href="./css/index-global.css">
+	<link rel="stylesheet" href="./css/index-extrasmall.css">
+	<link rel="stylesheet" href="./css/index-small.css">
+	<link rel="stylesheet" href="./css/index-medium.css">
+	<link rel="stylesheet" href="./css/index-large.css">
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<meta charset="utf-8">
+</head>
+<body>
+	<div class="container-fluid" id="mainContainer">
+		<div class="row row-top">
+			<div id="resources" class="col">
+				<div class="bordered">
+					<div class="row hide-extrasmall">
+						<div class="col col-1 button-showhide mobile-hide"><div id="tab-resources-showhide" class="button- button-ui -glow">-</div></div>
+						<div class="col"><div id="tab-resources-button" class="button- button-ui button-title -glow">Resources</div></div>
+					</div>
+					<div id="content-resources" class="flexbox">
+
+						<div class="resource" id="resource-energy">
+							<div class="row">
+								<div class="col col-5 text-left"><div class="resource- resource-name">Raw Energy</div></div>
+								<div class="col text-right"><div class="resource- resource-amount">0 / 1,000 K</div></div>
+							</div>
+							<div class="progress">
+								<div class="progress-bar" style="background-color: rgb(0, 255, 255)">
+									<div class="resource- resource-notification"></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="resource" id="resource-carbon">
+							<div class="row">
+								<div class="col col-5 text-left"><div class="resource- resource-name">Carbon</div></div>
+								<div class="col text-right"><div class="resource- resource-amount">0 / 100 | 0 /s</div></div>
+							</div>
+							<div class="progress">
+								<div class="progress-bar" style="background-color: rgb(100, 100, 100)">
+									<div class="resource- resource-notification"></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="resource" id="resource-oxygen">
+							<div class="row">
+								<div class="col col-5 text-left"><div class="resource- resource-name">Oxygen</div></div>
+								<div class="col text-right"><div class="resource- resource-amount">0 / 5,000 K | 0 /s</div></div>
+							</div>
+							<div class="progress">
+								<div class="progress-bar" style="background-color: rgb(200, 200, 255)">
+									<div class="resource- resource-notification"></div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="resource" id="resource-moonstone">
+							<div class="row">
+								<div class="col col-5 text-left"><div class="resource- resource-name">Moonstone</div></div>
+								<div class="col text-right"><div class="resource- resource-amount">0 | 0 /s</div></div>
+							</div>
+						</div>
+						
+						<div class="resource" id="resource-darkmatter">
+							<div class="row">
+								<div class="col col-5 text-left"><div class="resource- resource-name">Dark Matter</div></div>
+								<div class="col text-right"><div class="resource- resource-amount">0 | 0 /s</div></div>
+							</div>
+						</div>
+						
+						<div class="resource" id="resource-exoticmatter">
+							<div class="row">
+								<div class="col col-5 text-left"><div class="resource- resource-name">Exotic Matter</div></div>
+								<div class="col text-right"><div class="resource- resource-amount">0 | 0 /s</div></div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div id="clicker" class="col col-2">
+				<div class="bordered">
+					<div class="row hide-extrasmall">
+						<div class="col col-1 button-showhide mobile-hide"><div id="tab-rift-showhide" class="button- button-ui -glow">-</div></div>
+						<div class="col"><div id="tab-rift-button" class="button- button-ui button-title -glow">Energy Rift</div></div>
+					</div>
+					<div class="row"><div class="col"><div id="canvasAnchor"></div></div></div>
+					<div id="canvasOverlay">
+						<div class="row">
+							<div class="col colLeft">
+								<div class="stats-" id="stats-clickspersecond"></div>
+								<div class="stats-" id="stats-currentclicks"></div>
+								<div class="stats-" id="stats-multiplier"></div>
+							</div>
+							<div class="col colRight">
+								<div class="stats-" id="stats-burst"></div>
+								<div class="stats-" id="stats-noise"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="clickerNoGraphics" class="col col-2">
+				<div class="bordered">
+					<div class="row hide-extrasmall">
+						<div class="col col-1 button-showhide mobile-hide"><div id="tab-riftng-showhide" class="button- button-ui -glow">-</div></div>
+						<div class="col"><div id="tab-riftng-button" class="button- button-ui button-title -glow">Energy Rift</div></div>
+					</div>
+					<div class="row">
+						<div class="col col-5 colLeft clicker-ng-padding">
+							<div class="stats-" id="stats-ng-clickspersecond"></div>
+							<div class="stats-" id="stats-ng-energypersecond"></div>
+							<div class="stats-" id="stats-ng-currentclicks"></div>
+							<div class="stats-" id="stats-ng-multiplier"></div>
+						</div>
+						<div class="col">
+							<div id="riftButton" class="button- button-ui -glow">Click</div>
+						</div>
+						<div class="col col-5 colRight clicker-ng-padding">
+							<div class="stats-" id="stats-ng-burst"></div>
+							<div class="stats-" id="stats-ng-noise"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="population" class="col col-2">
+				<div class="bordered">
+					<div class="row hide-extrasmall">
+						<div class="col button-"><div id="tab-population-button" class="button-ui button-title -glow">Population</div></div>
+						<div class="col col-1 button- button-showhide mobile-hide"><div id="tab-population-showhide" class="button-ui -glow">-</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col text-center text-light">
+							<div class="population-" id="population-amount">0 / 0 | + 0.00 / min</div>
+							<div class="population-progress progress">
+								<div class="progress-bar bg-success">
+									<div id="population-notification"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="_log" class="col">
+				<div class="bordered">
+					<div class="row hide-extrasmall">
+						<div class="col button-"><div id="tab-log-button" class="button-ui button-title -glow">Log</div></div>
+						<div class="col col-1 button- button-showhide mobile-hide"><div id="tab-log-showhide" class="button-ui -glow">-</div></div>
+					</div>
+					<div class="row">
+						<div class="col"><div type="button" class="button- button-ui log-toggle log-active -glow">Story</div></div>
+						<div class="col"><div type="button" class="button- button-ui log-toggle log-active -glow">Resources</div></div>
+						<div class="col"><div type="button" class="button- button-ui log-toggle log-active -glow">Combat</div></div>
+						<div class="col"><div type="button" class="button- button-ui log-toggle log-active -glow">Upgrades</div></div>
+						<div class="col"><div type="button" class="button- button-ui log-toggle -glow">Other</div></div>
+					</div>
+					<ul class="list-group">
+						<li class="list-group-item log-entry log-story" style="margin-top: 0px;">00-00:00:00 | You're not sure where you are, or what you are. All you see is empty Space, and some kind of Light?</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="row row-mid">
+			<div id="purchases" class="col col-7">
+				<div class="bordered">
+					<div class="row hide-extrasmall">
+						<div class="col"><div id="tab-buildings-button" class="button- button-ui -glow" onclick="switchTab(event, 'purchases', 'buildings')">Buildings</div></div>
+						<div class="col"><div id="tab-upgrades-button" class="button- button-ui -glow" onclick="switchTab(event, 'purchases', 'upgrades')">Upgrades</div></div>
+						<div class="col"><div id="tab-workers-button" class="button- button-ui -glow" onclick="switchTab(event, 'purchases', 'workers')">Workers</div></div>
+						<div class="col col-2">
+							<div class="dropdown button- button-ui" style="height: calc(100% - 2px); margin: 0px; padding: 0px; border: none;">
+								<div id="multiselect-buyamount" type="button" class="dropdown-toggle button- button-ui -glow" style="width: calc(100% - 2px);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">x1</div>
+								<div class="dropdown-menu dropdown-menu-right button-s">
+									<div class="multiselect-button button- -glow">x1</div>
+									<div class="multiselect-button button- -glow">x10</div>
+									<div class="multiselect-button button- -glow">x100</div>
+									<div class="multiselect-button button- -glow">x1000</div>
+									<div class="multiselect-button button- -glow">SMART</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="content-buildings" class="flexbox">
+
+						<div class="building bordered" id="building-spacevacuum">
+							<div class="row ">
+								<div class="col col-10 text-center">
+									<div class="building- building-name">Space Vacuum</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="building- building-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- building-short-description">Generates Energy</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- button- button-building -glow -tooltip" data-type="building" data-index="0">Purchase</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="building bordered" id="building-energygun">
+							<div class="row ">
+								<div class="col col-10 text-center">
+									<div class="building- building-name">Energy Gun</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="building- building-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- building-short-description">Shoots the Rift</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- button- button-building -glow -tooltip" data-type="building" data-index="1">Purchase</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="building bordered" id="building-storagerift">
+							<div class="row ">
+								<div class="col col-10 text-center">
+									<div class="building- building-name">Storage Rift</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="building- building-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- building-short-description">Holds your Energy</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- button- button-building -glow -tooltip" data-type="building" data-index="2">Purchase</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="building bordered" id="building-energycondenser">
+							<div class="row ">
+								<div class="col col-10 text-center">
+									<div class="building- building-name">Energy Condenser</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="building- building-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- building-short-description">Creates Matter</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- button- button-building -glow -tooltip" data-type="building" data-index="3">Purchase</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="building bordered" id="building-carboncube">
+							<div class="row ">
+								<div class="col col-10 text-center">
+									<div class="building- building-name">Carbon Cube</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="building- building-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- building-short-description">Holds your Carbon</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- button- button-building -glow -tooltip" data-type="building" data-index="4">Purchase</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="building bordered" id="building-oxygentank">
+							<div class="row ">
+								<div class="col col-10 text-center">
+									<div class="building- building-name">Oxygen Tank</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="building- building-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- building-short-description">Holds your Oxygen</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- button- button-building -glow -tooltip" data-type="building" data-index="5">Purchase</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="building bordered" id="building-tribute">
+							<div class="row ">
+								<div class="col col-10 text-center">
+									<div class="building- building-name">Tribute</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="building- building-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- building-short-description">Increases Resource Gain</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="building- button- button-building -glow -tooltip" data-type="building" data-index="6">Purchase</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					<div id="content-workers" class="flexbox">
+						
+					</div>
+					<div id="content-upgrades" class="flexbox">
+
+						<div class="upgrade bordered" id="upgrade-">
+							<div class="row">
+								<div class="col col-10 text-center">
+									<div class="upgrade- upgrade-name">Better Vacuums</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="upgrade- upgrade-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="upgrade- button- button-upgrade -glow -tooltip" data-type="upgrade" data-index="0">Purchase</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="upgrade bordered" id="upgrade-">
+							<div class="row">
+								<div class="col col-10 text-center">
+									<div class="upgrade- upgrade-name">Faster Multiplier</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="upgrade- upgrade-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="upgrade- button- button-upgrade -glow -tooltip" data-type="upgrade" data-index="1">Purchase</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="upgrade bordered" id="upgrade-">
+							<div class="row">
+								<div class="col col-10 text-center">
+									<div class="upgrade- upgrade-name">Rift Stabilization</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="upgrade- upgrade-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="upgrade- button- button-upgrade -glow -tooltip" data-type="upgrade" data-index="2">Purchase</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="upgrade bordered" id="upgrade-">
+							<div class="row">
+								<div class="col col-10 text-center">
+									<div class="upgrade- upgrade-name">Improved Energy Gun</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="upgrade- upgrade-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="upgrade- button- button-upgrade -glow -tooltip" data-type="upgrade" data-index="3">Purchase</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="upgrade bordered" id="upgrade-">
+							<div class="row">
+								<div class="col col-10 text-center">
+									<div class="upgrade- upgrade-name">Faster Matter Creation</div>
+								</div>
+								<div class="col col-2 text-center">
+									<div class="upgrade- upgrade-amount">0</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">
+									<div class="upgrade- button- button-upgrade -glow -tooltip" data-type="upgrade" data-index="4">Purchase</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div id="activities" class="col col-5">
+				<div class="bordered">
+					<div class="row hide-extrasmall">
+						<div class="col">
+							<div id="tab-mattercondenser-button" class="button- button-ui -glow" onclick="switchTab(event, 'activities', 'mattercondenser')">Matter Condenser</div>
+						</div>
+						<div class="col">
+							<div id="tab-exploration-button" class="button- button-ui -glow" onclick="switchTab(event, 'activities', 'exploration')">Exploration</div>
+						</div>
+						<div class="col">
+							<div id="tab-warp-button" class="button- button-ui -glow" onclick="switchTab(event, 'activities', 'warp')">Warp</div>
+						</div>
+					</div>
+
+					<div id="content-mattercondenser" class="flexbox">
+
+						<div id="MC-carbon" class="MC bordered">
+							<div class="row">
+								<div class="col text-center">Carbon</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">75 Energy</div>
+							</div>
+							<div class="row">
+								<div class="col text-center MC-customamount button-MC button- -glow">1</div>
+								<div class="col text-center button-MC button- -glow">10%</div>
+								<div class="col text-center button-MC button- -glow">50%</div>
+								<div class="col text-center button-MC button- -glow">100%</div>
+							</div>
+						</div>
+
+						<div id="MC-oxygen" class="MC bordered">
+							<div class="row">
+								<div class="col text-center">Oxygen</div>
+							</div>
+							<div class="row">
+								<div class="col text-center">50 Energy</div>
+							</div>
+							<div class="row">
+								<div class="col text-center MC-customamount button-MC button- -glow">1</div>
+								<div class="col text-center button-MC button- -glow">10%</div>
+								<div class="col text-center button-MC button- -glow">50%</div>
+								<div class="col text-center button-MC button- -glow">100%</div>
+							</div>
+						</div>
+
+					</div>
+					<div id="content-exploration" class="flexbox">
+
+					</div>
+					<div id="content-warp" class="flexbox">
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="bottom-toolbar" class="row row-bot bordered">
+		<div class="col col-2">
+			<div id="toolbar-time-button" class="button- button-toolbar -glow">00-00:00:00</div>
+		</div>
+		<div class="col">
+			<div class="button- button-toolbar -glow">?</div>
+		</div>
+		<div class="col">
+			<div class="button- button-toolbar -glow">?</div>
+		</div>
+		<div class="col col-1 hide-large">
+			<div id="toolbar-log-button" class="button- button-toolbar -glow">Log</div>
+		</div>
+		<div class="col col-2">
+			<div id="toolbar-version-button" class="v-c button- button-toolbar -glow">Version 0</div>
+		</div>
+		<div class="col col-1">
+			<div id="toolbar-settings-button" class="button- button-toolbar -glow">Settings</div>
+		</div>
+		<div class="col col-1">
+			<div id="toolbar-save-button" class="button- button-toolbar -glow">Save</div>
+		</div>
+		<div class="col col-1">
+			<div id="toolbar-load-button" class="button- button-toolbar -glow">Load</div>
+		</div>
+	</div>
+	<div id="seperate-log"></div>
+	
+	<div id="tooltip"><div class="tooltip-header"><div class="tooltip-title"></div></div><div class="tooltip-content"><div class="tooltip-description"></div></div><div class="tooltip-footer"><div class="tooltip-extra"></div></div></div>
+
+	<div id="modal-saveload" class="modal-">
+		<div id="modal-save">
+			<div class="-modal-header"><h1 class="-modal-header-text">Save your Progress</h1></div>
+			<div class="-modal-content">
+				<h3 class="-modal-content-text">Your Progress is stored in this String, store it somewhere safe!</h3>
+				<textarea readonly="readonly" class="-modal-content-field" type="text" onclick="this.select()"></textarea>
+				<h4 class="-modal-content-text">I will need this from you next time ;)</h3>
+			</div>
+			<div class="-modal-footer">
+				<div class="row">
+					<div class="col"><div id="modal-switch-load-button" class="button- button-modal -glow">Load a Save</div></div>
+					<div class="col hide-extrasmall mobile-hide bordered bg-black">&nbsp;</div>
+					<div class="col hide-extrasmall bordered bg-black">&nbsp;</div>
+					<div class="mobile-show w-100"></div>
+					<div class="col"><div class="button- button-modal modal-close-button -glow">Close</div></div>
+				</div>
+			</div>
+		</div>
+		<div id="modal-load">
+			<div class="-modal-header"><h1 class="-modal-header-text">Load your previous Progress</h1></div>
+			<div class="-modal-content">
+				<h3 class="-modal-content-text">Paste your Save-String from last time in here and I will attempt to load it!</h3>
+				<textarea class="-modal-content-field" type="text" value="test"></textarea>
+				<h4 class="-modal-content-text">Bug Reports to Rewind1337@hotmail.com</h3>
+			</div>
+			<div class="-modal-footer">
+				<div class="row">
+					<div class="col"><div id="modal-switch-save-button" class="button- button-modal -glow">Save your Game</div></div>
+					<div class="col hide-extrasmall mobile-hide bordered bg-black">&nbsp;</div>
+					<div class="mobile-show w-100"></div>
+					<div class="col"><div class="button- button-modal modal-close-button -glow">Cancel</div></div>
+					<div class="col"><div id="modal-load-button" class="button- button-modal -glow">Load!</div></div>
+				</div>
+			</div>
+		</div>
+		<div id="modal-progress">
+			<div class="-modal-header"><h1 class="-modal-header-text">Welcome Back!</h1></div>
+			<div class="-modal-content">
+				<ul class="list-group progress-list">
+					<li class="list-group-item progress-list-item">
+						<div class="row">
+							<div class="col text-left">
+								Time spend Offline:
+							</div>
+							<div class="col text-right">
+								<div id="modal-progress-time">0</div>
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item progress-list-item">
+						<div class="row">
+							<div class="col text-left">
+								Energy Gained:
+							</div>
+							<div class="col text-right">
+								<div id="modal-progress-energy">0</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<h4 class="-modal-content-text"></h3>
+			</div>
+			<div class="-modal-footer">
+				<div class="row">
+					<div class="col hide-extrasmall mobile-hide bordered bg-black">&nbsp;</div>
+					<div class="col hide-extrasmall mobile-hide bordered bg-black">&nbsp;</div>
+					<div class="col hide-extrasmall bordered bg-black">&nbsp;</div>
+					<div class="mobile-show w-100"></div>
+					<div class="col"><div class="button- button-modal modal-close-button -glow">Continue</div></div>
+				</div>
+			</div>
+		</div>
+		<div id="modal-settings">
+			<div class="-modal-header"><h1 class="-modal-header-text">Settings</h1></div>
+			<div class="-modal-content">
+				<ul class="list-group settings-list">
+					<li class="list-group-item settings-list-item">
+						<div class="row">
+							<div class="col text-left">
+								a
+							</div>
+							<div class="col text-right">
+								b
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item settings-list-item">
+						0
+					</li>
+				</ul>
+			</div>
+			<div class="-modal-footer">
+				<div class="row">
+					<div class="col mobile-hide bordered bg-black">&nbsp;</div>
+					<div class="col mobile-hide bordered bg-black">&nbsp;</div>
+					<div class="col"><div class="button- button-modal modal-close-button -glow">Close</div></div>
+				</div>
+			</div>
+		</div>
+		<div id="modal-changelog">
+			<div class="-modal-header"><h1 class="-modal-header-text">Changelog</h1></div>
+			<div class="-modal-content">
+				<h3 class="-modal-content-text">Current Version: <div class="v-c" style="display: inline;">1</div>, released <div class="v-current" style="display: inline;">02.02.2020</div></h3>
+				<div class="version-list flexbox fff-sb fff-border">
+					<div class="version-breakdown v-1-sb v-1-border">
+						<div class="version-name v-1">Version 1 (02.02.2020)</div>
+						<div class="version-topic">&curren; Work in Progress</div>
+						<div class="version-subtopic">&times; Population</div>
+						<div class="version-subtopic">&times; Unlock Progression</div>
+						<div class="version-subtopic">&times; Story Progression</div>
+						<div class="version-subtopic">&times; Save/Load</div>
+						<br/>
+						<div class="version-topic">&times; Resources</div>
+						<div class="version-subtopic">&times; Matter</div>
+						<div class="version-subtopic">&times; Carbon</div>
+						<div class="version-subtopic">&times; Oxygen</div>
+						<div class="version-subtopic">&times; Moonstone</div>
+						<div class="version-subtopic">&times; Dark Matter</div>
+						<div class="version-subtopic">&times; Exotic Matter</div>
+						<div class="version-topic">&times; Buildings</div>
+						<div class="version-subtopic">&times; Space Vacuum</div>
+						<div class="version-subtopic">&times; Energy Gun</div>
+						<div class="version-subtopic">&times; Storage Rift</div>
+						<div class="version-subtopic">&times; Matter Condenser</div>
+						<div class="version-subtopic">&times; Carbon Cube</div>
+						<div class="version-subtopic">&times; Oxygen Tank</div>
+						<div class="version-subtopic">&times; Tribute</div>
+						<div class="version-topic">&times; Upgrades</div>
+						<div class="version-subtopic">&times; Better Vacuums</div>
+						<div class="version-subtopic">&times; Faster Multiplier</div>
+						<div class="version-subtopic">&times; Rift Stabilization</div>
+						<div class="version-subtopic">&times; Improved Energy Gun</div>
+						<div class="version-subtopic">&times; Faster Matter Creation</div>
+						<div class="version-topic">&times; Matter Creation</div>
+						<div class="version-subtopic">&times; Carbon</div>
+						<div class="version-subtopic">&times; Oxygen</div>
+					</div>
+					<div class="version-breakdown v-2-sb v-2-border">
+						<div class="version-name v-2">Version 2 (??.??.202?)</div>
+						<div class="version-topic">&times; placeholder</div>
+						<div class="version-subtopic">&times; placeholder</div>
+
+						<div class="version-subtopic">&times; placeholder</div>
+						<div class="version-subtopic">&times; placeholder</div>
+
+						<div class="version-subtopic">&times; placeholder</div>
+						<div class="version-subtopic">&times; placeholder</div>
+
+						<div class="version-subtopic">&times; placeholder</div>
+						<div class="version-subtopic">&times; placeholder</div>
+
+						<div class="version-subtopic">&times; placeholder</div>
+					</div>
+					<div class="version-breakdown v-3-sb v-3-border">
+						<div class="version-name v-3">Version 3 (??.??.202?)</div>
+						<div class="version-topic">&times; placeholder</div>
+						<div class="version-subtopic">&times; placeholder</div>
+
+						<div class="version-subtopic">&times; placeholder</div>
+						<div class="version-subtopic">&times; placeholder</div>
+
+						<div class="version-subtopic">&times; placeholder</div>
+						<div class="version-subtopic">&times; placeholder</div>
+
+						<div class="version-subtopic">&times; placeholder</div>
+						<div class="version-subtopic">&times; placeholder</div>
+
+						<div class="version-subtopic">&times; placeholder</div>
+					</div>
+				</div>
+			</div>
+			<div class="-modal-footer">
+				<div class="row">
+					<div class="col mobile-hide bordered bg-black">&nbsp;</div>
+					<div class="col mobile-hide bordered bg-black">&nbsp;</div>
+					<div class="col"><div class="button- button-modal modal-close-button -glow">Close</div></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="mobile-toolbar">
+		<ul class="list-group">
+			<li class="list-group-item">
+				<div id="mobile-toolbar-showhide" class="button- button-mobile-toolbar-showhide -glow">v - - M E N U - - v</div>
+				<div class="button- button-mobile-toolbar -glow">Energy Rift</div>
+				<div class="button- button-mobile-toolbar -glow">Resources</div>
+				<div class="button- button-mobile-toolbar -glow">Population</div>
+			</li>
+		</ul>
+	</div>
+</body>
+</html> 
+<script src="./lib/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
+<script src="./lib/p5.collide.js"></script>
+<script src="./lib/bootstrap.min.js"></script>
+<script src="./lib/aes.js"></script>
+<script src="./src/global.js"></script>
+<script src="./src/main.js"></script>

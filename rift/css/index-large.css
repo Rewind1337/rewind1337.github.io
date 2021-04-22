@@ -1,0 +1,161 @@
+/*  CSS written by Nicolai Krechel @ Rewind1337@hotmail.com, 2020
+		using Bootstrap 4 */
+
+@media (min-width: 1200px) {
+	/* Modals */
+	.modal- {
+		position: absolute;
+		z-index: 1010;
+		top: 0px;
+		left: 0px;
+		right: 0px;
+		bottom: 0px;
+		height: auto;
+		background-color: rgba(0, 0, 0, 0.433);
+		border: 1px solid white;
+	}
+	#modal-saveload {
+		position: absolute;
+		z-index: 1005;
+		top: 0px;
+		left: 0px;
+		right: 0px;
+		bottom: 0px;
+	}
+	#modal-save, #modal-load, #modal-progress, #modal-settings, #modal-changelog {
+		position: absolute;
+		z-index: 1005;
+		top: 100px;
+		left: 200px;
+		right: 200px;
+		background-color: rgba(0, 0, 0, 1);
+		border: 1px solid white;
+	}
+	.-modal-header {text-align: left;border-bottom: 1px solid white;}
+	.-modal-header-text {color: white;font-size: 4vw;margin-left: 1.4vw;}
+	.-modal-content {text-align: center;border-bottom: 1px solid white;}
+	.-modal-content-field {width: 80%;height: 15vw;text-align: center;font-size: 12px;line-height: 16px;}
+	h3.-modal-content-text {color: white;font-size: 2vw; margin-top: 0.5vw;}
+	h4.-modal-content-text {color: white;font-size: 1.5vw;}
+	.-modal-footer {text-align: right;color: white;}
+	.button-modal {line-height: 4vw;font-size: 1.8vw;}
+	/* Different Rows */
+	.row-top > .col > * {height: 50vh; min-height: 300px;}
+	.row-mid > div > div > .flexbox {max-height: 50vh; overflow: auto;}
+	.row-mid > .col > * {height: 45vh; min-height: 275px;}
+	.row-mid > div > div > .flexbox {max-height: 45vh; overflow: auto;}
+	.row-bot > .col > * {height: auto;}
+	/* Different Columns */
+	#resources {flex-basis: 25%; max-width: 25%;}
+	#clicker {flex-basis: 25%; max-width: 25%;}
+	#clickerNoGraphics {flex-basis: 25%; max-width: 25%;}
+	#population {flex-basis: 25%; max-width: 25%;}
+	#_log {flex-basis: 25%; max-width: 25%;}
+	/* Left-Hand Quickbar */
+	#mobile-toolbar {display: none;}
+	/* Bottom-Row Toolbar */
+	#bottom-toolbar {
+		position: sticky;
+		bottom: 0px;
+		left: 0px;
+		right: 0px;
+	}
+	/* Different Buttons hiding and showing, see mobile query*/
+	.hide-large {display: none;}
+	.medium-show {display: hide;}
+	.mobile-hide {display: block;}
+	.mobile-show {display: none;}
+	.show-extrasmall {display: none;}
+	.hide-extrasmall {display: block;}
+	/* Most Text on the UI */
+	.stats-, .population-, .resource-, .building-, .upgrade- {
+		margin: 0;
+		line-height: 20px;
+		font-size: calc(12px + 0.2vw);
+		color: white;
+	}
+	/* Containers of the Resources, Buildings, Etc */
+	.resource {
+		float: left;
+		background-color: rgb(30, 0, 0);
+		width: 100%;
+		margin: 1px;
+		padding: 2px;
+		padding-bottom: 4px;
+		border-bottom: 1px dashed white;
+	}
+	.building {
+		float: left;
+		background-color: rgb(0, 50, 0);
+		width: calc(33.3333% - 2px);
+		color: white;
+		padding: 4px;
+		margin: 1px;
+	}
+	.upgrade {
+		float: left;
+		background-color: rgb(50, 50, 0);
+		width: calc(33.3333% - 2px);
+		color: white;
+		padding: 4px;
+		margin: 1px;
+	}
+	.MC {
+		float: left;
+		background-color: rgb(50, 50, 50);
+		width: calc(50% - 2px);
+		color: white;
+		padding: 4px;
+		margin: 1px;
+	}
+	.upgrade > .row, .building > .row, .MC > .row {
+		padding-top: 2px !important;
+		padding-bottom: 2px !important;
+	}
+	.upgrade > .row:first-child, .building > .row:first-child, .MC > .row:first-child {
+		padding-top: 3px !important;
+	}
+	.upgrade > .row:last-child, .building > .row:last-child, .MC > .row:last-child {
+		padding-bottom: 0px !important;
+	}
+
+	/* Different Button Styles (mostly Fonts) */
+	/* Building Purchase Button */
+	.button-building {
+		font-size: 18px;
+		line-height: 20px;
+	}
+	/* Upgrade Purchase Button */
+	.button-upgrade {
+		font-size: 18px;
+		line-height: 20px;
+	}
+	/* Buttons at the bottom of the Screen */
+	.button-toolbar {
+		font-size: 18px;
+		line-height: 18px;
+		padding: 2px;
+		padding-top: 3px;
+		padding-bottom: 4px;
+	}
+	/* All the other Buttons */
+	.button-ui {
+		font-size: 16px;
+		line-height: 18px;
+		padding: 2px;
+		padding-top: 3px;
+		padding-bottom: 4px;
+	}
+	/* Population Text */
+	#population-amount {
+		margin-top: 0.9vw !important;
+		font-size: 1.4vw;
+		line-height: 0.4vw;
+	}
+	/* Population Progressbar */
+	.population-progress {
+		margin-top: 16px  !important;
+		margin-bottom: 6px  !important;
+		height: 32px !important;
+	}
+}
