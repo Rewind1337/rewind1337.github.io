@@ -1,0 +1,107 @@
+#canvasScreen {
+    background-color: black;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 0;
+    padding: 0px;
+    margin: 0px;
+}
+#overlay {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: rgba(255,255,255,0.2);
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    z-index: 2;
+    padding: 3px;
+    margin: 0px;
+	width: 400px;
+	height: auto;
+	box-shadow: 0 5px 8px 0 rgba(100,100,255,0.2),0 7px 20px 0 rgba(100,100,255,0.17); 
+	border: 1px solid rgba(0,0,255,0.66);
+	color: white;
+}
+#overlay:hover {
+	border: 1px solid rgba(0,0,255,0.88);
+}
+#smalloverlay {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: rgba(255,255,255,0.2);
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    z-index: 1;
+    padding: 3px;
+    margin: 0px;
+	width: 40px;
+	height: 40px;
+	box-shadow: 0 5px 8px 0 rgba(100,100,255,0.2),0 7px 20px 0 rgba(100,100,255,0.17); 
+	border: 1px solid rgba(0,0,255,0.66);
+	color: black;
+}
+#smalloverlay:hover {
+	border: 1px solid rgba(0,0,255,0.88);
+}
+.divider {
+    padding: 1px;
+	float: left;
+	width: 49.5%;
+	height: auto;
+	font-size: 15px;
+	line-height: 1.8;
+}
+.divider:hover {
+	background-color: rgba(255,255,255,0.04);
+}
+p {
+	padding: 0px;
+    margin: 0px;
+	float: left;
+	text-align: left;
+	color: black;
+}
+h1 {
+	width: 100%;
+	padding: 0px;
+    margin: 0px;
+	float: center;
+	text-align: center;
+	color: black;
+}
+input, select{
+	background-color: rgba(255,255,255,0.77);
+    padding: 0px;
+	line-height: 1.5;
+	text-indent: 0px;
+	border: 1px solid rgba(0,0,255,0.66);
+	float: right;
+	width: 100%;
+	margin-top: 3px;
+	margin-bottom: 2px;
+	box-shadow: 0 5px 8px 0 rgba(0,0,255,0.07),0 7px 20px 0 rgba(0,0,255,0.08);
+}
+input{
+	text-indent: 5px;
+}
+input:hover, select:hover {
+	background-color: rgba(255,255,255,1);
+	box-shadow: 0 5px 8px 0 rgba(0,0,255,0.1),0 7px 20px 0 rgba(0,0,255,0.12); 
+	border: 1px solid rgba(0,0,255,0.88);
+}
+button {
+	text-align: center;
+	background-color: rgba(255,255,255,0.77);
+	border: none;
+	margin-top: 3px;
+	margin-bottom: 2px;
+	height: 22px;
+	border: 1px solid rgba(0,0,255,0.66);
+	box-shadow: 0 5px 8px 0 rgba(0,0,255,0.07),0 7px 20px 0 rgba(0,0,255,0.08); 
+	color: black;
+}
+button:hover {
+	background-color: rgba(255,255,255,1);
+	box-shadow: 0 5px 8px 0 rgba(0,0,255,0.1),0 7px 20px 0 rgba(0,0,255,0.12); 
+	border: 1px solid rgba(0,0,255,0.88);
+}

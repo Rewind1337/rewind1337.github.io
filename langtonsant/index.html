@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Langton's Ant</title>
+	<link rel="stylesheet" type="text/css" href="interface.css">
+	<meta charset="utf-8">
+</head>
+
+<body>
+ <div id="canvasContainer">
+	<canvas onclick="toggleClick()" id="canvasScreen" width="0" height="0"> </canvas>
+	<div id="overlay">
+		<h1>Langton's Ant</h1>
+		<div class="divider" style="text-align: left">
+			<p>• Grid Size:</p><br>
+			<p>• Update Speed:</p><br>
+			<br>
+			<p style="text-decoration: underline;">Rules:</p><br>
+			<p>• States: </p><br>
+			<p>• Colors: </p><br>
+			<button style="width: 100%; float: left;" id="refresh" onclick="updateValues()">Update Rules</button><br>
+			<button style="width: 100%; float: left;" id="hide" onclick="showhide()">Hide this Panel</button><br>
+			<button style="width: 100%; float: left;" id="reset" onclick="init()">Reset</button><br>
+			<input style="width: 100%;" type="number" value="1" min="1" max="999" step="1" id="input_uitick"></input>
+		</div>
+		<div class="divider" style="text-align: right; text-decoration: none;">
+			<input type="number" value="12" min="4" max="256" step="2" id="input_gridsize"></input><br>
+			<input type="number" value="80" min="1" max="500" step="1" id="input_updatespeed"></input><br>
+			<br>
+			<br>
+			<input type="number" value="1" min="1" max="8" step="1" id="input_rule_states"></input><br>
+			<select id="antstyle"> <option value="rainbow">Rainbow</option> <option value="gray" selected>Grayscale</option> <option value="exper">Experimental</option> </select>
+			<p>[ - ] to reinitialise</p><br>
+			<p>[ + ] to show this again</p><br>
+			<p>[Spc] to continuously run</p><br>
+			<br>
+			<button style="width: 100%; float: left;" id="uitick" onclick="uiTick()">Tick</button>
+		</div>
+	</div>
+	<button onclick="showhide()" id="smalloverlay">
+	+
+	</button>
+</div>
+
+<script type="text/javascript" src="main.js"></script>
+</body>
+</html>

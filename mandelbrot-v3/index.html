@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Mandelbrot p5</title>
+	<link rel="stylesheet" type="text/css" href="./src/interface.css">
+	<link href="https://fonts.googleapis.com/css?family=Slabo+27px&display=swap" rel="stylesheet"> 
+	<meta charset="utf-8">
+</head>
+<body>
+	<div id="toggleControls" class="noselect" onclick="toggleControls()">
+		<h6>+</h6>
+	</div>
+	<div id="controls">
+		<h1 class="noselect">Mandelbrot Explorer</h1>
+		<div class="row clearfix">
+			<h2 class="noselect">Iterations</h2>
+			<input id="in_it" type="number" min="1" max="4096" value="32" step="1">
+		</div>
+		<div class="row clearfix">
+			<h2 class="noselect">Zoom</h2>
+			<input id="in_zoom" type="number" min="100" max="1000000000" value="400" step="1">
+		</div>
+		<div class="row clearfix">
+			<h2 class="noselect">Camera X</h2>
+			<input id="in_X" type="number" min="-2" max="2" value="0.0" step="0.0000000001">
+		</div>
+		<div class="row clearfix">
+			<h2 class="noselect">Camera Y</h2>
+			<input id="in_Y" type="number" min="-2" max="2" value="0.0" step="0.0000000001">
+		</div>
+		<div class="row clearfix">
+			<h2 class="noselect">Draw Crosshair</h2>
+			<input id="in_crossHair" type="checkbox" checked>
+		</div>
+		<div class="row clearfix">
+			<h2 class="noselect">Draw Scanline</h2>
+			<input id="in_scanLine" type="checkbox" checked>
+		</div>
+		<div class="row clearfix">
+			<h2 class="noselect">Generate Julia Set</h2>
+			<input id="in_julia" type="checkbox" onchange="toggleJulia()">
+		</div>
+		<div id="toggle_julia">
+			<div class="row clearfix">
+				<h2 class="noselect">X Value</h2>
+				<input id="in_juliaX" type="number" min="-2" max="2" value="0.0" step="0.00001">
+			</div>
+			<div class="row clearfix">
+				<h2 class="noselect">Y Value</h2>
+				<input id="in_juliaY" type="number" min="-2" max="2" value="0.0" step="0.00001">
+			</div>
+		</div>
+		<div id="genButton" class="row clearfix" onclick="generate()">
+			<h6 class="noselect">Generate</h6>
+		</div>
+	</div>
+</body>
+	<script type="text/javascript" src="./libs/jquery.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
+	<script type="text/javascript" src="./src/main.js"></script>
+</html>

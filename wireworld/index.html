@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="interface.css">
+	<title>Wireworld</title>
+</head><body>
+<header></header>
+
+<h1 style="font-size: 1.6vw;">W i r e - W o r l d</h1>
+
+<h4>Anzahl der Pixel</h4>
+<input type="number" min="20" max="200" value="100" step="5" id="inputSize"></input><br/><br/>
+
+<h4>Größe der Pixel</h4>
+<input type="number" min="1" max="16" value="8" step="1" id="inputScale"></input><br/><br/>
+
+<button id="buttonInit" onclick="init()">Canvas Generieren</button><br/><br/>
+
+<h4>Werkzeug:</h4>
+<select id="kindSelector">
+	<option value="void">Void / Delete</option>
+	<option value="cable">Cable</option>
+	<option value="ehead">Electron - Head</option>
+	<option value="etail">Electron - Tail</option>
+	<option value="emitter">Emitter</option>
+</select><br/><br/>
+
+<button id="buttonTick" onclick="tick()">one cycle</button><br/><br/>
+<button id="buttonRun" onclick="toggleRun()">run continously</button><br/><br/>
+
+<h4>Update - Delay</h4>
+<input type="number" min="10" max="1000" value="100" step="10" id="inputDelay"></input>
+
+<canvas onclick="toggleClick(event)"></canvas>
+<footer></footer>
+</body>
+<script src="main.js"></script>
+</html>
