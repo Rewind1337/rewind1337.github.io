@@ -1,20 +1,22 @@
 :root {
-  --back: #F7F7F7;
+  --back: #FFF;
   --one: #005815;
   --one-alt: #008d34;
   --two: #4C0070;
   --two-alt: #8A00C8;
   --three: #C24E00;
   --three-alt: #E26D00;
+  --four: #009975;
+  --four-alt: #00DBA8;
 
   --section-height: max(33vh, 250px);
-  --e-height: max(60vh, 250px);
+  --e-height: max(45vh, 450px);
 
   --a-expanded-height: max(33vh, 250px);
   --b-expanded-height: 60vh;
   --c-expanded-height: 60vh;
   --d-expanded-height: 60vh;
-  --e-expanded-height: max(60vh, 250px);
+  --e-expanded-height: max(45vh, 450px);
 
   --line-width: 16px;
   --page-width: min(calc(100vw - 168px), 90vw);
@@ -147,7 +149,11 @@ section.expanded.sec-c li:hover {
 }
 
 .social-row {
-  margin-top: 80px;
+  margin-top: 40px;
+}
+
+section.expanded a img {
+  opacity: 0.66 !important;
 }
 
 a {
@@ -158,9 +164,10 @@ a {
 .social-popout {
   position: relative;
   opacity: 0 !important;
-  top: -50px;
+  top: 30px;
   font-size: 1px;
   line-height: 0;
+  color: white;
 
   transition: top 0.25s ease-in-out, font-size 0.25s ease-in-out, opacity 0.25s ease-in-out;
 }
@@ -172,13 +179,15 @@ a img {
   border-radius: 14px;
   margin-right: 16px;
   margin-left: 16px;
-  opacity: 0.33 !important;
+  opacity: 0.0 !important;
   transform: scale(1);
 
-  transition: transform 0.25s ease-in-out, margin-left 0.25s ease-in-out, margin-right 0.25s ease-in-out, opacity 0.25s ease-in-out;
+  filter: invert();
+
+  transition: transform 0.25s ease-in-out, margin-left 0.25s ease-in-out, margin-right 0.25s ease-in-out, opacity 1s ease-in-out;
 }
 
-a:hover img {
+section.expanded a:hover img {
   margin-right: 32px;
   margin-left: 32px;
   opacity: 1 !important;
@@ -188,7 +197,7 @@ a:hover img {
 
 a:hover .social-popout {
   opacity: 1 !important;
-  top: -30px;
+  top: 100px;
   font-size: 32px;
 }
 
@@ -286,9 +295,9 @@ section.expanded input, section.expanded textarea {
 }
 
 .full-bleed {
-  background-color: var(--three);
+  background-color: transparent;
   color: var(--back);
-  box-shadow: 0 0 0 100vmax var(--three);
+  box-shadow: 0 0 0 100vmax transparent;
   clip-path: inset(-8px -100vmax);
 }
 
@@ -317,7 +326,7 @@ section.expanded input, section.expanded textarea {
 }
 
 .sec-b.expanded > .sec-expanded > * {
-  color: white;
+  color: var(--back);
 }
 
 .sec-b.expanded {
@@ -337,7 +346,7 @@ section.expanded input, section.expanded textarea {
 }
 
 .sec-c.expanded > .sec-expanded > * {
-  color: white;
+  color: var(--back);
 }
 
 .sec-c.expanded {
@@ -357,7 +366,7 @@ section.expanded input, section.expanded textarea {
 }
 
 .sec-d.expanded > .sec-expanded > * {
-  color: white;
+  color: var(--back);
 }
 
 .sec-d.expanded {
@@ -366,15 +375,29 @@ section.expanded input, section.expanded textarea {
 
 .sec-e {
   height: var(--e-height);
-  color: black;
-  background-color: var(--back);
-  box-shadow: 0 0 0 100vmax var(--back);
-  border-left: 1px dashed black;
-  border-right: 1px dashed black;
+  color: white;
+  background-color: var(--four);
+  box-shadow: 0 0 0 100vmax var(--four);
+  border-left: 1px dashed white;
+  border-right: 1px dashed white;
+}
+
+.sec-e > .sec-expanded > * {
+  color: var(--four);
+  transition: color 1s ease-in-out
+}
+
+.sec-e.expanded > .sec-expanded > * {
+  color: var(--back);
 }
 
 .sec-e.expanded {
   height: var(--e-expanded-height);
+}
+
+.sec-e .border-sides {
+  border-left: 1px dashed white;
+  border-right: 1px dashed white;
 }
 
 .piz {
@@ -405,7 +428,7 @@ section.expanded input, section.expanded textarea {
 }
 
 #piz-e {
-  background-color: var(--back);
+  background-color: var(--four);
   left: 0px;
 }
 
