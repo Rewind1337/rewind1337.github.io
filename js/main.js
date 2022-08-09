@@ -58,23 +58,27 @@ $(document).ready(function () {
     e.stopPropagation();
   })
 
-  $(document).resize(function () {updateScrolls();})
+  $(document).resize(function () {
+    updateScrolls();
+    viewportHeight = window.innerHeight;
+    viewportWidth = window.innerWidth;
+  })
 
   updateScrolls();
 })
 
 function updateScrolls () {
   let b = $("#sec-b")[0].getBoundingClientRect().top
-  $("#piz-b").css({"height": Math.min(b + 5, viewportHeight) + "px"})
+  $("#piz-b").css({"height": Math.min(b, viewportHeight) + "px"})
 
   let c = $("#sec-c")[0].getBoundingClientRect().top
-  $("#piz-c").css({"height": Math.min(c + 5, viewportHeight) + "px"})
+  $("#piz-c").css({"height": Math.min(c, viewportHeight) + "px"})
 
   let d = $("#sec-d")[0].getBoundingClientRect().top
-  $("#piz-d").css({"height": Math.min(d + 5, viewportHeight) + "px"})
+  $("#piz-d").css({"height": Math.min(d, viewportHeight) + "px"})
 
   let e = $("#sec-e")[0].getBoundingClientRect().top
-  $("#piz-e").css({"height": Math.min(e + 5, viewportHeight) + "px"})
+  $("#piz-e").css({"height": Math.min(e, viewportHeight) + "px"})
 }
 
 function typeOut(word, destination, speed) {
