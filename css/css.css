@@ -1,0 +1,359 @@
+:root {
+  --back: #F7F7F7;
+  --one: #005815;
+  --one-alt: #008d34;
+  --two: #4C0070;
+  --two-alt: #8A00C8;
+  --three: #C24E00;
+  --three-alt: #E26D00;
+
+  --section-height: 35vh;
+
+  --a-expanded-height: 35vh;
+  --b-expanded-height: 90vh;
+  --c-expanded-height: 90vh;
+  --d-expanded-height: 60vh;
+  --e-expanded-height: 35vh;
+
+  --line-width: 16px;
+  --page-width: min(calc(100vw - 160px), 90vw);
+
+  --font-size-h1: 5rem;
+  --font-size-h2: 3rem;
+  --font-size-h3: 2rem;
+}
+
+html, body {
+  background: var(--back);
+  overflow-x: hidden;
+  height: 100vh;
+}
+
+html {
+  border-right: 1px solid black;
+}
+
+ul {
+  list-style-type: none;
+  opacity: 1;
+}
+
+li {
+  font-size: 28px;
+  font-weight: 200;
+  line-height: 40px;
+  margin: 3px;
+  margin-bottom: 6px;
+  padding: 4px;
+  border: 1px solid var(--one-alt);
+  border-radius: 4px;
+}
+
+.sec-b li:hover {
+  font-weight: 400;
+  cursor: pointer;
+  background-color: var(--one-alt);
+}
+
+.sec-c li:hover {
+  font-weight: 400;
+  cursor: pointer;
+  background-color: var(--two-alt);
+}
+
+* {
+  opacity: 0;
+	margin: 0;
+	padding: 0;
+  box-sizing: border-box !important;
+  font-family: 'Poppins', sans-serif;
+  scrollbar-color: white black;
+  scrollbar-width: thin;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.col {
+  flex-basis: 100%;
+  padding: 8px;
+}
+
+.col-25 {
+  flex-basis: 25%;
+}
+
+.col-75 {
+  flex-basis: 75%;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.border-sides {
+  border-left: 1px dashed black;
+  border-right: 1px dashed black;
+  border-color: black;
+
+  transition: border-color 1s ease-in-out;
+}
+
+section:not(.expanded) .border-sides {
+  border-color: transparent;
+}
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../lib/materialicons.woff2") format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -moz-font-feature-settings: 'liga';
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#page {
+  z-index: 1000;
+  text-align: center;
+  margin: 0 auto;
+  width: var(--page-width);
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: 400;
+  line-height: 80px;
+  margin-top: 10px;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  line-height: 60px;
+  font-weight: 300;
+  text-align: inherit;
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+  font-weight: 300;
+  line-height: 60px;
+}
+
+section {
+  z-index: 100;
+  width: 100%;
+  padding: 16px;
+  height: var(--section-height);
+
+  position: sticky;
+  top: 0px;
+
+  transition: height 1s ease-in-out, padding 1s ease-in-out;
+}
+
+.sec-expanded {
+  height: 0px;
+  color: var(--back);
+  transition: color 1s ease-in-out, height 1s ease-in-out;
+}
+
+section:not(.expanded) > .sec-expanded ul {
+  display: none;
+  opacity: 0;
+}
+
+section.expanded > .sec-expanded {
+  height: max-content;
+  color: black;
+}
+
+.invert .text-preview {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.text-preview {
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.full-bleed {
+  background-color: var(--three);
+  color: var(--back);
+  box-shadow: 0 0 0 100vmax var(--three);
+  clip-path: inset(-2px -100vmax);
+}
+
+.sec-a {
+  color: black;
+  background-color: var(--back);
+  box-shadow: 0 0 0 100vmax var(--back);
+  border-left: 1px dashed black;
+  border-right: 1px dashed black;
+}
+
+.sec-a.expanded {
+  height: var(--a-expanded-height);
+}
+
+.sec-b {
+  background-color: var(--one);
+  box-shadow: 0 0 0 100vmax var(--one);
+  border-left: 1px dashed white;
+  border-right: 1px dashed white;
+}
+
+.sec-b > .sec-expanded > * {
+  color: var(--one);
+  transition: color 1s ease-in-out;
+}
+
+.sec-b.expanded > .sec-expanded > * {
+  color: white;
+}
+
+.sec-b.expanded {
+  height: var(--b-expanded-height);
+}
+
+.sec-c {
+  background-color: var(--two);
+  box-shadow: 0 0 0 100vmax var(--two);
+  border-left: 1px dashed white;
+  border-right: 1px dashed white;
+}
+
+.sec-c > .sec-expanded > * {
+  color: var(--two);
+  transition: color 1s ease-in-out
+}
+
+.sec-c.expanded > .sec-expanded > * {
+  color: white;
+}
+
+.sec-c.expanded {
+  height: var(--c-expanded-height);
+}
+
+.sec-d {
+  background-color: var(--three);
+  box-shadow: 0 0 0 100vmax var(--three);
+  border-left: 1px dashed white;
+  border-right: 1px dashed white;
+}
+
+.sec-d > .sec-expanded > * {
+  color: var(--three);
+  transition: color 1s ease-in-out
+}
+
+.sec-d.expanded > .sec-expanded > * {
+  color: white;
+}
+
+.sec-d.expanded {
+  height: var(--d-expanded-height);
+}
+
+.sec-e {
+  color: black;
+  background-color: var(--back);
+  box-shadow: 0 0 0 100vmax var(--back);
+  border-left: 1px dashed black;
+  border-right: 1px dashed black;
+}
+
+.sec-e.expanded {
+  height: var(--e-expanded-height);
+}
+
+.piz {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  width: var(--line-width);
+  z-index: 1300;
+
+  transition: width 1s ease-in-out, left 1s ease-in-out;
+}
+
+#piz-b {
+  background-color: var(--one);
+  left: calc(var(--line-width) * 3);
+}
+
+#piz-c {
+  background-color: var(--two);
+  left: calc(var(--line-width) * 2);
+}
+
+#piz-d {
+  background-color: var(--three);
+  left: calc(var(--line-width) * 1);
+}
+
+#piz-e {
+  background-color: var(--back);
+  left: 0px;
+}
+
+
+@media only screen and (max-width : 961px) {
+  :root {
+    --line-width: 8px;
+    --page-width: min(calc(100vw - 88px));
+  }
+
+  section {
+    padding: 8px;
+  }
+}
+
+@media only screen and (max-width : 641px) {
+  :root {
+    --line-width: 6px;
+    --page-width: min(calc(100vw - 66px));
+  }
+
+  section {
+    padding: 4px;
+  }
+}
+
+@media only screen and (max-width : 481px) {
+  :root {
+    --line-width: 4px;
+    --page-width: min(calc(100vw - 48px));
+  }
+
+  section {
+    padding: 0px;
+  }
+}
