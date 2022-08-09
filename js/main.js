@@ -58,6 +58,10 @@ $(document).ready(function () {
     e.stopPropagation();
   })
 
+  $("a").click(function (e) {
+    e.stopPropagation();
+  })
+
   $(document).resize(function () {
     updateScrolls();
   })

@@ -9,14 +9,13 @@
   --four: #009975;
   --four-alt: #00DBA8;
 
-  --section-height: max(33vh, 250px);
-  --e-height: max(45vh, 450px);
+  --section-height: max(35vh, 250px);
 
-  --a-expanded-height: max(33vh, 250px);
-  --b-expanded-height: 60vh;
-  --c-expanded-height: 60vh;
-  --d-expanded-height: 60vh;
-  --e-expanded-height: max(45vh, 450px);
+  --a-expanded-height: min(100vh, 500px);
+  --b-expanded-height: min(100vh, 500px);
+  --c-expanded-height: min(100vh, 500px);
+  --d-expanded-height: min(100vh, 500px);
+  --e-expanded-height: min(100vh, 500px);
 
   --line-width: 16px;
   --page-width: min(calc(100vw - 168px), 90vw);
@@ -32,8 +31,10 @@
 
 html, body {
   background: var(--back);
+  overflow-y: auto;
   overflow-x: hidden;
   height: 100vh;
+  min-width: 503px;
 }
 
 html {
@@ -64,6 +65,14 @@ li {
 
 .sec-c li {
   border: 1px solid var(--two-alt);
+}
+
+section:not(.expanded) {
+  overflow-y: hidden;
+}
+
+section.expanded {
+  overflow-y: auto;
 }
 
 section.expanded.sec-b li:hover {
@@ -233,6 +242,7 @@ section:not(.expanded) .border-sides {
   text-align: center;
   margin: 0 auto;
   width: var(--page-width);
+  min-width: 503px;
 }
 
 h1 {
@@ -260,6 +270,8 @@ section {
   width: 100%;
   padding: 16px;
   height: var(--section-height);
+
+  overflow-x: hidden;
 
   position: sticky;
   top: 0px;
@@ -307,6 +319,9 @@ section.expanded input, section.expanded textarea {
   box-shadow: 0 0 0 100vmax var(--back);
   border-left: 1px dashed black;
   border-right: 1px dashed black;
+
+  scrollbar-color: #ddd black;
+  scrollbar-width: thin;
 }
 
 .sec-a.expanded {
@@ -318,6 +333,9 @@ section.expanded input, section.expanded textarea {
   box-shadow: 0 0 0 100vmax var(--one);
   border-left: 1px dashed white;
   border-right: 1px dashed white;
+
+  scrollbar-color: var(--one-alt) black;
+  scrollbar-width: thin;
 }
 
 .sec-b > .sec-expanded > * {
@@ -338,6 +356,9 @@ section.expanded input, section.expanded textarea {
   box-shadow: 0 0 0 100vmax var(--two);
   border-left: 1px dashed white;
   border-right: 1px dashed white;
+
+  scrollbar-color: var(--two-alt) black;
+  scrollbar-width: thin;
 }
 
 .sec-c > .sec-expanded > * {
@@ -358,6 +379,9 @@ section.expanded input, section.expanded textarea {
   box-shadow: 0 0 0 100vmax var(--three);
   border-left: 1px dashed white;
   border-right: 1px dashed white;
+
+  scrollbar-color: var(--three-alt) black;
+  scrollbar-width: thin;
 }
 
 .sec-d > .sec-expanded > * {
@@ -374,12 +398,13 @@ section.expanded input, section.expanded textarea {
 }
 
 .sec-e {
-  height: var(--e-height);
-  color: white;
   background-color: var(--four);
   box-shadow: 0 0 0 100vmax var(--four);
   border-left: 1px dashed white;
   border-right: 1px dashed white;
+
+  scrollbar-color: var(--four-alt) black;
+  scrollbar-width: thin;
 }
 
 .sec-e > .sec-expanded > * {
@@ -464,6 +489,12 @@ section.expanded input, section.expanded textarea {
 
   section {
     padding: 0px;
+    padding-left: calc(var(--line-width) * 4);
+    padding-right: calc(var(--line-width) * 4);
+  }
+
+  .hide-xs {
+    display: none;
   }
 }
 
@@ -500,6 +531,10 @@ section.expanded input, section.expanded textarea {
   section {
     padding: 4px;
   }
+
+  .hide-s {
+    display: none;
+  }
 }
 
 @media only screen and (min-width: 641px) and (max-width : 961px) {
@@ -534,5 +569,9 @@ section.expanded input, section.expanded textarea {
 
   section {
     padding: 8px;
+  }
+
+  .hide-m {
+    display: none;
   }
 }
