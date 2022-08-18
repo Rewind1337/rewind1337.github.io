@@ -1,6 +1,8 @@
 let viewportHeight = 1000;
 let viewportWidth = 1000;
 
+let firstTimeExpand = {a: false, b: false, c: false, d: false, e: false}
+
 $(document).ready(function () {
   viewportHeight = window.innerHeight;
   viewportWidth = window.innerWidth;
@@ -34,14 +36,54 @@ $(document).ready(function () {
   $("body").scroll(function () {updateScrolls();})
 
   $("section").click(function() {
+    let id = $(this).attr("id");
     let expanded = $(this).hasClass("expanded") || false;
     let href = $(this).attr("id") + "-anchor";
-    if (expanded == false) {
-      $(this).addClass("expanded", true);
-      document.getElementById(href).scrollIntoView({behavior: 'smooth'});
-    } else {
-      $(this).removeClass("expanded", true);
+    let that = $(this);
+
+    if ($(this).attr("id") == "sec-d" && expanded == false) {
+      let _h = $("#sec-d")[0].getBoundingClientRect().top;
+      $("body").css({"paddingBottom": _h + "px"})
+      setTimeout(function () {
+        $("body").css({"paddingBottom": "0"})
+      }, 1000)
     }
+
+    if ($(this).attr("id") == "sec-e" && expanded == false) {
+      $("body").css({"paddingBottom": "100vh"})
+      setTimeout(function () {
+        $("body").css({"paddingBottom": "0"})
+      }, 1000)
+    }
+
+    if (expanded == false) {
+      let _letter = id.substring(id.length - 1);
+
+      let _t = $(this).find("#subtitle-" + _letter)[0].getBoundingClientRect().top;
+      let _h = $(this).find("#subtitle-" + _letter)[0].getBoundingClientRect().height;
+      let _offset = _t + _h;
+      _offset = Math.abs(_offset);
+
+      $(this).find(".sec-expanded").show().css({"height": "calc(96vh - 300px)"});
+      $(this).addClass("expanded");
+      document.getElementById(href).scrollIntoView({behavior: 'smooth'});
+
+      if (firstTimeExpand[_letter] == false) {
+        setTimeout(function () {
+          typeOut("Placeholder", "#a-1-1", 80 + Math.random() * 40);
+          typeOut("Placeholder", "#a-1-2", 80 + Math.random() * 40);
+          typeOut("Placeholder", "#a-1-3", 80 + Math.random() * 40);
+        }, 333)
+        firstTimeExpand[_letter] = true;
+      }
+
+    } else {
+      $(this).removeClass("expanded");
+      setTimeout(function () {
+        $(that).find(".sec-expanded").css({"display": "none"}).css({"height": "300px"});
+      }, 1000)
+    }
+
     let a = setInterval(function () {updateScrolls();}, 1)
     setTimeout(function () {
       clearInterval(a);
@@ -63,7 +105,10 @@ $(document).ready(function () {
   })
 
   $(document).resize(function () {
-    updateScrolls();
+    let a = setInterval(function () {updateScrolls();}, 1)
+    setTimeout(function () {
+      clearInterval(a);
+    }, 1000)
   })
 
   window.onorientationchange = (event) => {
@@ -182,10 +227,17 @@ function updateScrolls () {
 function typeOut(word, destination, speed) {
   $(destination).html("");
   for (let i = 0; i < word.length; i++) {
-    setTimeout(function () {
-      let html = $(destination).html();
-      $(destination).html(html.substring(0, html.length - 1) + word.charAt(i) + "_");
-    }, i * speed)
+    if (word.charAt(i) == " ") {
+      setTimeout(function () {
+        let html = $(destination).html();
+        $(destination).html(html.substring(0, html.length - 1) + "&nbsp;" + "_");
+      }, i * speed)
+    } else {
+      setTimeout(function () {
+        let html = $(destination).html();
+        $(destination).html(html.substring(0, html.length - 1) + word.charAt(i) + "_");
+      }, i * speed)
+    }
   }
 
   setTimeout(function () {

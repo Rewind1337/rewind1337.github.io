@@ -9,13 +9,13 @@
   --four: #009975;
   --four-alt: #00DBA8;
 
-  --section-height: max(35vh, 250px);
+  --section-height: max(35vh, 330px);
 
-  --a-expanded-height: min(100vh, 500px);
-  --b-expanded-height: min(100vh, 500px);
-  --c-expanded-height: min(100vh, 500px);
-  --d-expanded-height: min(100vh, 500px);
-  --e-expanded-height: min(100vh, 500px);
+  --a-expanded-height: calc(100vh + 8px);
+  --b-expanded-height: 100vh;
+  --c-expanded-height: 100vh;
+  --d-expanded-height: 100vh;
+  --e-expanded-height: 100vh;
 
   --line-width: 16px;
   --page-width: min(calc(100vw - 168px), 90vw);
@@ -122,6 +122,13 @@ section.expanded.sec-c li:hover {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  height: 100%;
 }
 
 .col {
@@ -280,7 +287,6 @@ section {
 }
 
 .sec-expanded {
-  height: 0px;
   color: var(--back);
   transition: color 1s ease-in-out, height 1s ease-in-out;
 }
@@ -290,7 +296,6 @@ section:not(.expanded) > .sec-expanded li {
 }
 
 section.expanded > .sec-expanded {
-  height: max-content;
   color: black;
 }
 
@@ -496,6 +501,10 @@ section.expanded input, section.expanded textarea {
   .hide-xs {
     display: none;
   }
+
+  .border-sides {
+    border: none !important;
+  }
 }
 
 @media only screen and (min-width: 481px) and (max-width : 640px) {
@@ -535,6 +544,10 @@ section.expanded input, section.expanded textarea {
   .hide-s {
     display: none;
   }
+
+  .border-sides {
+    border: none !important;
+  }
 }
 
 @media only screen and (min-width: 641px) and (max-width : 961px) {
@@ -573,5 +586,9 @@ section.expanded input, section.expanded textarea {
 
   .hide-m {
     display: none;
+  }
+
+  .border-sides {
+    border: none !important;
   }
 }
