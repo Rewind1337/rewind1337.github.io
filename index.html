@@ -32,6 +32,28 @@
 								<h3 id="a-1-3"></h3>
 							</div>
 						</div>
+						<div class="flex-row flex-grow align-center">
+							<div class="col text-right hide-xs hide-s">
+								<h3 id="a-2-1"></h3>
+							</div>
+							<div class="col text-center border-sides">
+								<h3 id="a-2-2"></h3>
+							</div>
+							<div class="col text-left hide-xs hide-s">
+								<h3 id="a-2-3"></h3>
+							</div>
+						</div>
+						<div class="flex-row">
+							<div class="col text-right hide-xs hide-s">
+								<h3 id="a-3-1"></h3>
+							</div>
+							<div class="col text-center border-sides">
+								<h3 id="a-3-2"></h3>
+							</div>
+							<div class="col text-left hide-xs hide-s">
+								<h3 id="a-3-3"></h3>
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -43,20 +65,17 @@
 					<div class="flex-col">
 						<div class="flex-row">
 							<div class="col col-25 text-left">
-								<h3>Categories</h3>
+								<h3 id="game-category-list-header"></h3>
 								<ul id="game-category-list">
-									<li>Idle / Clicker</li>
-									<li>Minigames</li>
-									<li>Simulations</li>
-									<li>Other Stuff</li>
+									<li data-category="idleclicker"></li>
+									<li data-category="minigames"></li>
+									<li data-category="simulations"></li>
+									<li data-category="other"></li>
 								</ul>
 							</div>
 							<div class="col col-75 text-left">
-								<h3>Games</h3>
+								<h3 id="game-list-header">Games</h3>
 								<ul id="game-list">
-									<li>Placeholder</li>
-									<li>Placeholder</li>
-									<li>Placeholder</li>
 									<li>Placeholder</li>
 								</ul>
 							</div>
@@ -72,19 +91,16 @@
 					<div class="flex-col">
 						<div class="flex-row">
 							<div class="col col-25 text-left">
-								<h3>Categories</h3>
+								<h3 id="tool-category-list-header"></h3>
 								<ul id="tool-category-list">
-									<li>Design</li>
-									<li>Function</li>
-									<li>Other Stuff</li>
+									<li data-category="design"></li>
+									<li data-category="function"></li>
+									<li data-category="other"></li>
 								</ul>
 							</div>
 							<div class="col col-75 text-left">
-								<h3>Tools</h3>
+								<h3 id="tool-list-header">Tools</h3>
 								<ul id="tool-list">
-									<li>Placeholder</li>
-									<li>Placeholder</li>
-									<li>Placeholder</li>
 									<li>Placeholder</li>
 								</ul>
 							</div>
@@ -95,17 +111,18 @@
 			<section id="sec-d" class="invert full-bleed sec-d text-right">
 				<i id="sec-d-anchor" style="position: absolute; top: -8px"></i>
 				<h1 id="title-d">&nbsp;</h1>
-				<h2 id="subtitle-d" class="text-preview">&nbsp;</h2>
+				<h2 id="subtitle-d" class="text-preview full-bleed">&nbsp;</h2>
 				<div class="sec-expanded">
 					<div class="flex-col">
 						<div class="flex-row">
-							<div class="col col-75 text-center">
-								<h3>Contact Form</h3>
-								<input id="mail-subject" type="text"/><br/>
-								<textarea id="mail-body" type="text"></textarea>
+							<div id="contact-form" class="col col-75 text-center card">
+								<h3 id="contact-form-header"></h3>
+								<input id="mail-subject" placeholder="Mail Subject" type="text"/><br/>
+								<textarea id="mail-body" placeholder="Mail Body Content" type="text"></textarea><br/>
+								<button id="mail-button" class="btn btn-d"><span id="mail-button-text"></span></button>
 							</div>
 							<div class="col col-25 text-left hide-xs hide-s">
-								<h3>Placeholder</h3>
+								<h3 id="contact-form-sidetext"></h3>
 							</div>
 						</div>
 					</div>
@@ -119,34 +136,34 @@
 					<div class="flex-col">
 						<div class="flex-row social-row">
 							<div class="col col-25 text-left hide-xs hide-s">
-								<h3>Placeholder</h3>
+								<h3 id="e-1-1"></h3>
 							</div>
 							<div class="col col-50 text-center border-sides">
 								<div class="flex-row items-center">
-									<a href="https://linkedin.com/in/nicolai-krechel-17347a228">
+									<a class="col card" href="https://linkedin.com/in/nicolai-krechel-17347a228">
 										<div class="social-popout">LinkedIn</div>
 										<img src="./media/linkedin-iconmonstr.svg" alt="LinkedIn"/>
 									</a>
-									<a href="https://github.com/Rewind1337">
+									<a class="col card" href="https://github.com/rewind1337">
 										<div class="social-popout">GitHub</div>
 										<img src="./media/github-iconmonstr.svg" alt="GitHub"/>
 									</a>
-									<a href="https://reddit.com/user/Rewind13337/?sort=top">
+									<a class="col card" href="https://reddit.com/user/rewind13337">
 										<div class="social-popout">Reddit</div>
 										<img src="./media/reddit-iconmonstr.svg" alt="Reddit"/>
 									</a>
-									<a href="https://twitch.tv/rewind13337">
+									<a class="col card" href="https://twitch.tv/rewind1337">
 										<div class="social-popout">Twitch</div>
 										<img src="./media/twitch-iconmonstr.svg" alt="Twitch"/>
 									</a>
-									<a href="https://youtube.com/rewindgps">
+									<a class="col card" href="https://youtube.com/rewindgps">
 										<div class="social-popout">YouTube</div>
 										<img src="./media/youtube-iconmonstr.svg" alt="Youtube"/>
 									</a>
 								</div>
 							</div>
 							<div class="col col-25 text-right hide-xs hide-s">
-								<h3>Placeholder</h3>
+								<h3 id="e-1-3"></h3>
 							</div>
 						</div>
 					</div>

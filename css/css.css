@@ -18,15 +18,24 @@
   --e-expanded-height: 100vh;
 
   --line-width: 16px;
-  --page-width: min(calc(100vw - 168px), 90vw);
+  --page-width: min(calc(100vw - 80px), 95vw);
+  --body-width: 400px;
 
   --font-size-h1: 5rem;
   --font-size-h2: 3rem;
   --font-size-h3: 2rem;
+  --font-size-text: 1.35rem;
+  --font-size-inputs: 1.45rem;
+  --font-size-button: 1.5rem;
+  --font-size-button-hover: 1.7rem;
 }
 
 .items-center {
   justify-content: center !important;
+}
+
+#game-list, #game-list-header, #tool-list, #tool-list-header {
+  display: none;
 }
 
 html, body {
@@ -34,7 +43,7 @@ html, body {
   overflow-y: auto;
   overflow-x: hidden;
   height: 100vh;
-  min-width: 503px;
+  min-width: var(--body-width);
 }
 
 html {
@@ -56,7 +65,7 @@ li {
   padding: 4px;
   border-radius: 4px;
 
-  transition: border 1s ease-in-out;
+  transition: border 1s ease-in-out, font-size 0.25s ease-in-out;
 }
 
 .sec-b li {
@@ -78,18 +87,20 @@ section.expanded {
 section.expanded.sec-b li:hover {
   font-size: 32px;
   cursor: pointer;
+  font-weight: 400;
   background-color: var(--one-alt);
 }
 
 section.expanded.sec-c li:hover {
-  font-weight: 400;
+  font-size: 32px;
   cursor: pointer;
+  font-weight: 400;
   background-color: var(--two-alt);
 }
 
 .sec-d input, .sec-d textarea{
   background-color: var(--three-alt);
-  font-size: 28px;
+  font-size: var(--font-size-inputs);
   font-weight: 200;
   line-height: 40px;
   border: 1px solid white;
@@ -106,6 +117,11 @@ section.expanded.sec-c li:hover {
   transition: opacity 1s ease-in-out, height 1s ease-in-out;
 }
 
+#contact-form {
+  margin-right: 32px;
+  margin-top: 16px;
+}
+
 * {
   opacity: 0;
 	margin: 0;
@@ -118,10 +134,33 @@ section.expanded.sec-c li:hover {
   user-select: none;
 }
 
+@keyframes example {
+  0%   {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+*:focus-visible {
+  box-shadow: 0px 0px 12px white;
+  outline: none;
+
+  animation-name: example;
+  animation-duration: 0.101s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
 .flex-row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.align-center {
+  align-items: center;
 }
 
 .flex-col {
@@ -177,15 +216,52 @@ a {
   color: black;
 }
 
+#mail-subject, #mail-body {
+  width: 75%;
+  margin-bottom: 8px;
+}
+
+.btn {
+  cursor: pointer;
+  font-size: var(--font-size-button);
+  font-weight: 200;
+  line-height: 40px;
+  background-color: rgba(255, 255, 255, 0.33);
+  border: 1px solid white;
+  padding: 8px;
+  border-radius: 4px;
+  color: white;
+  width: min(50%, 500px);
+
+  opacity: 0 !important;
+
+  transition: opacity 1s ease-in-out, font-weight 0.25s ease-in-out, font-size 0.25s ease-in-out;
+}
+
+.btn:hover {
+  font-weight: 400;
+  font-size: var(--font-size-button-hover);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .social-popout {
   position: relative;
   opacity: 0 !important;
   top: 30px;
-  font-size: 1px;
+  font-size: 0px;
   line-height: 0;
   color: white;
+  text-shadow: 0px 0px 3px black, 0px 0px 14px black;
 
-  transition: top 0.25s ease-in-out, font-size 0.25s ease-in-out, opacity 0.25s ease-in-out;
+  transition: top 0.5s ease-in-out, font-size 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+a.col {
+  padding: 8px;
+  padding-top: 16px;
+  flex-basis: unset !important;
+  min-width: unset !important;
+  margin: 8px;
 }
 
 a img {
@@ -200,7 +276,7 @@ a img {
 
   filter: invert();
 
-  transition: transform 0.25s ease-in-out, margin-left 0.25s ease-in-out, margin-right 0.25s ease-in-out, opacity 1s ease-in-out;
+  transition: transform 0.5s ease-in-out, margin-left 0.5s ease-in-out, margin-right 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
 section.expanded a:hover img {
@@ -247,9 +323,9 @@ section:not(.expanded) .border-sides {
 #page {
   z-index: 1000;
   text-align: center;
-  margin: 0 auto;
+  margin: 0 0 0 auto;
   width: var(--page-width);
-  min-width: 503px;
+  min-width: var(--body-width);
 }
 
 h1 {
@@ -292,6 +368,10 @@ section {
 }
 
 section:not(.expanded) > .sec-expanded li {
+  transition: border 1s ease-in-out, color 1s ease-in-out;
+}
+
+section:not(.expanded) > .sec-expanded li {
   border: 1px solid transparent;
 }
 
@@ -299,7 +379,7 @@ section.expanded > .sec-expanded {
   color: black;
 }
 
-section.expanded input, section.expanded textarea {
+section.expanded * {
   opacity: 1 !important;
 }
 
@@ -462,10 +542,32 @@ section.expanded input, section.expanded textarea {
   left: 0px;
 }
 
+section:not(.expanded) .card {
+  opacity: 0 !important;
+}
+
+.card {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.5);
+  opacity: 1 !important;
+
+  transition-property: background-color, border, box-shadow, opacity;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in-out;
+}
+
+.card:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
 @media only screen and (min-width: 1px) and (max-width : 480px) {
   :root {
     --line-width: 4px;
-    --page-width: min(calc(100vw - 48px));
+    --page-width: min(calc(100vw - 20px));
   }
 
   h3 {
@@ -510,7 +612,7 @@ section.expanded input, section.expanded textarea {
 @media only screen and (min-width: 481px) and (max-width : 640px) {
   :root {
     --line-width: 6px;
-    --page-width: min(calc(100vw - 66px));
+    --page-width: min(calc(100vw - 30px));
   }
 
   h3 {
@@ -553,7 +655,7 @@ section.expanded input, section.expanded textarea {
 @media only screen and (min-width: 641px) and (max-width : 961px) {
   :root {
     --line-width: 8px;
-    --page-width: min(calc(100vw - 88px));
+    --page-width: min(calc(100vw - 40px));
   }
 
   h3 {
