@@ -1,0 +1,112 @@
+* {
+	margin: 0;
+	padding: 0;
+  overflow: hidden;
+  box-sizing: border-box !important;
+  font-family: 'Glory', sans-serif;
+  scrollbar-color: #ff9b00 #311b00;
+  scrollbar-width: thin;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+canvas {
+  cursor: crosshair;
+  border: 3px double rgba(0, 0, 0, 0.5);
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.center-vertically {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#tool-bar {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100vw;
+  height: 64px;
+  box-shadow: 0px 0px 12px black;
+  padding: 2px;
+  background-color: rgb(230, 230, 230);
+}
+
+#particle-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 50%;
+}
+
+#particle-0 > .particle-img {
+  background-color: white;
+}
+
+#particle-1 > .particle-img {
+  background-color: lemonchiffon;
+}
+
+#particle-2 > .particle-img {
+  background-color: deepskyblue;
+}
+
+#particle-3 > .particle-img {
+  background-color: gray;
+}
+#particle-3 > .particle-text {
+  color: white;
+}
+
+.particle {
+  padding: 2px;
+  height: 58px;
+}
+
+.particle-img {
+  height: 54px;
+  width: 54px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.particle-text {
+  position: relative;
+  text-align: center;
+  top: -37px;
+}
+
+.particle:hover {
+  background-color: white;
+}
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../lib/materialicons.woff2") format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -moz-font-feature-settings: 'liga';
+  -moz-osx-font-smoothing: grayscale;
+}
