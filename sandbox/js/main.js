@@ -121,10 +121,12 @@ class Pixel {
 			break;
 			case STEAM:
 				this.fill = color(0, 0, 70 + random(0, 20));
+
 				if (up.type === AIR) {
 					this.swap(up);
 					return;
 				}
+
 				if (up.type !== AIR) {
 					if (true) { // move or not?
 						if (Math.random() >= 0.5) {
@@ -183,6 +185,15 @@ class Pixel {
 					this.swap(down);
 					return;
 				}
+
+				if (down.type === LAVA) {
+					this.setType(STEAM);
+					if (Math.random() >= 0.5) {
+						down.setType(STEAM);
+					}
+					return;
+				}
+
 				if (down.type !== AIR) {
 					if (true) { // move or not?
 						if (Math.random() >= 0.5) {
@@ -216,6 +227,22 @@ class Pixel {
 					return;
 				}
 
+				if (left.type === WATER) {
+					left.setType(STEAM);
+					if (Math.random() >= 0.5) {
+						this.setType(STEAM);
+					}
+					return;
+				}
+
+				if (right.type === WATER) {
+					right.setType(STEAM);
+					if (Math.random() >= 0.5) {
+						this.setType(STEAM);
+					}
+					return;
+				}
+
 				if (down.type !== AIR) {
 					if (Math.random() >= 0.5) { // move or not?
 						if (Math.random() >= 0.5) {
@@ -241,6 +268,9 @@ class Pixel {
 	draw () {
 		drawingContext.fillStyle = this.fill.toString(RGB);
 		drawingContext.fillRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+
+		drawingContext.strokeStyle = "rgba(0, 0, 0, 0.1)";
+		drawingContext.strokeRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 	}
 }
 
@@ -311,13 +341,6 @@ function setup () {
 }
 
 function startTickClock () {
-	global_timer = setInterval(function () {
-		for (let x = 0; x < PIXELS.length; x++) {
-			for (let y = 0; y < PIXELS[0].length; y++) {
-				PIXELS[x][y].tick();
-			}
-		}
-	}, 1000 / TPS)
 }
 
 function setupSandbox() {
@@ -347,6 +370,7 @@ function draw () {
 	for (let x = PIXELS.length - 1; x >= 0; x--) {
 		for (let y = PIXELS[0].length - 1; y >= 0; y--) {
 			let p = PIXELS[x][y];
+			p.tick();
 			p.draw();
 
 			// debug count of particles
