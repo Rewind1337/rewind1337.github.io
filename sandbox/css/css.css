@@ -3,7 +3,7 @@
 	padding: 0;
   overflow: hidden;
   box-sizing: border-box !important;
-  font-family: 'Glory', sans-serif;
+  font-family: 'Silkscreen', cursive;
   scrollbar-color: #ff9b00 #311b00;
   scrollbar-width: thin;
   -moz-user-select: none;
@@ -13,6 +13,9 @@
 canvas {
   cursor: crosshair;
   border: 3px double rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px black;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
 body {
@@ -38,12 +41,13 @@ body {
   display: flex;
   border-bottom: 1px solid rgba(0, 0, 0, 0.5);
   padding: 6px;
+  box-shadow: 0 0 12px black;
   background: repeating-linear-gradient(
     45deg,
-    #eee,
-    #eee 10px,
-    #ddd 10px,
-    #ddd 20px
+    #fafafa,
+    #fafafa 10px,
+    #eaeaea 10px,
+    #eaeaea 20px
   );
 }
 
@@ -74,12 +78,27 @@ input {
 }
 
 select, input {
-  width: 300px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  min-width: 200px;
+  max-width: 400px;
+  margin-inline: auto;
 }
 
-select:focus, input[type='number']:focus {
+textarea {
+  width: 100%;
+  margin-inline: auto;
+  resize: none;
+  background-color: white;
+  font-size: 12px;
+  line-height: 16px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  padding: 6px;
+}
+
+select:focus, input[type='number']:focus, textarea:focus {
   animation: rainbowFocus 5s linear infinite;
 }
 
@@ -87,18 +106,81 @@ input[type='checkbox']:focus {
   animation: rainbowShadow 5s linear infinite;
 }
 
-#controls-col {
-  align-content: center;
+#settings-row {
+  flex-wrap: nowrap;
 }
 
-#controls-playpause {
-  width: 100px
+#controls-col {
+  align-content: center;
+  width: 600px;
+  flex-basis: 600px;
+}
+
+#controls-wrapper {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+
+.control-button {
+  width: 60px;
 }
 
 .control-button .material-icons {
   padding-top: 4px;
-  line-height: 16px;
+  line-height: 24px;
   font-size: 30px !important;
+}
+
+#file-bar {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 1000%);
+}
+
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+
+  opacity: 0;
+
+  display: none;
+}
+
+.modal-content {
+  width: 600px;
+  margin-inline: auto;
+  margin-top: 100px;
+  padding: 32px;
+  border-radius: 16px;
+  background-color: white;
+  box-shadow: 0 0 24px black;
+}
+
+.modal-header {
+  font-size: 32px;
+}
+
+.modal-text {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 8px;
+}
+
+.modal-button {
+  padding: 4px;
+  width: 100%;
+}
+
+.modal-footer {
+  width: 100%;
+  display: flex;
 }
 
 #tool-bar {
@@ -109,6 +191,7 @@ input[type='checkbox']:focus {
   width: 100vw;
   height: 64px;
   border-top: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px black;
   padding: 2px;
   background: repeating-linear-gradient(
     45deg,
@@ -138,7 +221,6 @@ input[type='checkbox']:focus {
 }
 
 .col {
-  max-width: 100%;
   flex-grow: 1;
   text-align: center;
   display: flex;
@@ -170,7 +252,7 @@ input[type='checkbox']:focus {
   padding: 2px;
   height: 58px;
   z-index: 110;
-}
+} 
 
 .particle-img {
   height: 54px;
@@ -188,6 +270,7 @@ input[type='checkbox']:focus {
   width: 100%;
   text-align: center;
   align-self: center;
+  font-size: 12px;
 }
 
 .particle:not(.particle-wip):hover .particle-img {

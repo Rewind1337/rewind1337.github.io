@@ -4,10 +4,32 @@
 		<title></title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="./css/css.css">
-		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet"> 
 	</head>
 
 	<body>
+		<div id="file-modal" class="modal">
+			<div class="modal-content">
+				<span id="file-modal-header" class="modal-header">Import/Export Grid State</span>
+				<textarea id="file-in-out" rows="12" readonly onclick="this.focus();this.select();document.execCommand('copy')"></textarea>
+				<div class="modal-footer">
+					<span class="modal-text">Click to Copy</span>
+				</div>
+				<div class="modal-footer">
+					<button id="file-in-confirm" class="modal-button">Import</button>
+					<button id="file-in-cancel" class="modal-button">Cancel</button>
+					<button id="file-out-confirm" class="modal-button">Done</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="file-bar">
+			<button id="controls-export" class="control-button"><span class="material-icons">download</span></button>
+			<button id="controls-import" class="control-button"><span class="material-icons">file_upload</span></button>
+		</div>
+
 		<div id="settings-bar">
 			<div id="settings-list">
 				<div class="flex-row">
@@ -15,9 +37,8 @@
 						<div class="col">
 							<span class="settings-text">PIXEL SIZE</span>
 							<select id="setting-pixelsize">
-								<option value="2">1</option>
+								<option value="1">1</option>
 								<option value="2">2</option>
-								<option value="5">4</option>
 								<option value="5">5</option>
 								<option value="10">10</option>
 								<option default selected value="20">20</option>
@@ -42,14 +63,16 @@
 							<input id="setting-maxtps" type="number" min="1" max="1000" value="60" step="1">
 						</div>
 					</div>
-					<div class="flex-row">
+					<div class="flex-row" id="settings-row">
 						<div class="col">
 							<span class="settings-text">DRAW GRID</span>
 							<input id="setting-showgrid" type="checkbox">
 						</div>
 						<div class="col" id="controls-col">
 							<span class="settings-text">CONTROLS</span>
-							<button id="controls-playpause" class="control-button"><span class="material-icons">play_arrow</span></button>
+							<div id="controls-wrapper">
+								<button id="controls-playpause" class="control-button"><span class="material-icons">pause</span></button>
+							</div>
 						</div>
 						<div class="col">
 							<span class="settings-text">DEBUG MODE</span>
@@ -59,6 +82,7 @@
 				</div>
 			</div> 
 		</div>
+
 		<div class="center-vertically" id="canvas-parent">
 			<div id="debug-info">
 				<span class="debug-text" id="debug-fps"></span>
@@ -66,6 +90,7 @@
 				<span class="debug-text" id="debug-unstable"></span>
 			</div>
 		</div>
+
 		<div id="tool-bar">
 			<div id="particle-list" class="flex-row">
 

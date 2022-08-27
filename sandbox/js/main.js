@@ -278,8 +278,10 @@ class Pixel {
 
 		let off = 0.2 * PIXEL_SIZE;
 		if (!this.stable && DEBUG_MODE) {
-			drawingContext.strokeStyle = "rgba(0, 0, 0, 0.1)";
-			drawingContext.strokeRect(this.x * PIXEL_SIZE + off, this.y * PIXEL_SIZE + off, PIXEL_SIZE - 2*off, PIXEL_SIZE - 2*off);
+			drawingContext.beginPath();
+			drawingContext.arc(this.x * PIXEL_SIZE + PIXEL_SIZE/2, this.y * PIXEL_SIZE + PIXEL_SIZE/2, PIXEL_SIZE/6, 0, 2 * Math.PI, false);
+			drawingContext.fillStyle = 'rgba(0, 0, 0, 0.2)';
+			drawingContext.fill();
 		}
 	}
 }
@@ -433,6 +435,56 @@ function bindSettings () {
 		let v = $(this).prop("checked");
 		DEBUG_MODE = v;
 	}).change();
+
+	$("#controls-playpause").click(function () {
+		let v = $(this).hasClass("paused")
+		if (v === true) {
+			$(this).removeClass("paused");
+			$(this).find(".material-icons").html("pause");
+			startTickClock();
+		} else {
+			$(this).addClass("paused");
+			$(this).find(".material-icons").html("play_arrow");
+			clearInterval(global_timer);
+		}
+	}).change();
+
+	$("#controls-export").click(function () {
+		let bool = confirm("Export current Grid State?");
+		if (bool) {
+			let json = exportB64();
+			$("#file-modal").css({"display": "block"}).animate({"opacity": 1}, 200);
+			$("#file-in-out").prop("readonly", true).val(json);
+			$("#file-in-confirm").hide();
+			$("#file-in-cancel").hide();
+			$("#file-out-confirm").show();
+		}
+	})
+
+	$("#controls-import").click(function () {
+		let bool = confirm("Do you want to import a Grid State?");
+		if (bool) {
+			$("#file-modal").css({"display": "block"}).animate({"opacity": 1}, 200);
+			$("#file-in-out").prop("readonly", false).val("");
+			$("#file-in-confirm").show();
+			$("#file-in-cancel").show();
+			$("#file-out-confirm").hide();
+		}
+	})
+
+	$("#file-in-confirm").click(function () {
+		let string = $("#file-in-out").val();
+		importB64(string);
+		$("#file-modal").animate({"opacity": 0}, 200).css({"display": "none"});
+	})
+
+	$("#file-in-cancel").click(function () {
+		$("#file-modal").animate({"opacity": 0}, 200).css({"display": "none"});
+	})
+
+	$("#file-out-confirm").click(function () {
+		$("#file-modal").animate({"opacity": 0}, 200).css({"display": "none"});
+	})
 }
 
 function draw () {
