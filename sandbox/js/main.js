@@ -297,6 +297,8 @@ function importB64 (string) {
 
 	let _PIXELS = importJSON.PIXELS;
 
+	setupSandbox();
+
 	for (let x = 0; x < GRID_WIDTH; x++) {
 		for (let y = 0; y < GRID_HEIGHT; y++) {
 			PIXELS[x][y].setType(_PIXELS[x][y].type);
