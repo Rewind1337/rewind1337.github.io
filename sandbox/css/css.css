@@ -82,6 +82,10 @@ body {
 
 /* Liquids */
 .particle[data-type='WATER'] .particle-img {background-color: deepskyblue;}
+.particle[data-type='LAVA'] .particle-img {background-color: darkred;}
+
+/* Gases */
+.particle[data-type='STEAM'] .particle-img {background-color: lightgray;}
 
 /* Solids */
 .particle[data-type='WALL'] .particle-img {background-color: hsl(0deg, 0%, 10%);}
