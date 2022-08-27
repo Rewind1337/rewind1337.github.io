@@ -11,17 +11,18 @@ let global_timer;
 let selectedType = 0;
 
 // ticks per second
-const TPS = 3000;
+let TPS = 60;
 
 // pixel size
-let PIXEL_SIZE = 3;
-let BRUSH_SIZE = 3;
+let PIXEL_SIZE = 20;
+let BRUSH_SIZE = 2;
 
 let DRAW_GRID = false;
+let DEBUG_MODE = true;
 
 // amount of pixels per side
-let GRID_WIDTH = 300;
-let GRID_HEIGHT = 250;
+let GRID_WIDTH = 40;
+let GRID_HEIGHT = 30;
 
 // particles - special
 const AIR = 0;
@@ -134,8 +135,53 @@ class Pixel {
 				this.stable = true;
 			break;
 			case SAND:
-				if (down.type === AIR || down.type === WATER) {
+				if (down.type === AIR) {
 					this.swap(down);
+					break;
+				}
+
+				if (down.type === WATER) {
+					let r = Math.random();
+					if (r < 0.33334) {
+						if (downleft.type === WATER) {
+							this.swap(downleft);
+							break;
+						}
+						if (downright.type === WATER) {
+							this.swap(downright);
+							break;
+						}
+						if (down.type === WATER) {
+							this.swap(down);
+							break;
+						}
+					} else if (r >= 0.33334 && r < 0.66667) {
+						if (downright.type === WATER) {
+							this.swap(downright);
+							break;
+						}
+						if (downleft.type === WATER) {
+							this.swap(downleft);
+							break;
+						}
+						if (down.type === WATER) {
+							this.swap(down);
+							break;
+						}
+					} else if (r >= 0.66667) {
+						if (down.type === WATER) {
+							this.swap(down);
+							break;
+						}
+						if (downleft.type === WATER) {
+							this.swap(downleft);
+							break;
+						}
+						if (downright.type === WATER) {
+							this.swap(downright);
+							break;
+						}
+					}
 				}
 
 				if (down.type !== AIR) {
@@ -149,10 +195,12 @@ class Pixel {
 						if (Math.random() >= 0.5) {
 							if (downleft.type === AIR) {
 								this.swap(downleft);
+								break;
 							}
 						} else {
 							if (downright.type === AIR) {
 								this.swap(downright);
+								break;
 							}
 						}
 					}	
@@ -164,6 +212,7 @@ class Pixel {
 			case STONE:
 				if (down.type === AIR || down.type === SAND || down.type === WATER) {
 					this.swap(down);
+					break;
 				}
 
 				// considered stable, no calculation
@@ -174,6 +223,7 @@ class Pixel {
 				this.stable = true;
 				if (down.type === AIR || down.type === STEAM) {
 					this.swap(down);
+					break;
 				}
 
 				if (down.type !== AIR) {
@@ -184,10 +234,12 @@ class Pixel {
 						if (Math.random() >= 0.5) {
 							if (left.type == AIR) {
 								this.swap(left);
+								break;
 							}
 						} else {
 							if (right.type === AIR) {
 								this.swap(right);
+								break;
 							}
 						}
 					}
@@ -225,7 +277,7 @@ class Pixel {
 		}
 
 		let off = 0.2 * PIXEL_SIZE;
-		if (!this.stable) {
+		if (!this.stable && DEBUG_MODE) {
 			drawingContext.strokeStyle = "rgba(0, 0, 0, 0.1)";
 			drawingContext.strokeRect(this.x * PIXEL_SIZE + off, this.y * PIXEL_SIZE + off, PIXEL_SIZE - 2*off, PIXEL_SIZE - 2*off);
 		}
@@ -294,11 +346,13 @@ function setup () {
 	angleMode(DEGREES);
 	frameRate(TPS);
 	setupSandbox();
+	bindSettings();
 	bindToolbar();
 	startTickClock();
 }
 
 function startTickClock () {
+	clearInterval(global_timer);
 	global_timer = setInterval(function () {
 		for (let x = 0; x < width/PIXEL_SIZE; x++) {
 			for (let y = 0; y < height/PIXEL_SIZE; y++) {
@@ -325,12 +379,60 @@ function setupSandbox() {
 }
 
 function bindToolbar () {
-	$(".particle").click(function () {
+	$(".particle:not(.particle-wip)").click(function () {
 		let type = eval($(this).attr("data-type"));
 		selectedType = type;
 		$(".particle").removeClass("selected");
 		$(this).addClass("selected");
 	})
+}
+
+function bindSettings () {
+	$("#setting-pixelsize").change(function () {
+		let v = Number($(this).val());
+		PIXEL_SIZE = v;
+		setupSandbox();
+	}).change();
+
+	$("#setting-brushsize").change(function () {
+		let v = Number($(this).val());
+		BRUSH_SIZE = v;
+	}).change();
+
+	$("#setting-gridwidth").change(function () {
+		let v = Number($(this).val());
+		GRID_WIDTH = v;
+		setupSandbox();
+	}).change();
+
+	$("#setting-gridheight").change(function () {
+		let v = Number($(this).val());
+		GRID_HEIGHT = v;
+		setupSandbox();
+	}).change();
+
+	$("#setting-maxtps").change(function () {
+		let v = Number($(this).val());
+		TPS = v;
+		frameRate(TPS);
+		startTickClock();
+	}).change();
+
+	$("#setting-showgrid").change(function () {
+		let v = $(this).prop("checked");
+		DRAW_GRID = v;
+		for (let x = PIXELS.length - 1; x >= 0; x--) {
+			for (let y = PIXELS[0].length - 1; y >= 0; y--) {
+				let p = PIXELS[x][y];
+				p.draw();
+			}
+		}
+	}).change();
+
+	$("#setting-debugmode").change(function () {
+		let v = $(this).prop("checked");
+		DEBUG_MODE = v;
+	}).change();
 }
 
 function draw () {
