@@ -8,7 +8,7 @@ let selectedType = 0;
 
 const TPS = 30;
 
-const PIXEL_SIZE = 20;
+const PIXEL_SIZE = 10;
 
 const AIR = 0;
 const WALL = 1;
@@ -24,7 +24,6 @@ class Pixel {
 		this.setType(type);
 
 		this.doTick = true;
-		this.doDraw = true;
 
 		this.draw();
 	}
@@ -152,8 +151,6 @@ class Pixel {
 	}
 
 	draw () {
-		if (!this.doDraw) return;
-
 		stroke(0, 0, 0, 0.1);
 		fill(this.fill);
 		rect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
@@ -244,9 +241,7 @@ function draw () {
 	for (let x = PIXELS.length - 1; x >= 0; x--) {
 		for (let y = PIXELS[0].length - 1; y >= 0; y--) {
 			let p = PIXELS[x][y];
-			if (p.doDraw) {
-				p.draw();
-			}
+			p.draw();
 
 			// debug count of particles
 			if (p.type !== AIR) {count ++;}
