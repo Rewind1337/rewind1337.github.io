@@ -286,10 +286,10 @@ class Pixel {
 	}
 }
 
-function importB64 (string) {
+function importGridState (string) {
 	clearInterval(global_timer);
 
-	let importJSON = JSON.parse(atob(string));
+	let importJSON = JSON.parse(string);
 
 	GRID_WIDTH = importJSON.GRID_WIDTH;
 	GRID_HEIGHT = importJSON.GRID_HEIGHT;
@@ -301,14 +301,14 @@ function importB64 (string) {
 
 	for (let x = 0; x < GRID_WIDTH; x++) {
 		for (let y = 0; y < GRID_HEIGHT; y++) {
-			PIXELS[x][y].setType(_PIXELS[x][y].type);
+			PIXELS[x][y].setType(_PIXELS[x][y]);
 		}
 	}
 
 	startTickClock();
 }
 
-function exportB64 () {
+function exportGridState () {
 	// setup json for export
 	let exportJSON = {
 		PIXELS: undefined,
@@ -324,15 +324,15 @@ function exportB64 () {
 		for (let y = 0; y < PIXELS[0].length; y++) {
 			exportArray[x].push([]);
 			let P = PIXELS[x][y];
-			let clean = {x: P.x, y: P.y, type: P.type};
-			exportArray[x][y] = clean;
+			let type = P.type;
+			exportArray[x][y] = type;
 		}
 	}
 
 	// add pixels into json
 	exportJSON.PIXELS = exportArray;
 
-	return btoa(JSON.stringify(exportJSON));
+	return JSON.stringify(exportJSON);
 }
 
 function preload () {}
@@ -454,7 +454,7 @@ function bindSettings () {
 	$("#controls-export").click(function () {
 		let bool = confirm("Export current Grid State?");
 		if (bool) {
-			let json = exportB64();
+			let json = exportGridState();
 			$("#file-modal").css({"display": "block"}).animate({"opacity": 1}, 200);
 			$("#file-in-out").prop("readonly", true).val(json);
 			$("#file-in-confirm").hide();
@@ -476,7 +476,7 @@ function bindSettings () {
 
 	$("#file-in-confirm").click(function () {
 		let string = $("#file-in-out").val();
-		importB64(string);
+		importGridState(string);
 		$("#file-modal").animate({"opacity": 0}, 200).css({"display": "none"});
 	})
 
