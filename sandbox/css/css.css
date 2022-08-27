@@ -121,6 +121,16 @@ body {
   animation: rainbowSelection 5s linear infinite;
 }
 
+#debug-info {
+  display: flex;
+  width: 800px;
+}
+
+.debug-text {
+  flex-grow: 1;
+  text-align: center;
+}
+
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;

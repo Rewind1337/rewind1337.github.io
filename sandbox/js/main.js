@@ -11,14 +11,17 @@ let global_timer;
 let selectedType = 0;
 
 // ticks per second
-const TPS = 30;
+const TPS = 3000;
 
 // pixel size
-let PIXEL_SIZE = 20;
+let PIXEL_SIZE = 3;
+let BRUSH_SIZE = 3;
+
+let DRAW_GRID = false;
 
 // amount of pixels per side
-let GRID_WIDTH = 40;
-let GRID_HEIGHT = 20;
+let GRID_WIDTH = 300;
+let GRID_HEIGHT = 250;
 
 // particles - special
 const AIR = 0;
@@ -41,8 +44,10 @@ class Pixel {
 	constructor (type, x, y) {
 		this.x = x;
 		this.y = y;
+		
+		this.stable = false;
+		this.didChange = true;
 
-		this.timeAlive = 0;
 		this.setType(type);
 
 		this.doTick = true;
@@ -53,11 +58,14 @@ class Pixel {
 	swap (target) {
 		let tempType = this.type;
 		this.setType(target.type);
+		this.didChange = true;
 		target.setType(tempType);
 	}
 
 	setType (type) {
 		this.type = type;
+		
+		this.stable = false;
 
 		switch (this.type) {
 			case AIR:
@@ -76,7 +84,7 @@ class Pixel {
 				this.fill = color(random(0, 10), 100, 20 + random(0, 15));
 			break;
 			case STEAM:
-				this.fill = color(0, 0, 70 + random(0, this.timeAlive));
+				this.fill = color(0, 0, 90);
 			break;
 			case WALL:
 				this.fill = color(0, 0, 0 + random(0, 15));
@@ -89,7 +97,11 @@ class Pixel {
 	}
 
 	tick () {
-		if (this.type === AIR || this.type === WALL) return;
+		if (this.type === AIR || this.type === WALL) {
+			this.stable = true
+			this.draw();
+			return;
+		}
 
 		this.timeAlive ++;
 
@@ -113,59 +125,37 @@ class Pixel {
 		let upright = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
 		let downleft = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
 		let downright = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
+		
+		this.didChange = false;
 
 		switch (this.type) {
 			case WALL:
 			case AIR:
-
-			break;
-			case STEAM:
-				this.fill = color(0, 0, 70 + random(0, 20));
-
-				if (up.type === AIR) {
-					this.swap(up);
-					return;
-				}
-
-				if (up.type !== AIR) {
-					if (true) { // move or not?
-						if (Math.random() >= 0.5) {
-							if (left.type === AIR) {
-								this.swap(left);
-								return;
-							}
-						} else {
-							if (right.type === AIR) {
-								this.swap(right);
-								return;
-							}
-						}
-					}
-				}
-
-				// considered stable, no calculation
-				this.doTick = false;
+				this.stable = true;
 			break;
 			case SAND:
 				if (down.type === AIR || down.type === WATER) {
 					this.swap(down);
-					return;
 				}
 
 				if (down.type !== AIR) {
+					this.stable = true;
+					if (!atBottom) {
+						if (left.type === AIR || right.type === AIR) {
+							this.stable = false;
+						}
+					}
 					if (Math.random() > 0.7 && !atBottom) { // move or not?
 						if (Math.random() >= 0.5) {
 							if (downleft.type === AIR) {
 								this.swap(downleft);
-								return;
 							}
 						} else {
 							if (downright.type === AIR) {
 								this.swap(downright);
-								return;
 							}
 						}
-					}
+					}	
 				}
 
 				// considered stable, no calculation
@@ -174,86 +164,30 @@ class Pixel {
 			case STONE:
 				if (down.type === AIR || down.type === SAND || down.type === WATER) {
 					this.swap(down);
-					return;
 				}
 
 				// considered stable, no calculation
 				this.doTick = false;
+				this.stable = true;
 			break;
 			case WATER:
+				this.stable = true;
 				if (down.type === AIR || down.type === STEAM) {
 					this.swap(down);
-					return;
-				}
-
-				if (down.type === LAVA) {
-					this.setType(STEAM);
-					if (Math.random() >= 0.5) {
-						down.setType(STEAM);
-					}
-					return;
 				}
 
 				if (down.type !== AIR) {
 					if (true) { // move or not?
-						if (Math.random() >= 0.5) {
-							if (left.type === AIR || left.type === STEAM) {
-								this.swap(left);
-								return;
-							}
-						} else {
-							if (right.type === AIR || right.type === STEAM) {
-								this.swap(right);
-								return;
-							}
+						if (left.type == AIR || right.type === AIR) {
+							this.stable = false;
 						}
-					}
-				}
-
-				// considered stable, no calculation
-				this.doTick = false;
-			break;
-			case LAVA:
-				if (down.type === AIR || down.type === STEAM) {
-					this.swap(down);
-					return;
-				}
-
-				if (down.type === WATER) {
-					down.setType(STEAM);
-					if (Math.random() >= 0.5) {
-						this.setType(STEAM);
-					}
-					return;
-				}
-
-				if (left.type === WATER) {
-					left.setType(STEAM);
-					if (Math.random() >= 0.5) {
-						this.setType(STEAM);
-					}
-					return;
-				}
-
-				if (right.type === WATER) {
-					right.setType(STEAM);
-					if (Math.random() >= 0.5) {
-						this.setType(STEAM);
-					}
-					return;
-				}
-
-				if (down.type !== AIR) {
-					if (Math.random() >= 0.5) { // move or not?
 						if (Math.random() >= 0.5) {
-							if (left.type === AIR) {
+							if (left.type == AIR) {
 								this.swap(left);
-								return;
 							}
 						} else {
 							if (right.type === AIR) {
 								this.swap(right);
-								return;
 							}
 						}
 					}
@@ -263,14 +197,38 @@ class Pixel {
 				this.doTick = false;
 			break;
 		}
+		
+		if (this.didChange) { // good
+			up.stable = false;
+			down.stable = false;
+			left.stable = false;
+			right.stable = false;
+			
+			upleft.stable = false;
+			upright.stable = false;
+			downleft.stable = false;
+			downright.stable = false;
+		}
+		
+		if (this.stable) {
+			this.draw();
+		}
 	}
 
 	draw () {
 		drawingContext.fillStyle = this.fill.toString(RGB);
 		drawingContext.fillRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 
-		drawingContext.strokeStyle = "rgba(0, 0, 0, 0.1)";
-		drawingContext.strokeRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+		if (DRAW_GRID) {
+			drawingContext.strokeStyle = "rgba(0, 0, 0, 0.1)";
+			drawingContext.strokeRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+		}
+
+		let off = 0.2 * PIXEL_SIZE;
+		if (!this.stable) {
+			drawingContext.strokeStyle = "rgba(0, 0, 0, 0.1)";
+			drawingContext.strokeRect(this.x * PIXEL_SIZE + off, this.y * PIXEL_SIZE + off, PIXEL_SIZE - 2*off, PIXEL_SIZE - 2*off);
+		}
 	}
 }
 
@@ -337,14 +295,24 @@ function setup () {
 	frameRate(TPS);
 	setupSandbox();
 	bindToolbar();
-	startTickClock(30);
+	startTickClock();
 }
 
 function startTickClock () {
+	global_timer = setInterval(function () {
+		for (let x = 0; x < width/PIXEL_SIZE; x++) {
+			for (let y = 0; y < height/PIXEL_SIZE; y++) {
+				if (!PIXELS[x][y].stable) {
+					PIXELS[x][y].tick();
+				}
+			}
+		}
+	}, 1000 / TPS)
 }
 
 function setupSandbox() {
 	resizeCanvas(GRID_WIDTH * PIXEL_SIZE, GRID_HEIGHT * PIXEL_SIZE);
+	$("#debug-info").css({"width": GRID_WIDTH * PIXEL_SIZE + "px"})
 
 	PIXELS = [];
 	for (let x = 0; x < GRID_WIDTH; x++) {
@@ -367,17 +335,20 @@ function bindToolbar () {
 
 function draw () {
 	let count = 0;
+	let stableCount = 0;
 	for (let x = PIXELS.length - 1; x >= 0; x--) {
 		for (let y = PIXELS[0].length - 1; y >= 0; y--) {
 			let p = PIXELS[x][y];
-			p.tick();
-			p.draw();
+			if (!p.stable) {
+				p.draw();
+			}
 
 			// debug count of particles
 			if (p.type !== AIR) {count ++;}
+			
+			if (!p.stable) {stableCount ++;}
 		}
 	}
-
 
 	stroke(0, 0, 0, 1);
 	noFill();
@@ -390,20 +361,22 @@ function draw () {
 		handleClick(mouseX - 4, mouseY - 4);
 	}
 
-	rect(pixelX * PIXEL_SIZE, pixelY * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE)
-
-	stroke(0, 0, 100);
-	fill(0, 0, 0);
-	text("tps: " + Math.round(frameRate()), 0, 10);
-	text("particles: " + count, 0, 30);
+	$("#debug-fps").text("tps: " + Math.round(frameRate()));
+	$("#debug-count").text("particles: " + count);
+	$("#debug-unstable").text("unstable: " + stableCount);
 }
 
 function handleClick(mx, my) {
 	if (mx >= 0 && mx <= width && my >= 0 && my <= height) {
-		let pixelX = ~~((mx / width) * (width / PIXEL_SIZE));
-		let pixelY = ~~((my / height) * (height / PIXEL_SIZE));
-		PIXELS[pixelX][pixelY].setType(selectedType);
-		PIXELS[pixelX][pixelY].tick();
+		for (let xoff = -BRUSH_SIZE + 1; xoff < BRUSH_SIZE; xoff++) {
+			for (let yoff = -BRUSH_SIZE + 1; yoff < BRUSH_SIZE; yoff++) {
+				let pixelX = ~~((mx / width) * (width / PIXEL_SIZE));
+				let pixelY = ~~((my / height) * (height / PIXEL_SIZE));
+				let p = PIXELS[clamp(pixelX + xoff, 0, PIXELS.length - 1)][clamp(pixelY + yoff, 0, PIXELS[0].length - 1)];
+				p.setType(selectedType);
+				p.tick();
+			}
+		}
 	}
 }
 
