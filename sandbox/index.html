@@ -10,24 +10,29 @@
 	</head>
 
 	<body>
+		<div id="tooltip">
+			text could go here
+		</div>
+
 		<div id="file-modal" class="modal">
 			<div class="modal-content">
-				<span id="file-modal-header" class="modal-header">Import/Export Grid State</span>
+				<span id="file-modal-header" class="modal-header">Import/Export Sandbox</span>
 				<textarea id="file-in-out" rows="12" readonly onclick="this.focus();this.select();document.execCommand('copy')"></textarea>
 				<div class="modal-footer">
 					<span class="modal-text">Click to Copy</span>
 				</div>
 				<div class="modal-footer">
-					<button id="file-in-confirm" class="modal-button">Import</button>
-					<button id="file-in-cancel" class="modal-button">Cancel</button>
-					<button id="file-out-confirm" class="modal-button">Done</button>
+					<button id="file-in-confirm" class="modal-button" data-tooltip="completes the import & closes the modal">Import</button>
+					<button id="file-in-cancel" class="modal-button" data-tooltip="cancels the import & closes the modal">Cancel</button>
+					<button id="file-out-confirm" class="modal-button" data-tooltip="closes the modal">Done</button>
 				</div>
 			</div>
 		</div>
 
 		<div id="file-bar">
-			<button id="controls-export" class="control-button"><span class="material-icons">download</span></button>
-			<button id="controls-import" class="control-button"><span class="material-icons">file_upload</span></button>
+			<button id="controls-export" class="control-button" data-tooltip="export current sandbox"><span class="material-icons">download</span></button>
+			<button id="controls-playpause" class="control-button" data-tooltip="pauses / resumes the simulation"><span class="material-icons">pause</span></button>
+			<button id="controls-import" class="control-button" data-tooltip="import sandbox"><span class="material-icons">file_upload</span></button>
 		</div>
 
 		<div id="settings-bar">
@@ -35,48 +40,50 @@
 				<div class="flex-row">
 					<div class="flex-row">
 						<div class="col">
-							<span class="settings-text">PIXEL SIZE</span>
-							<select id="setting-pixelsize">
+							<span class="settings-text">PARTICLE SIZE</span>
+							<select id="setting-pixelsize" data-tooltip="how big the particles get drawn in your sandbox">
 								<option value="1">1</option>
 								<option value="2">2</option>
 								<option value="5">5</option>
-								<option value="10">10</option>
-								<option default selected value="20">20</option>
+								<option default selected value="10">10</option>
+								<option value="20">20</option>
 								<option value="30">30</option>
 								<option value="40">40</option>
 							</select>
 						</div>
 						<div class="col">
 							<span class="settings-text">BRUSH SIZE</span>
-							<input id="setting-brushsize" type="number" min="1" max="25" value="2" step="1">
+							<input id="setting-brushsize" type="number" min="1" max="25" value="2" step="1" data-tooltip="how many particles you create at once">
 						</div>
 						<div class="col">
 							<span class="settings-text">GRID WIDTH</span>
-							<input id="setting-gridwidth" type="number" min="10" max="1000" value="40" step="1">
+							<input id="setting-gridwidth" type="number" min="10" max="1000" value="60" step="1" data-tooltip="amount of particles on the vertical axis">
 						</div>
 						<div class="col">
 							<span class="settings-text">GRID HEIGHT</span>
-							<input id="setting-gridheight" type="number" min="10" max="1000" value="30" step="1">
+							<input id="setting-gridheight" type="number" min="10" max="1000" value="60" step="1" data-tooltip="amount of particles on the horizontal axis">
 						</div>
 						<div class="col">
 							<span class="settings-text">MAX. TPS</span>
-							<input id="setting-maxtps" type="number" min="1" max="1000" value="60" step="1">
+							<input id="setting-maxtps" type="number" min="1" max="1000" value="60" step="1" data-tooltip="limits the amount of updates per second">
 						</div>
 					</div>
 					<div class="flex-row" id="settings-row">
 						<div class="col">
-							<span class="settings-text">DRAW GRID</span>
-							<input id="setting-showgrid" type="checkbox">
-						</div>
-						<div class="col" id="controls-col">
-							<span class="settings-text">CONTROLS</span>
-							<div id="controls-wrapper">
-								<button id="controls-playpause" class="control-button"><span class="material-icons">pause</span></button>
-							</div>
+							<span class="settings-text">DRAW&nbsp;GRID</span>
+							<input id="setting-drawgrid" type="checkbox" data-tooltip="toggles the grid, low performance impact">
 						</div>
 						<div class="col">
-							<span class="settings-text">DEBUG MODE</span>
-							<input id="setting-debugmode" type="checkbox" checked>
+							<span class="settings-text">DRAW&nbsp;HOVER</span>
+							<input id="setting-drawhover" type="checkbox" checked data-tooltip="toggles the hover selection, low performance impact">
+						</div>
+						<div class="col">
+							<span class="settings-text">STABLE&nbsp;MODE</span>
+							<input id="setting-stablemode" type="checkbox" data-tooltip="toggles creating particles with the 'always stable' flag, they will not move">
+						</div>
+						<div class="col">
+							<span class="settings-text">DEBUG&nbsp;MODE</span>
+							<input id="setting-debugmode" type="checkbox" checked data-tooltip="toggles debug mode, showing unstable particles, high performance impact">
 						</div>
 					</div>
 				</div>
@@ -84,10 +91,11 @@
 		</div>
 
 		<div class="center-vertically" id="canvas-parent">
+			<span class="debug-text" id="title-text">Sandbox</span>
 			<div id="debug-info">
-				<span class="debug-text" id="debug-fps"></span>
-				<span class="debug-text" id="debug-count"></span>
-				<span class="debug-text" id="debug-unstable"></span>
+				<span class="debug-text" id="debug-fps" data-tooltip="current updates per second"></span>
+				<span class="debug-text" id="debug-count" data-tooltip="current number of non-air particles"></span>
+				<span class="debug-text" id="debug-unstable" data-tooltip="currentn umber of particles being updated"></span>
 			</div>
 		</div>
 
@@ -97,7 +105,7 @@
 				<div class="particle-break">SPECIAL</div>
 
 				<div data-type="AIR" class="particle">
-					<div class="particle-img">
+					<div class="particle-img" data-tooltip="air">
 						<div class="particle-text">Air</div>
 					</div>
 				</div>
@@ -105,12 +113,12 @@
 				<div class="particle-break">POWDERS</div>
 
 				<div data-type="SAND" class="particle">
-					<div class="particle-img">
+					<div class="particle-img" data-tooltip="sand">
 						<div class="particle-text">Sand</div>
 					</div>
 				</div>
 				<div data-type="STONE" class="particle">
-					<div class="particle-img">
+					<div class="particle-img" data-tooltip="stone">
 						<div class="particle-text">Stone</div>
 					</div>
 				</div>
@@ -118,20 +126,25 @@
 				<div class="particle-break">LIQUIDS</div>
 
 				<div data-type="WATER" class="particle">
-					<div class="particle-img">
+					<div class="particle-img" data-tooltip="water">
 						<div class="particle-text">Water</div>
 					</div>
 				</div>
 				<div data-type="LAVA" class="particle particle-wip">
-					<div class="particle-img">
+					<div class="particle-img" data-tooltip="work in progress">
 						<div class="particle-text">Lava</div>
+					</div>
+				</div>
+				<div data-type="ACID" class="particle particle-wip">
+					<div class="particle-img" data-tooltip="work in progress">
+						<div class="particle-text">Acid</div>
 					</div>
 				</div>
 
 				<div class="particle-break">GASES&nbsp;&nbsp;</div>
 
 				<div data-type="STEAM" class="particle particle-wip">
-					<div class="particle-img">
+					<div class="particle-img" data-tooltip="work in progress">
 						<div class="particle-text">Steam</div>
 					</div>
 				</div>
@@ -139,7 +152,7 @@
 				<div class="particle-break">SOLIDS&nbsp;</div>
 
 				<div data-type="WALL" class="particle">
-					<div class="particle-img">
+					<div class="particle-img" data-tooltip="wall">
 						<div class="particle-text">Wall</div>
 					</div>
 				</div>

@@ -13,9 +13,13 @@
 canvas {
   cursor: crosshair;
   border: 3px double rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 4px black;
+  box-shadow: 0 0 36px black;
   margin-top: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 32px;
+}
+
+html, body {
+  background-color: rgb(40, 40, 40);
 }
 
 body {
@@ -79,8 +83,8 @@ input {
 
 select, input {
   width: 100%;
-  min-width: 200px;
-  max-width: 400px;
+  min-width: 70px;
+  max-width: 130px;
   margin-inline: auto;
 }
 
@@ -102,8 +106,36 @@ select:focus, input[type='number']:focus, textarea:focus {
   animation: rainbowFocus 5s linear infinite;
 }
 
+input[type='checkbox'] {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  margin-bottom: 4px;
+}
+
 input[type='checkbox']:focus {
   animation: rainbowShadow 5s linear infinite;
+}
+
+#tooltip {
+  display: none;
+  opacity: 0;
+
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+  transform: translate(-50%, 0px);
+  max-width: 400px;
+
+  text-align: center;
+
+  padding: 12px;
+  border: 1px solid white;
+  box-shadow: 0 0 36px black;
+  border-radius: 4px;
+  background-color: white;
+
+  z-index: 2000;
 }
 
 #settings-row {
@@ -112,8 +144,8 @@ input[type='checkbox']:focus {
 
 #controls-col {
   align-content: center;
-  width: 600px;
-  flex-basis: 600px;
+  width: 300px;
+  flex-basis: 300px;
 }
 
 #controls-wrapper {
@@ -135,7 +167,8 @@ input[type='checkbox']:focus {
 #file-bar {
   position: absolute;
   left: 50%;
-  transform: translate(-50%, 1000%);
+  bottom: 80px;
+  transform: translate(-50%, 0);
 }
 
 .modal {
@@ -204,7 +237,7 @@ input[type='checkbox']:focus {
 }
 
 #particle-list {
-  width: 50%;
+  width: 100%;
 }
 
 .flex-row {
@@ -240,6 +273,7 @@ input[type='checkbox']:focus {
 /* Liquids */
 .particle[data-type='WATER'] .particle-img {background-color: deepskyblue;}
 .particle[data-type='LAVA'] .particle-img {background-color: darkred;}
+.particle[data-type='ACID'] .particle-img {background-color: hsl(120deg, 100%, 42%);}
 
 /* Gases */
 .particle[data-type='STEAM'] .particle-img {background-color: lightgray;}
@@ -310,9 +344,15 @@ input[type='checkbox']:focus {
 }
 
 .debug-text {
-  flex-grow: 1;
   font-size: 18px;
   text-align: center;
+  color: white;
+  flex-basis: 100%;
+}
+
+#title-text {
+  font-size: 24px;
+  border-bottom: 1px solid white;
 }
 
 @font-face {

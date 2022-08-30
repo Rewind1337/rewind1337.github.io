@@ -1,52 +1,66 @@
 // p5 canvas
 let canvas;
+let __canvas;
+
+let __canvasContext;
 
 // pixelarray
 let PIXELS;
 
 // tick timer
-let global_timer;
+let globalTimer;
 
-// selection from ui
-let selectedType = 0;
+// tooltip stuff
+let tooltipTimeout;
+let tooltipContent = "";
+let tooltipOpen = false;
+
+// modal stuff
+let modalOpen = false;
+
+// ui stuff
+let SELECTED_TYPE = 0;
+let PIXEL_SIZE = 20;
+let BRUSH_SIZE = 2;
+
+// toggles
+let DRAW_HOVER = true;
+let DRAW_GRID = false;
+let DEBUG_MODE = true;
+let STABLE_MODE = false;
+
+// amount of pixels per side
+let GRID_WIDTH = 60;
+let GRID_HEIGHT = 60;
 
 // ticks per second
 let TPS = 60;
 
-// pixel size
-let PIXEL_SIZE = 20;
-let BRUSH_SIZE = 2;
-
-let DRAW_GRID = false;
-let DEBUG_MODE = true;
-
-// amount of pixels per side
-let GRID_WIDTH = 40;
-let GRID_HEIGHT = 30;
-
 // particles - special
 const AIR = 0;
 
+// particles - solids
+const WALL = 100;
+
 // particles - powders
-const SAND = 10;
-const STONE = 11;
+const SAND = 200;
+const STONE = 201;
 
 // particles - liquids
-const WATER = 100;
-const LAVA = 101;
+const WATER = 300;
+const LAVA = 301;
+const ACID = 302;
 
 // particles - gases
-const STEAM = 200;
-
-// particles - solids
-const WALL = 1;
+const STEAM = 400;
 
 class Pixel {
-	constructor (type, x, y) {
+	constructor (type, x, y, stableMode) {
 		this.x = x;
 		this.y = y;
 		
 		this.stable = false;
+		this.alwaysStable = stableMode;
 		this.didChange = true;
 
 		this.setType(type);
@@ -61,6 +75,10 @@ class Pixel {
 		this.setType(target.type);
 		this.didChange = true;
 		target.setType(tempType);
+	}
+
+	setAlwaysStable (bool) {
+		this.alwaysStable = bool;
 	}
 
 	setType (type) {
@@ -84,6 +102,9 @@ class Pixel {
 			case LAVA:
 				this.fill = color(random(0, 10), 100, 20 + random(0, 15));
 			break;
+			case ACID:
+				this.fill = color(120, 75 + random(0, 25), 50 + random(0, 25));
+			break;
 			case STEAM:
 				this.fill = color(0, 0, 90);
 			break;
@@ -98,8 +119,8 @@ class Pixel {
 	}
 
 	tick () {
-		if (this.type === AIR || this.type === WALL) {
-			this.stable = true
+		if (this.type === AIR || this.type === WALL || this.alwaysStable) {
+			this.stable = true;
 			this.draw();
 			return;
 		}
@@ -135,49 +156,49 @@ class Pixel {
 				this.stable = true;
 			break;
 			case SAND:
-				if (down.type === AIR) {
+				if (down.type === AIR && !down.alwaysStable) {
 					this.swap(down);
 					break;
 				}
 
-				if (down.type === WATER) {
+				if (down.type === WATER && !down.alwaysStable) {
 					let r = Math.random();
 					if (r < 0.33334) {
-						if (downleft.type === WATER) {
+						if (downleft.type === WATER && !downleft.alwaysStable) {
 							this.swap(downleft);
 							break;
 						}
-						if (downright.type === WATER) {
+						if (downright.type === WATER && !downright.alwaysStable) {
 							this.swap(downright);
 							break;
 						}
-						if (down.type === WATER) {
+						if (down.type === WATER && !down.alwaysStable) {
 							this.swap(down);
 							break;
 						}
 					} else if (r >= 0.33334 && r < 0.66667) {
-						if (downright.type === WATER) {
+						if (downright.type === WATER && !downright.alwaysStable) {
 							this.swap(downright);
 							break;
 						}
-						if (downleft.type === WATER) {
+						if (downleft.type === WATER && !downleft.alwaysStable) {
 							this.swap(downleft);
 							break;
 						}
-						if (down.type === WATER) {
+						if (down.type === WATER && !down.alwaysStable) {
 							this.swap(down);
 							break;
 						}
 					} else if (r >= 0.66667) {
-						if (down.type === WATER) {
+						if (down.type === WATER && !down.alwaysStable) {
 							this.swap(down);
 							break;
 						}
-						if (downleft.type === WATER) {
+						if (downleft.type === WATER && !downleft.alwaysStable) {
 							this.swap(downleft);
 							break;
 						}
-						if (downright.type === WATER) {
+						if (downright.type === WATER && !downright.alwaysStable) {
 							this.swap(downright);
 							break;
 						}
@@ -210,7 +231,7 @@ class Pixel {
 				this.doTick = false;
 			break;
 			case STONE:
-				if (down.type === AIR || down.type === SAND || down.type === WATER) {
+				if ((down.type === AIR || down.type === SAND || down.type === WATER) && !down.alwaysStable) {
 					this.swap(down);
 					break;
 				}
@@ -221,7 +242,7 @@ class Pixel {
 			break;
 			case WATER:
 				this.stable = true;
-				if (down.type === AIR || down.type === STEAM) {
+				if (down.type === AIR && !down.alwaysStable) {
 					this.swap(down);
 					break;
 				}
@@ -268,26 +289,31 @@ class Pixel {
 	}
 
 	draw () {
-		drawingContext.fillStyle = this.fill.toString(RGB);
-		drawingContext.fillRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+		__canvasContext.fillStyle = this.fill.toString(RGB);
+		__canvasContext.fillRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 
 		if (DRAW_GRID) {
-			drawingContext.strokeStyle = "rgba(0, 0, 0, 0.1)";
-			drawingContext.strokeRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+			__canvasContext.strokeStyle = "rgba(0, 0, 0, 0.1)";
+			__canvasContext.strokeRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 		}
 
 		let off = 0.2 * PIXEL_SIZE;
 		if (!this.stable && DEBUG_MODE) {
-			drawingContext.beginPath();
-			drawingContext.arc(this.x * PIXEL_SIZE + PIXEL_SIZE/2, this.y * PIXEL_SIZE + PIXEL_SIZE/2, PIXEL_SIZE/6, 0, 2 * Math.PI, false);
-			drawingContext.fillStyle = 'rgba(0, 0, 0, 0.2)';
-			drawingContext.fill();
+			__canvasContext.beginPath();
+			__canvasContext.arc(this.x * PIXEL_SIZE + PIXEL_SIZE/2, this.y * PIXEL_SIZE + PIXEL_SIZE/2, PIXEL_SIZE/6, 0, 2 * Math.PI, false);
+			__canvasContext.fillStyle = 'rgba(0, 0, 0, 0.2)';
+			__canvasContext.fill();
+		}
+
+		if (this.alwaysStable) {
+			__canvasContext.strokeStyle = "rgb(255, 0, 0)";
+			__canvasContext.strokeRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 		}
 	}
 }
 
 function importGridState (string) {
-	clearInterval(global_timer);
+	clearInterval(globalTimer);
 
 	let importJSON = JSON.parse(string);
 
@@ -301,7 +327,8 @@ function importGridState (string) {
 
 	for (let x = 0; x < GRID_WIDTH; x++) {
 		for (let y = 0; y < GRID_HEIGHT; y++) {
-			PIXELS[x][y].setType(_PIXELS[x][y]);
+			PIXELS[x][y].setType(_PIXELS[x][y][0]);
+			PIXELS[x][y].setAlwaysStable((_PIXELS[x][y][1] === 1 ? true : false));
 		}
 	}
 
@@ -324,8 +351,7 @@ function exportGridState () {
 		for (let y = 0; y < PIXELS[0].length; y++) {
 			exportArray[x].push([]);
 			let P = PIXELS[x][y];
-			let type = P.type;
-			exportArray[x][y] = type;
+			exportArray[x][y] = [P.type, (P.alwaysStable === true ? 1 : 0)];
 		}
 	}
 
@@ -343,21 +369,33 @@ function setup () {
 	canvas.parent("canvas-parent")
 	$("#r-canvas")[0].addEventListener('contextmenu', (event) => {event.preventDefault();});
 
+	__canvas = createGraphics(10, 10, P2D);
+	__canvasContext = __canvas.canvas.getContext("2d");
+
 	colorMode(HSL, 360, 100, 100, 1);
 	ellipseMode(CENTER);
 	rectMode(CORNER);
 	smooth();
 	angleMode(DEGREES);
 	frameRate(TPS);
+
+	__canvas.colorMode(HSL, 360, 100, 100, 1);
+	__canvas.ellipseMode(CENTER);
+	__canvas.rectMode(CORNER);
+	__canvas.smooth();
+	__canvas.angleMode(DEGREES);
+	__canvas.frameRate(TPS);
+
 	setupSandbox();
 	bindSettings();
 	bindToolbar();
+	bindTooltip();
 	startTickClock();
 }
 
 function startTickClock () {
-	clearInterval(global_timer);
-	global_timer = setInterval(function () {
+	clearInterval(globalTimer);
+	globalTimer = setInterval(function () {
 		for (let x = 0; x < width/PIXEL_SIZE; x++) {
 			for (let y = 0; y < height/PIXEL_SIZE; y++) {
 				if (!PIXELS[x][y].stable) {
@@ -369,23 +407,53 @@ function startTickClock () {
 }
 
 function setupSandbox() {
-	resizeCanvas(GRID_WIDTH * PIXEL_SIZE, GRID_HEIGHT * PIXEL_SIZE);
-	$("#debug-info").css({"width": GRID_WIDTH * PIXEL_SIZE + "px"})
+	let sandboxWidth = GRID_WIDTH * PIXEL_SIZE;
+	let sandboxHeight = GRID_HEIGHT * PIXEL_SIZE;
+
+	resizeCanvas(sandboxWidth, sandboxHeight);
+	__canvas.resizeCanvas(sandboxWidth, sandboxHeight);
+
+	$("#debug-info").css({"width": sandboxWidth + "px"})
 
 	PIXELS = [];
 	for (let x = 0; x < GRID_WIDTH; x++) {
 		PIXELS.push([]);
 		for (let y = 0; y < GRID_HEIGHT; y++) {
 			PIXELS[x].push([]);
-			PIXELS[x][y] = new Pixel(0, x, y);
+			PIXELS[x][y] = new Pixel(0, x, y, false);
 		}
 	}
+}
+
+function bindTooltip () {
+	$('[data-tooltip]').hover(function () {
+		let tttext = $(this).attr("data-tooltip");
+		if (tttext.length > 0) {
+			$("#tooltip").text($(this).attr("data-tooltip"));
+		} else {
+			$("#tooltip").text("no tooltip yet :(");
+		}
+
+		tooltipTimeout = setTimeout(function () {
+			tooltipOpen = true;
+			if (winMouseY < windowHeight/2) {
+				$("#tooltip").css({"top": (winMouseY + 50) + "px", "left": winMouseX + "px", "display": "block"}).animate({"opacity": 1}, 1000);
+			} else {
+				$("#tooltip").css({"top": (winMouseY - 50) + "px", "left": winMouseX + "px", "display": "block", "transform": "translate(-50%, -100%)"}).animate({"opacity": 1}, 1000);
+			}
+		}, 1500);
+	}, function () {
+		clearTimeout(tooltipTimeout);
+		if (tooltipOpen) {
+			$("#tooltip").css({"opacity": 0, "top": "-10000px", "left": "-10000px", "display": "none"});
+		}
+	})
 }
 
 function bindToolbar () {
 	$(".particle:not(.particle-wip)").click(function () {
 		let type = eval($(this).attr("data-type"));
-		selectedType = type;
+		SELECTED_TYPE = type;
 		$(".particle").removeClass("selected");
 		$(this).addClass("selected");
 	})
@@ -422,7 +490,7 @@ function bindSettings () {
 		startTickClock();
 	}).change();
 
-	$("#setting-showgrid").change(function () {
+	$("#setting-drawgrid").change(function () {
 		let v = $(this).prop("checked");
 		DRAW_GRID = v;
 		for (let x = PIXELS.length - 1; x >= 0; x--) {
@@ -431,6 +499,16 @@ function bindSettings () {
 				p.draw();
 			}
 		}
+	}).change();
+
+	$("#setting-drawhover").change(function () {
+		let v = $(this).prop("checked");
+		DRAW_HOVER = v;
+	}).change();
+
+	$("#setting-stablemode").change(function () {
+		let v = $(this).prop("checked");
+		STABLE_MODE = v;
 	}).change();
 
 	$("#setting-debugmode").change(function () {
@@ -447,12 +525,12 @@ function bindSettings () {
 		} else {
 			$(this).addClass("paused");
 			$(this).find(".material-icons").html("play_arrow");
-			clearInterval(global_timer);
+			clearInterval(globalTimer);
 		}
 	}).change();
 
 	$("#controls-export").click(function () {
-		let bool = confirm("Export current Grid State?");
+		let bool = confirm("Export current Sandbox?");
 		if (bool) {
 			let json = exportGridState();
 			$("#file-modal").css({"display": "block"}).animate({"opacity": 1}, 200);
@@ -460,17 +538,19 @@ function bindSettings () {
 			$("#file-in-confirm").hide();
 			$("#file-in-cancel").hide();
 			$("#file-out-confirm").show();
+			modalOpen = true;
 		}
 	})
 
 	$("#controls-import").click(function () {
-		let bool = confirm("Do you want to import a Grid State?");
+		let bool = confirm("Do you want to import a Sandbox?");
 		if (bool) {
 			$("#file-modal").css({"display": "block"}).animate({"opacity": 1}, 200);
 			$("#file-in-out").prop("readonly", false).val("");
 			$("#file-in-confirm").show();
 			$("#file-in-cancel").show();
 			$("#file-out-confirm").hide();
+			modalOpen = true;
 		}
 	})
 
@@ -478,20 +558,23 @@ function bindSettings () {
 		let string = $("#file-in-out").val();
 		importGridState(string);
 		$("#file-modal").animate({"opacity": 0}, 200).css({"display": "none"});
+		modalOpen = false;
 	})
 
 	$("#file-in-cancel").click(function () {
 		$("#file-modal").animate({"opacity": 0}, 200).css({"display": "none"});
+		modalOpen = false;
 	})
 
 	$("#file-out-confirm").click(function () {
 		$("#file-modal").animate({"opacity": 0}, 200).css({"display": "none"});
+		modalOpen = false;
 	})
 }
 
 function draw () {
-	let count = 0;
-	let stableCount = 0;
+	let particleCount = 0;
+	let unstableCount = 0;
 	for (let x = PIXELS.length - 1; x >= 0; x--) {
 		for (let y = PIXELS[0].length - 1; y >= 0; y--) {
 			let p = PIXELS[x][y];
@@ -500,54 +583,70 @@ function draw () {
 			}
 
 			// debug count of particles
-			if (p.type !== AIR) {count ++;}
-			
-			if (!p.stable) {stableCount ++;}
+			if (p.type !== AIR) {particleCount ++;}
+			if (!p.stable) {unstableCount ++;}
 		}
 	}
 
-	stroke(0, 0, 0, 1);
-	noFill();
+	image(__canvas, 0, 0, width, height);
 
 	// hover
-	let pixelX = ~~(((mouseX - 4) / width) * (width / PIXEL_SIZE));
-	let pixelY = ~~(((mouseY - 4) / height) * (height / PIXEL_SIZE));
+	if (DRAW_HOVER) {
+		drawingContext.strokeStyle = "rgb(0, 0, 0)";
+		let mx = ~~(((mouseX - 4) / width) * (width / PIXEL_SIZE));
+		let my = ~~(((mouseY - 4) / height) * (height / PIXEL_SIZE));
+		for (let xoff = -BRUSH_SIZE + 1; xoff < BRUSH_SIZE; xoff++) {
+			for (let yoff = -BRUSH_SIZE + 1; yoff < BRUSH_SIZE; yoff++) {
+				drawingContext.strokeRect((mx + xoff) * PIXEL_SIZE, (my + yoff) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+			}
+		}
+	}
 
 	if (mouseIsPressed) {
 		handleClick(mouseX - 4, mouseY - 4);
 	}
 
 	$("#debug-fps").text("tps: " + Math.round(frameRate()));
-	$("#debug-count").text("particles: " + count);
-	$("#debug-unstable").text("unstable: " + stableCount);
+	$("#debug-count").text("particles: " + particleCount);
+	$("#debug-unstable").text("unstable: " + unstableCount);
 }
 
 function handleClick(mx, my) {
+	if (modalOpen) return;
+
 	if (mx >= 0 && mx <= width && my >= 0 && my <= height) {
 		for (let xoff = -BRUSH_SIZE + 1; xoff < BRUSH_SIZE; xoff++) {
 			for (let yoff = -BRUSH_SIZE + 1; yoff < BRUSH_SIZE; yoff++) {
 				let pixelX = ~~((mx / width) * (width / PIXEL_SIZE));
 				let pixelY = ~~((my / height) * (height / PIXEL_SIZE));
 				let p = PIXELS[clamp(pixelX + xoff, 0, PIXELS.length - 1)][clamp(pixelY + yoff, 0, PIXELS[0].length - 1)];
-				p.setType(selectedType);
+
+				p.setType(SELECTED_TYPE);
+				p.setAlwaysStable(STABLE_MODE);
+
 				p.tick();
 			}
 		}
 	}
 }
 
+// on click
 function mousePressed () {
 	handleClick(mouseX - 4, mouseY - 4);
 }
 
+// on drag
 function mouseDragged () {
 	handleClick(mouseX - 4, mouseY - 4);
 }
 
-function keyPressed () {}
-function keyReleased () {}
 function mouseReleased () {}
 function mouseMoved () {}
 function mouseWheel() {}
+
+function keyPressed () {}
+function keyReleased () {}
+
+function windowResized() {}
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
