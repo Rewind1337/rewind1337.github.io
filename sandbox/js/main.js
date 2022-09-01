@@ -414,7 +414,7 @@ function setup () {
 	canvas = createCanvas(10, 10, P2D);
 	canvas.id("r-canvas");
 	canvas.parent("canvas-parent")
-	$("#r-canvas")[0].addEventListener('contextmenu', (event) => {event.preventDefault();});
+	// $("#r-canvas")[0].addEventListener('contextmenu', (event) => {event.preventDefault();});
 
 	__canvas = createGraphics(10, 10, P2D);
 	__canvasContext = __canvas.canvas.getContext("2d");
