@@ -28,13 +28,13 @@
 			</div>
 		</div>
 
-		<div id="file-bar">
+		<div id="file-bar" class="fade-in-at-start">
 			<button id="controls-export" class="control-button" data-tooltip="export current sandbox"><span class="material-icons">download</span></button>
 			<button id="controls-playpause" class="control-button" data-tooltip="pauses / resumes the simulation"><span class="material-icons">pause</span></button>
 			<button id="controls-import" class="control-button" data-tooltip="import sandbox"><span class="material-icons">file_upload</span></button>
 		</div>
 
-		<div id="settings-bar">
+		<div id="settings-bar" class="fade-in-at-start">
 			<div id="settings-list">
 				<div class="flex-row">
 					<div class="flex-row">
@@ -70,19 +70,19 @@
 					<div class="flex-row" id="settings-row">
 						<div class="col">
 							<span class="settings-text">DRAW&nbsp;GRID</span>
-							<input id="setting-drawgrid" type="checkbox" data-tooltip="toggles the grid, low performance impact">
+							<input id="setting-drawgrid" type="checkbox" data-tooltip="toggles the grid, high performance impact">
 						</div>
 						<div class="col">
 							<span class="settings-text">DRAW&nbsp;HOVER</span>
 							<input id="setting-drawhover" type="checkbox" checked data-tooltip="toggles the hover selection, low performance impact">
 						</div>
 						<div class="col">
-							<span class="settings-text">STABLE&nbsp;MODE</span>
+							<span class="settings-text">P.&nbsp;STABLE&nbsp;MODE</span>
 							<input id="setting-stablemode" type="checkbox" data-tooltip="toggles creating particles with the 'always stable' flag, they will not move">
 						</div>
 						<div class="col">
 							<span class="settings-text">DEBUG&nbsp;MODE</span>
-							<input id="setting-debugmode" type="checkbox" checked data-tooltip="toggles debug mode, showing unstable particles, high performance impact">
+							<input id="setting-debugmode" type="checkbox" checked data-tooltip="toggles debug mode, showing unstable particles, low-medium performance impact">
 						</div>
 					</div>
 				</div>
@@ -93,12 +93,15 @@
 			<span class="debug-text" id="title-text">Sandbox</span>
 			<div id="debug-info">
 				<span class="debug-text" id="debug-fps" data-tooltip="current updates per second"></span>
-				<span class="debug-text" id="debug-count" data-tooltip="current number of non-air particles"></span>
-				<span class="debug-text" id="debug-unstable" data-tooltip="currentn umber of particles being updated"></span>
+				<span class="debug-text" id="debug-count" data-tooltip="current number of non-air particles">Loading...</span>
+				<span class="debug-text" id="debug-unstable" data-tooltip="currentn number of particles being updated"></span>
+			</div>
+			<div class="progress-bar">
+				<div id="loader-bar"></div>
 			</div>
 		</div>
 
-		<div id="tool-bar">
+		<div id="tool-bar" class="fade-in-at-start">
 			<div id="particle-list" class="flex-row">
 
 				<div class="particle-break">SPECIAL</div>

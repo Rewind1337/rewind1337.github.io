@@ -172,6 +172,9 @@ class Pixel {
 			let affectedType = Object.keys(PIXEL_DEF[st])[0];
 			for (let at in PIXEL_DEF[st]) {
 				let rule = PIXEL_DEF[st][at];
+
+				// kinda working? but ehh
+
 				if (rule === GRAVITY) {
 					if (down.type == affectedType) {
 						this.swap(down);
@@ -180,7 +183,9 @@ class Pixel {
 					}
 				}
 
-				if (rule === SAND_PILE && down.type != AIR) {
+				// nope
+
+				if (rule === SAND_PILE) {
 					if (Math.random() > 0.7 && !atBottom) { // move or not?
 						if (Math.random() >= 0.5) {
 							if (downleft.type == affectedType) {
@@ -438,7 +443,20 @@ function setup () {
 	bindSettings();
 	bindToolbar();
 	bindTooltip();
+
 	startTickClock();
+
+	$(".fade-in-at-start").animate({"opacity": 1}, 1000);
+
+	$("#loader-bar").css({"width": "100%"});
+
+	$("#loader-bar").parent().animate({"opacity": 0}, 750, function () {
+		$("#loader-bar").hide();
+	})
+
+	setTimeout(function () {
+		$("#r-canvas").animate({"opacity": 1}, 250);
+	}, 250);
 }
 
 function startTickClock () {
@@ -496,12 +514,14 @@ function bindTooltip () {
 				$("#tooltip").css({"top": (winMouseY - 50) + "px", "left": winMouseX + "px", "display": "block", "transform": "translate(-50%, -100%)"}).animate({"opacity": 1}, 1000);
 			}
 		}, 1500);
-	}, function () {
-		clearTimeout(tooltipTimeout);
-		if (tooltipOpen) {
-			$("#tooltip").css({"opacity": 0, "top": "-10000px", "left": "-10000px", "display": "none"});
-		}
-	})
+	}, stopTooltipTimer)
+}
+
+function stopTooltipTimer () {
+	clearTimeout(tooltipTimeout);
+	if (tooltipOpen) {
+		$("#tooltip").css({"opacity": 0, "top": "-10000px", "left": "-10000px", "display": "none"});
+	}
 }
 
 function bindToolbar () {
@@ -677,6 +697,8 @@ function draw () {
 
 function handleClick(mx, my) {
 	if (modalOpen) return;
+
+	stopTooltipTimer();
 
 	if (mx >= 0 && mx <= width && my >= 0 && my <= height) {
 		for (let xoff = -BRUSH_SIZE + 1; xoff < BRUSH_SIZE; xoff++) {

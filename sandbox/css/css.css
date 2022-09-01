@@ -16,6 +16,8 @@ canvas {
   box-shadow: 0 0 36px black;
   margin-top: 8px;
   margin-bottom: 32px;
+
+  opacity: 0;
 }
 
 html, body {
@@ -27,6 +29,10 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.fade-in-at-start {
+  opacity: 0;
 }
 
 .center-vertically {
@@ -61,6 +67,23 @@ body {
 
 .settings-text {
   font-size: 18px;
+}
+
+.progress-bar {
+  width: 50%;
+  height: 9px;
+  border-radius: 3px;
+  border: 1px solid white;
+  padding: 2px;
+}
+
+#loader-bar {
+  width: 0%;
+  height: 100%;
+  background-color: white;
+  margin-bottom: 2px;
+
+  transition: width 0.05s linear;
 }
 
 select {
