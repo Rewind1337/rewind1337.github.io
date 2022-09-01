@@ -40,19 +40,35 @@ let TPS = 60;
 const AIR = 0;
 
 // particles - solids
-const WALL = 100;
+const WALL = 10;
 
 // particles - powders
-const SAND = 200;
-const STONE = 201;
+const SAND = 30;
+const STONE = 31;
 
 // particles - liquids
-const WATER = 300;
-const LAVA = 301;
-const ACID = 302;
+const WATER = 50;
+const LAVA = 51;
+const ACID = 52;
 
 // particles - gases
-const STEAM = 400;
+const STEAM = 75;
+
+// pixel rules
+const GRAVITY = "gravity";
+const SAND_PILE = "sand_pile";
+
+// pixel definitions, unused currently
+let PIXEL_DEF = {
+	add_rule: (sourceTypes, affectedTypes, rule) => {
+		for (let st = 0; st < sourceTypes.length; st++) {
+			for (let at = 0; at < affectedTypes.length; at++) {
+				PIXEL_DEF[sourceTypes[st]] = {};
+				PIXEL_DEF[sourceTypes[st]][affectedTypes[at]] = rule
+			}
+		}
+	},
+}
 
 class Pixel {
 	constructor (type, x, y, stableMode) {
@@ -149,6 +165,42 @@ class Pixel {
 		let downright = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
 		
 		this.didChange = false;
+
+		/* PIXEL_DEF implementation attempt
+
+		for (let st in PIXEL_DEF) {
+			let affectedType = Object.keys(PIXEL_DEF[st])[0];
+			for (let at in PIXEL_DEF[st]) {
+				let rule = PIXEL_DEF[st][at];
+				if (rule === GRAVITY) {
+					if (down.type == affectedType) {
+						this.swap(down);
+					} else {
+						this.stable = true;
+					}
+				}
+
+				if (rule === SAND_PILE && down.type != AIR) {
+					if (Math.random() > 0.7 && !atBottom) { // move or not?
+						if (Math.random() >= 0.5) {
+							if (downleft.type == affectedType) {
+								this.swap(downleft);
+							} else {
+								this.stable = true;
+							}
+						} else {
+							if (downright.type == affectedType) {
+								this.swap(downright);
+							} else {
+								this.stable = true;
+							}
+						}
+					}	
+				}
+			}
+		}
+	
+		*/
 
 		switch (this.type) {
 			case WALL:
@@ -292,11 +344,6 @@ class Pixel {
 		__canvasContext.fillStyle = this.fill.toString(RGB);
 		__canvasContext.fillRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 
-		if (DRAW_GRID) {
-			__canvasContext.strokeStyle = "rgba(0, 0, 0, 0.1)";
-			__canvasContext.strokeRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
-		}
-
 		let off = 0.2 * PIXEL_SIZE;
 		if (!this.stable && DEBUG_MODE) {
 			__canvasContext.beginPath();
@@ -386,6 +433,7 @@ function setup () {
 	__canvas.angleMode(DEGREES);
 	__canvas.frameRate(TPS);
 
+	setupRules();
 	setupSandbox();
 	bindSettings();
 	bindToolbar();
@@ -404,6 +452,12 @@ function startTickClock () {
 			}
 		}
 	}, 1000 / TPS)
+}
+
+function setupRules() {
+	PIXEL_DEF.add_rule([SAND, WATER, STONE], [AIR], GRAVITY); // regular gravity for most particles, falling straight through the air
+	PIXEL_DEF.add_rule([SAND], [SAND], SAND_PILE); // piling mechanic for sand and other powders
+	PIXEL_DEF.add_rule([STONE], [SAND, WATER], GRAVITY);  // falling straight through sand and water
 }
 
 function setupSandbox() {
@@ -598,6 +652,16 @@ function draw () {
 		for (let xoff = -BRUSH_SIZE + 1; xoff < BRUSH_SIZE; xoff++) {
 			for (let yoff = -BRUSH_SIZE + 1; yoff < BRUSH_SIZE; yoff++) {
 				drawingContext.strokeRect((mx + xoff) * PIXEL_SIZE, (my + yoff) * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+			}
+		}
+	}
+
+	if (DRAW_GRID) {
+		for (let x = PIXELS.length - 1; x >= 0; x--) {
+			for (let y = PIXELS[0].length - 1; y >= 0; y--) {
+				drawingContext.strokeStyle = "rgba(0, 0, 0, 0.1)";
+				drawingContext.strokeRect(x * PIXEL_SIZE, y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+
 			}
 		}
 	}
