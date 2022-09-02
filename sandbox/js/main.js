@@ -61,9 +61,9 @@ const SAND_PILE = "sandPile";
 const LIQUID_SPREAD = "liquidSpread";
 const SINK_LIKE_STONE = "sinkLikeStone";
 const SINK_LIKE_SAND = "sinkLikeSand";
-const LAVA_EVAPORATE = "lavaStuff";
+const LAVA_EVAPORATE = "lavaEvaporate";
 const LAVA_SPREAD = "lavaSpread";
-const ACID_EVAPORATE = "acidStuff";
+const ACID_EVAPORATE = "acidEvaporate";
 const GAS_FLOAT = "gasFloat";
 const GAS_SPREAD = "gasSpread";
 
@@ -311,7 +311,7 @@ class Pixel {
 			if (rule === LAVA_EVAPORATE) {
 				let targets = [up, left, right, down];
 				for (let t in targets) {
-					if (targets[t].type === WATER) {
+					if (PIXEL_DEF.lava_whitelist.includes(targets[t].type)) {
 						targets[t].setType(STEAM);
 						if (Math.random() >= 0.5) { // burn self?
 							this.setType(STEAM);
@@ -564,8 +564,9 @@ function setupRules() {
 
 	PIXEL_DEF.add_rule([STONE], SINK_LIKE_STONE); // sinkage of stone through sand and water
 
-	PIXEL_DEF.add_rule([LAVA], LAVA_EVAPORATE); // evaporate water aswell as self sometimes
+	PIXEL_DEF.add_rule([LAVA], LAVA_EVAPORATE); // evaporate whitelist
 	PIXEL_DEF.add_rule([LAVA], LAVA_SPREAD); // spread of lava, like water, but slower
+	PIXEL_DEF.lava_whitelist = [WATER]; // blacklist
 
 	PIXEL_DEF.add_rule([ACID], ACID_EVAPORATE); // evaporate everything thats not in the blacklist
 	PIXEL_DEF.acid_blacklist = [AIR, WALL, ACID, STEAM]; // blacklist
