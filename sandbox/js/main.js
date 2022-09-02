@@ -56,15 +56,25 @@ const STEAM = 75;
 
 // pixel rules
 const GRAVITY = "gravity";
-const SAND_PILE = "sand_pile";
+const ANTIGRAVITY = "antigravity";
+const SAND_PILE = "sandPile";
+const LIQUID_SPREAD = "liquidSpread";
+const SINK_LIKE_STONE = "sinkLikeStone";
+const SINK_LIKE_SAND = "sinkLikeSand";
+const LAVA_EVAPORATE = "lavaStuff";
+const LAVA_SPREAD = "lavaSpread";
+const ACID_EVAPORATE = "acidStuff";
+const GAS_FLOAT = "gasFloat";
+const GAS_SPREAD = "gasSpread";
 
 // pixel definitions, unused currently
 let PIXEL_DEF = {
-	add_rule: (sourceTypes, affectedTypes, rule) => {
+	add_rule: (sourceTypes, rule) => {
 		for (let st = 0; st < sourceTypes.length; st++) {
-			for (let at = 0; at < affectedTypes.length; at++) {
-				PIXEL_DEF[sourceTypes[st]] = {};
-				PIXEL_DEF[sourceTypes[st]][affectedTypes[at]] = rule
+			if (sourceTypes[st] in PIXEL_DEF) {
+				PIXEL_DEF[sourceTypes[st]].push(rule);
+			} else {
+				PIXEL_DEF[sourceTypes[st]] = [rule];
 			}
 		}
 	},
@@ -78,6 +88,7 @@ class Pixel {
 		this.stable = false;
 		this.alwaysStable = stableMode;
 		this.didChange = true;
+		this.timeAlive = 0;
 
 		this.setType(type);
 
@@ -87,10 +98,12 @@ class Pixel {
 	}
 
 	swap (target) {
-		let tempType = this.type;
+		let temp = JSON.parse(JSON.stringify(this)); // maybe change this if its taking too long, but seems okay for now
 		this.setType(target.type);
+		this.timeAlive = target.timeAlive;
 		this.didChange = true;
-		target.setType(tempType);
+		target.setType(temp.type);
+		target.timeAlive = temp.timeAlive;
 	}
 
 	setAlwaysStable (bool) {
@@ -101,6 +114,7 @@ class Pixel {
 		this.type = type;
 		
 		this.stable = false;
+		this.timeAlive = 0;
 
 		switch (this.type) {
 			case AIR:
@@ -141,8 +155,6 @@ class Pixel {
 			return;
 		}
 
-		this.timeAlive ++;
-
 		if (!this.doTick) {
 			this.doTick = true;
 			return;
@@ -152,6 +164,12 @@ class Pixel {
 
 		if (this.y == PIXELS[0].length - 1) {
 			atBottom = true;
+		}
+
+		let atTop = false;
+
+		if (this.y == 0) {
+			atTop = true;
 		}
 
 		let up = PIXELS[this.x][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
@@ -166,58 +184,79 @@ class Pixel {
 		
 		this.didChange = false;
 
-		/* PIXEL_DEF implementation attempt
+		let st = this.type;
+		for (let i = 0; i < PIXEL_DEF[st].length; i++) {
+			let rule = PIXEL_DEF[st][i];
 
-		for (let st in PIXEL_DEF) {
-			let affectedType = Object.keys(PIXEL_DEF[st])[0];
-			for (let at in PIXEL_DEF[st]) {
-				let rule = PIXEL_DEF[st][at];
-
-				// kinda working? but ehh
-
-				if (rule === GRAVITY) {
-					if (down.type == affectedType) {
-						this.swap(down);
-					} else {
-						this.stable = true;
-					}
+			if (rule === GRAVITY) {
+				if (down.type === AIR || down.type === STEAM) {
+					this.swap(down);
+				} else {
+					this.stable = true;
 				}
+			}
 
-				// nope
-
-				if (rule === SAND_PILE) {
+			if (rule === SAND_PILE) {
+				if (down.type != AIR) {
 					if (Math.random() > 0.7 && !atBottom) { // move or not?
 						if (Math.random() >= 0.5) {
-							if (downleft.type == affectedType) {
+							if (downleft.type === AIR) {
 								this.swap(downleft);
-							} else {
-								this.stable = true;
 							}
 						} else {
-							if (downright.type == affectedType) {
+							if (downright.type === AIR) {
 								this.swap(downright);
-							} else {
-								this.stable = true;
 							}
 						}
 					}	
+					this.stable = true;
+					if (!atBottom) {
+						if (left.type === AIR || right.type === AIR) {
+							this.stable = false;
+						}
+					}
 				}
 			}
-		}
-	
-		*/
 
-		switch (this.type) {
-			case WALL:
-			case AIR:
-				this.stable = true;
-			break;
-			case SAND:
-				if (down.type === AIR && !down.alwaysStable) {
-					this.swap(down);
-					break;
+			if (rule === LIQUID_SPREAD) {
+				if (down.type !== AIR) {
+					if (true) { // move or not?
+						if (left.type === AIR || right.type === AIR) {
+							this.stable = false;
+						}
+						if (Math.random() >= 0.5) {
+							if (left.type === AIR) {
+								this.swap(left);
+							}
+						} else {
+							if (right.type === AIR) {
+								this.swap(right);
+							}
+						}
+					}
 				}
+			}
 
+			if (rule === GAS_SPREAD) {
+				if (up.type !== AIR) {
+					if (true) { // move or not?
+						if (left.type === AIR || right.type === AIR) {
+							this.stable = false;
+						}
+						if (Math.random() >= 0.5) {
+							if (left.type === AIR) {
+								this.swap(left);
+							}
+						} else {
+							if (right.type === AIR) {
+								this.swap(right);
+							}
+						}
+					}
+				}
+			}
+
+			if (rule === SINK_LIKE_SAND) {
 				if (down.type === WATER && !down.alwaysStable) {
 					let r = Math.random();
 					if (r < 0.33334) {
@@ -261,74 +300,117 @@ class Pixel {
 						}
 					}
 				}
+			}
 
-				if (down.type !== AIR) {
-					this.stable = true;
-					if (!atBottom) {
-						if (left.type === AIR || right.type === AIR) {
-							this.stable = false;
+			if (rule === SINK_LIKE_STONE) {
+				if (down.type === SAND || down.type === WATER) {
+					this.swap(down);
+				}
+			}
+
+			if (rule === LAVA_EVAPORATE) {
+				let targets = [up, left, right, down];
+				for (let t in targets) {
+					if (targets[t].type === WATER) {
+						targets[t].setType(STEAM);
+						if (Math.random() >= 0.5) { // burn self?
+							this.setType(STEAM);
 						}
 					}
-					if (Math.random() > 0.7 && !atBottom) { // move or not?
-						if (Math.random() >= 0.5) {
-							if (downleft.type === AIR) {
-								this.swap(downleft);
-								break;
-							}
-						} else {
-							if (downright.type === AIR) {
-								this.swap(downright);
-								break;
-							}
-						}
-					}	
 				}
+			}
 
-				// considered stable, no calculation
-				this.doTick = false;
-			break;
-			case STONE:
-				if ((down.type === AIR || down.type === SAND || down.type === WATER) && !down.alwaysStable) {
-					this.swap(down);
-					break;
-				}
-
-				// considered stable, no calculation
-				this.doTick = false;
-				this.stable = true;
-			break;
-			case WATER:
-				this.stable = true;
-				if (down.type === AIR && !down.alwaysStable) {
-					this.swap(down);
-					break;
-				}
-
+			if (rule === LAVA_SPREAD) {
 				if (down.type !== AIR) {
-					if (true) { // move or not?
-						if (left.type == AIR || right.type === AIR) {
-							this.stable = false;
-						}
+					if (left.type === AIR || right.type === AIR) {
+						this.stable = false;
+					}
+					if (Math.random() >= 0.9) { // move or not?
 						if (Math.random() >= 0.5) {
-							if (left.type == AIR) {
+							if (left.type === AIR) {
 								this.swap(left);
-								break;
 							}
 						} else {
 							if (right.type === AIR) {
 								this.swap(right);
-								break;
 							}
 						}
 					}
 				}
+			}
 
-				// considered stable, no calculation
-				this.doTick = false;
-			break;
+			if (rule === ACID_EVAPORATE) {
+				let targets = [up, left, right, down];
+				for (let t in targets) {
+					if (!PIXEL_DEF.acid_blacklist.includes(targets[t].type)) {
+						if (Math.random() >= 0.66667) { // make steam?
+							targets[t].setType(STEAM);
+						} else {
+							targets[t].setType(AIR);
+						}
+						if (Math.random() >= 0.5) { // burn self?
+							this.setType(STEAM);
+						}
+					}
+				}
+			}
+
+			if (rule === ANTIGRAVITY) {
+				if (up.type === AIR) {
+					this.swap(up);
+				} else {
+					this.stable = true;
+				}
+			}
+
+			if (rule === GAS_FLOAT) {
+				if (up.type === AIR) {
+					let r = Math.random();
+					if (r < 0.33334) {
+						if (upleft.type === AIR) {
+							this.swap(upleft);
+							break;
+						}
+						if (upright.type === AIR) {
+							this.swap(upright);
+							break;
+						}
+						if (up.type === AIR) {
+							this.swap(up);
+							break;
+						}
+					} else if (r >= 0.33334 && r < 0.66667) {
+						if (upright.type === AIR) {
+							this.swap(upright);
+							break;
+						}
+						if (upleft.type === AIR) {
+							this.swap(upleft);
+							break;
+						}
+						if (up.type === AIR) {
+							this.swap(up);
+							break;
+						}
+					} else if (r >= 0.66667) {
+						if (up.type === AIR) {
+							this.swap(up);
+							break;
+						}
+						if (upleft.type === AIR) {
+							this.swap(upleft);
+							break;
+						}
+						if (upright.type === AIR) {
+							this.swap(upright);
+							break;
+						}
+					}
+				}
+			}
 		}
 		
-		if (this.didChange) { // good
+		if (this.didChange) {
 			up.stable = false;
 			down.stable = false;
 			left.stable = false;
@@ -473,9 +555,25 @@ function startTickClock () {
 }
 
 function setupRules() {
-	PIXEL_DEF.add_rule([SAND, WATER, STONE], [AIR], GRAVITY); // regular gravity for most particles, falling straight through the air
-	PIXEL_DEF.add_rule([SAND], [SAND], SAND_PILE); // piling mechanic for sand and other powders
-	PIXEL_DEF.add_rule([STONE], [SAND, WATER], GRAVITY);  // falling straight through sand and water
+	PIXEL_DEF.add_rule([SAND, STONE, WATER, LAVA, ACID], GRAVITY); // falling straight through air
+
+	PIXEL_DEF.add_rule([SAND], SAND_PILE); // pilage of sand
+	PIXEL_DEF.add_rule([SAND], SINK_LIKE_SAND); // sinkage of sand through water, and spreading
+
+	PIXEL_DEF.add_rule([WATER, ACID], LIQUID_SPREAD); // spread of water
+
+	PIXEL_DEF.add_rule([STONE], SINK_LIKE_STONE); // sinkage of stone through sand and water
+
+	PIXEL_DEF.add_rule([LAVA], LAVA_EVAPORATE); // evaporate water aswell as self sometimes
+	PIXEL_DEF.add_rule([LAVA], LAVA_SPREAD); // spread of lava, like water, but slower
+
+	PIXEL_DEF.add_rule([ACID], ACID_EVAPORATE); // evaporate everything thats not in the blacklist
+	PIXEL_DEF.acid_blacklist = [AIR, WALL, ACID, STEAM]; // blacklist
+
+	PIXEL_DEF.add_rule([STEAM], GAS_FLOAT); // steam rises
+	PIXEL_DEF.add_rule([STEAM], ANTIGRAVITY); // antigravity
+	PIXEL_DEF.add_rule([STEAM], GAS_SPREAD); // spread of gasses
+
 }
 
 function setupSandbox() {
@@ -649,6 +747,7 @@ function bindSettings () {
 function draw () {
 	let particleCount = 0;
 	let unstableCount = 0;
+	
 	for (let x = PIXELS.length - 1; x >= 0; x--) {
 		for (let y = PIXELS[0].length - 1; y >= 0; y--) {
 			let p = PIXELS[x][y];
