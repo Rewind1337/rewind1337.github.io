@@ -38,18 +38,22 @@ let TPS = 60;
 
 // particles - special
 const AIR = 0;
+const FIRE = 1;
 
 // particles - solids
 const WALL = 10;
+const WOOD = 11;
 
 // particles - powders
 const SAND = 30;
 const STONE = 31;
+const GUNPOWDER = 32;
 
 // particles - liquids
 const WATER = 50;
 const LAVA = 51;
 const ACID = 52;
+const OIL = 53;
 
 // particles - gases
 const STEAM = 75;
@@ -67,7 +71,9 @@ const ACID_EVAPORATE = "acidEvaporate";
 const GAS_FLOAT = "gasFloat";
 const GAS_SPREAD = "gasSpread";
 
-// pixel definitions, unused currently
+// const FIRE_SPREAD = "fireSpread";
+
+// pixel definitions
 let PIXEL_DEF = {
 	add_rule: (sourceTypes, rule) => {
 		for (let st = 0; st < sourceTypes.length; st++) {
@@ -120,11 +126,17 @@ class Pixel {
 			case AIR:
 				this.fill = color(0, 0, 99.5 + random(0, 0.5));
 			break;
+			case FIRE:
+				this.fill = color(random(0, 25), 100, 55);
+			break;
 			case SAND:
 				this.fill = color(52, 100, 75 + random(0, 10));
 			break;
 			case STONE:
 				this.fill = color(0, 0, 45 + random(0, 10));
+			break;
+			case GUNPOWDER:
+				this.fill = color(10 + random(0, 10), 100, 70);
 			break;
 			case WATER:
 				this.fill = color(200, 100, 65 + random(0, 15));
@@ -135,11 +147,17 @@ class Pixel {
 			case ACID:
 				this.fill = color(120, 75 + random(0, 25), 50 + random(0, 25));
 			break;
+			case OIL:
+				this.fill = color(35, 5 + random(0, 10), random(3, 15));
+			break;
 			case STEAM:
 				this.fill = color(0, 0, 90);
 			break;
 			case WALL:
 				this.fill = color(0, 0, 0 + random(0, 15));
+			break;
+			case WOOD:
+				this.fill = color(25, 75, 25 + random(0, 10));
 			break;
 		}
 
@@ -186,6 +204,7 @@ class Pixel {
 
 		let st = this.type;
 		for (let i = 0; i < PIXEL_DEF[st].length; i++) {
+			if (!PIXEL_DEF[st][i]) break;
 			let rule = PIXEL_DEF[st][i];
 
 			if (rule === GRAVITY) {
@@ -343,13 +362,15 @@ class Pixel {
 				let targets = [up, left, right, down];
 				for (let t in targets) {
 					if (!PIXEL_DEF.acid_blacklist.includes(targets[t].type)) {
-						if (Math.random() >= 0.66667) { // make steam?
-							targets[t].setType(STEAM);
-						} else {
-							targets[t].setType(AIR);
-						}
-						if (Math.random() >= 0.5) { // burn self?
-							this.setType(STEAM);
+						if (Math.random() >= 0.75) { // eat particle?
+							if (Math.random() >= 0.66667) { // make steam?
+								targets[t].setType(STEAM);
+							} else {
+								targets[t].setType(AIR);
+							}
+							if (Math.random() >= 0.5) { // burn self?
+								this.setType(STEAM);
+							}
 						}
 					}
 				}
@@ -408,6 +429,24 @@ class Pixel {
 					}
 				}
 			}
+
+			/*
+
+			if (rule === FIRE_SPREAD) {
+				let targets = [up, left, right, down, upleft, upright, downleft, downright];
+				for (let t in targets) {
+					if (PIXEL_DEF.fire_whitelist.includes(targets[t].type)) {
+						if (Math.random() >= 0.9) { // turn to fire
+							targets[t].setType(FIRE);
+						}
+						if (Math.random() >= 0.98) { // burn self?
+							this.setType(STEAM);
+						}
+					}
+				}
+			}
+
+			*/
 		}
 		
 		if (this.didChange) {
@@ -555,10 +594,10 @@ function startTickClock () {
 }
 
 function setupRules() {
-	PIXEL_DEF.add_rule([SAND, STONE, WATER, LAVA, ACID], GRAVITY); // falling straight through air
+	PIXEL_DEF.add_rule([SAND, STONE, /*GUNPOWDER,*/ WATER, LAVA, ACID], GRAVITY); // falling straight through air
 
-	PIXEL_DEF.add_rule([SAND], SAND_PILE); // pilage of sand
-	PIXEL_DEF.add_rule([SAND], SINK_LIKE_SAND); // sinkage of sand through water, and spreading
+	PIXEL_DEF.add_rule([SAND  /*, GUNPOWDER*/ ], SAND_PILE); // pilage of sand
+	PIXEL_DEF.add_rule([SAND  /*, GUNPOWDER*/ ], SINK_LIKE_SAND); // sinkage of sand through water, and spreading
 
 	PIXEL_DEF.add_rule([WATER, ACID], LIQUID_SPREAD); // spread of water
 
@@ -566,7 +605,7 @@ function setupRules() {
 
 	PIXEL_DEF.add_rule([LAVA], LAVA_EVAPORATE); // evaporate whitelist
 	PIXEL_DEF.add_rule([LAVA], LAVA_SPREAD); // spread of lava, like water, but slower
-	PIXEL_DEF.lava_whitelist = [WATER]; // blacklist
+	PIXEL_DEF.lava_whitelist = [WATER]; // whitelist
 
 	PIXEL_DEF.add_rule([ACID], ACID_EVAPORATE); // evaporate everything thats not in the blacklist
 	PIXEL_DEF.acid_blacklist = [AIR, WALL, ACID, STEAM]; // blacklist
@@ -575,6 +614,10 @@ function setupRules() {
 	PIXEL_DEF.add_rule([STEAM], ANTIGRAVITY); // antigravity
 	PIXEL_DEF.add_rule([STEAM], GAS_SPREAD); // spread of gasses
 
+/*
+	PIXEL_DEF.add_rule([FIRE], FIRE_SPREAD); // spread of fire
+	PIXEL_DEF.fire_whitelist = [WOOD]; // whitelist
+*/
 }
 
 function setupSandbox() {

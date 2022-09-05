@@ -288,15 +288,19 @@ input[type='checkbox']:focus {
 
 /* Special */
 .particle[data-type='AIR'] .particle-img {background-color: white;}
+.particle[data-type='FIRE'] .particle-img {background-color: hsl(10deg, 100%, 50%);}
 
 /* Powders */
 .particle[data-type='SAND'] .particle-img {background-color: lemonchiffon;}
 .particle[data-type='STONE'] .particle-img {background-color: gray;}
+.particle[data-type='GUNPOWDER'] .particle-img {background-color: hsL(20deg, 100%, 75%);}
 
 /* Liquids */
 .particle[data-type='WATER'] .particle-img {background-color: deepskyblue;}
 .particle[data-type='LAVA'] .particle-img {background-color: darkred;}
 .particle[data-type='ACID'] .particle-img {background-color: hsl(120deg, 100%, 42%);}
+.particle[data-type='OIL'] .particle-img {background-color: hsl(35deg, 10%, 7.5%);}
+.particle[data-type='OIL'] .particle-text {color: white;}
 
 /* Gases */
 .particle[data-type='STEAM'] .particle-img {background-color: lightgray;}
@@ -304,6 +308,8 @@ input[type='checkbox']:focus {
 /* Solids */
 .particle[data-type='WALL'] .particle-img {background-color: hsl(0deg, 0%, 10%);}
 .particle[data-type='WALL'] .particle-text {color: white;}
+
+.particle[data-type='WOOD'] .particle-img {background-color: hsl(25deg, 75%, 31%);}
 
 .particle {
   padding: 2px;
