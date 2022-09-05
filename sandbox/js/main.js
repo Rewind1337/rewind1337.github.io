@@ -70,6 +70,7 @@ const LAVA_SPREAD = "lavaSpread";
 const ACID_EVAPORATE = "acidEvaporate";
 const GAS_FLOAT = "gasFloat";
 const GAS_SPREAD = "gasSpread";
+const FIRE_SPREAD = "fireSpread";
 
 // const FIRE_SPREAD = "fireSpread";
 
@@ -87,12 +88,12 @@ let PIXEL_DEF = {
 }
 
 class Pixel {
-	constructor (type, x, y, stableMode) {
+	constructor (type, x, y) {
 		this.x = x;
 		this.y = y;
 		
 		this.stable = false;
-		this.alwaysStable = stableMode;
+		this.alwaysStable = false;
 		this.didChange = true;
 		this.timeAlive = 0;
 
@@ -148,7 +149,7 @@ class Pixel {
 				this.fill = color(120, 75 + random(0, 25), 50 + random(0, 25));
 			break;
 			case OIL:
-				this.fill = color(35, 5 + random(0, 10), random(3, 15));
+				this.fill = color(35, 20 + random(0, 40), random(3, 15));
 			break;
 			case STEAM:
 				this.fill = color(0, 0, 90);
@@ -173,6 +174,35 @@ class Pixel {
 			return;
 		}
 
+		let st = this.type;
+		if (!Object.keys(PIXEL_DEF).includes("" + st)) return; // no pixel definitions -> no tick
+
+		let up = PIXELS[this.x][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
+		let down = PIXELS[this.x][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
+		let left = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][this.y];
+		let right = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][this.y];
+
+		let upleft = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
+		let upright = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
+		let downleft = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
+		let downright = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
+
+		for (let i = 0; i < PIXEL_DEF[st].length; i++) {
+			let rule = PIXEL_DEF[st][i];
+
+			if (rule === FIRE_SPREAD) {
+				let targets = [up, left, right, down, upleft, upright, downleft, downright];
+				for (let t in targets) {
+					if (PIXEL_DEF.combustible.includes(targets[t].type)) {
+						if (Math.random() >= 0.98) { // turn to fire
+							targets[t].setType(FIRE);
+						}
+					}
+				}
+			}
+
+		}
+
 		if (!this.doTick) {
 			this.doTick = true;
 			return;
@@ -189,22 +219,10 @@ class Pixel {
 		if (this.y == 0) {
 			atTop = true;
 		}
-
-		let up = PIXELS[this.x][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
-		let down = PIXELS[this.x][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
-		let left = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][this.y];
-		let right = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][this.y];
-
-		let upleft = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
-		let upright = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
-		let downleft = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
-		let downright = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
 		
 		this.didChange = false;
 
-		let st = this.type;
 		for (let i = 0; i < PIXEL_DEF[st].length; i++) {
-			if (!PIXEL_DEF[st][i]) break;
 			let rule = PIXEL_DEF[st][i];
 
 			if (rule === GRAVITY) {
@@ -429,24 +447,6 @@ class Pixel {
 					}
 				}
 			}
-
-			/*
-
-			if (rule === FIRE_SPREAD) {
-				let targets = [up, left, right, down, upleft, upright, downleft, downright];
-				for (let t in targets) {
-					if (PIXEL_DEF.fire_whitelist.includes(targets[t].type)) {
-						if (Math.random() >= 0.9) { // turn to fire
-							targets[t].setType(FIRE);
-						}
-						if (Math.random() >= 0.98) { // burn self?
-							this.setType(STEAM);
-						}
-					}
-				}
-			}
-
-			*/
 		}
 		
 		if (this.didChange) {
@@ -594,12 +594,12 @@ function startTickClock () {
 }
 
 function setupRules() {
-	PIXEL_DEF.add_rule([SAND, STONE, /*GUNPOWDER,*/ WATER, LAVA, ACID], GRAVITY); // falling straight through air
+	PIXEL_DEF.add_rule([SAND, STONE, GUNPOWDER, WATER, LAVA, ACID, OIL], GRAVITY); // falling straight through air
 
-	PIXEL_DEF.add_rule([SAND  /*, GUNPOWDER*/ ], SAND_PILE); // pilage of sand
-	PIXEL_DEF.add_rule([SAND  /*, GUNPOWDER*/ ], SINK_LIKE_SAND); // sinkage of sand through water, and spreading
+	PIXEL_DEF.add_rule([SAND, GUNPOWDER], SAND_PILE); // pilage of sand
+	PIXEL_DEF.add_rule([SAND, GUNPOWDER], SINK_LIKE_SAND); // sinkage of sand through water, and spreading
 
-	PIXEL_DEF.add_rule([WATER, ACID], LIQUID_SPREAD); // spread of water
+	PIXEL_DEF.add_rule([WATER, ACID, OIL], LIQUID_SPREAD); // spread of water
 
 	PIXEL_DEF.add_rule([STONE], SINK_LIKE_STONE); // sinkage of stone through sand and water
 
@@ -614,10 +614,8 @@ function setupRules() {
 	PIXEL_DEF.add_rule([STEAM], ANTIGRAVITY); // antigravity
 	PIXEL_DEF.add_rule([STEAM], GAS_SPREAD); // spread of gasses
 
-/*
 	PIXEL_DEF.add_rule([FIRE], FIRE_SPREAD); // spread of fire
-	PIXEL_DEF.fire_whitelist = [WOOD]; // whitelist
-*/
+	PIXEL_DEF.combustible = [WOOD, OIL]; // list of combustible particles
 }
 
 function setupSandbox() {
@@ -634,7 +632,7 @@ function setupSandbox() {
 		PIXELS.push([]);
 		for (let y = 0; y < GRID_HEIGHT; y++) {
 			PIXELS[x].push([]);
-			PIXELS[x][y] = new Pixel(0, x, y, false);
+			PIXELS[x][y] = new Pixel(0, x, y);
 		}
 	}
 }
@@ -795,6 +793,7 @@ function draw () {
 	for (let x = PIXELS.length - 1; x >= 0; x--) {
 		for (let y = PIXELS[0].length - 1; y >= 0; y--) {
 			let p = PIXELS[x][y];
+			p.timeAlive ++;
 			if (!p.stable) {
 				p.draw();
 			}

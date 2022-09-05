@@ -299,7 +299,7 @@ input[type='checkbox']:focus {
 .particle[data-type='WATER'] .particle-img {background-color: deepskyblue;}
 .particle[data-type='LAVA'] .particle-img {background-color: darkred;}
 .particle[data-type='ACID'] .particle-img {background-color: hsl(120deg, 100%, 42%);}
-.particle[data-type='OIL'] .particle-img {background-color: hsl(35deg, 10%, 7.5%);}
+.particle[data-type='OIL'] .particle-img {background-color: hsl(35deg, 33%, 7.5%);}
 .particle[data-type='OIL'] .particle-text {color: white;}
 
 /* Gases */
