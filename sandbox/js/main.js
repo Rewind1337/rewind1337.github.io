@@ -38,31 +38,33 @@ let TPS = 60;
 
 // particles - special
 const AIR = 0;
-const FIRE = 1;
+const FIRE = 10;
 
 // particles - solids
-const WALL = 10;
-const WOOD = 11;
+const WALL = 100;
+const WOOD = 110;
 
 // particles - powders
-const SAND = 30;
-const STONE = 31;
-const GUNPOWDER = 32;
+const SAND = 300;
+const STONE = 310;
+const GUNPOWDER = 320;
 
 // particles - liquids
-const WATER = 50;
-const LAVA = 51;
-const ACID = 52;
-const OIL = 53;
+const WATER = 500;
+const DOUBLE_WATER = 501;
+const LAVA = 510;
+const ACID = 520;
+const OIL = 530;
 
 // particles - gases
-const STEAM = 75;
+const STEAM = 750;
 
 // pixel rules
 const GRAVITY = "gravity";
 const ANTIGRAVITY = "antigravity";
 const SAND_PILE = "sandPile";
 const LIQUID_SPREAD = "liquidSpread";
+const DOUBLE_WATER_SPREAD = "doubleWaterSpread";
 const SINK_LIKE_STONE = "sinkLikeStone";
 const SINK_LIKE_SAND = "sinkLikeSand";
 const LAVA_EVAPORATE = "lavaEvaporate";
@@ -71,6 +73,9 @@ const ACID_EVAPORATE = "acidEvaporate";
 const GAS_FLOAT = "gasFloat";
 const GAS_SPREAD = "gasSpread";
 const FIRE_SPREAD = "fireSpread";
+const VOLATILE = "volatile";
+
+const DOUBLE_WATER_RULE = "testPleaseIgnore";
 
 // const FIRE_SPREAD = "fireSpread";
 
@@ -142,6 +147,9 @@ class Pixel {
 			case WATER:
 				this.fill = color(200, 100, 65 + random(0, 15));
 			break;
+			case DOUBLE_WATER:
+				this.fill = color(200, 100, 50);
+			break;
 			case LAVA:
 				this.fill = color(random(0, 10), 100, 20 + random(0, 15));
 			break;
@@ -167,17 +175,50 @@ class Pixel {
 		this.draw();
 	}
 
+	updateNeighbours () {
+		let up = PIXELS[this.x][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
+		let down = PIXELS[this.x][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
+		let left = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][this.y];
+		let right = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][this.y];
+
+		let upleft = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
+		let upright = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
+		let downleft = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
+		let downright = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
+
+		up.stable = false;
+		down.stable = false;
+		left.stable = false;
+		right.stable = false;
+		
+		upleft.stable = false;
+		upright.stable = false;
+		downleft.stable = false;
+		downright.stable = false;
+	}
+
 	tick () {
-		if (this.type === AIR || this.type === WALL || this.alwaysStable) {
+		let atBottom = false;
+
+		if (this.y == PIXELS[0].length - 1) {
+			atBottom = true;
+		}
+
+		let atTop = false;
+
+		if (this.y == 0) {
+			atTop = true;
+		}
+
+		let st = this.type;
+		if (this.type === AIR || this.type === WALL || this.alwaysStable || !Object.keys(PIXEL_DEF).includes("" + st)) {
 			this.stable = true;
 			this.draw();
 			return;
 		}
 
-		let st = this.type;
-		if (!Object.keys(PIXEL_DEF).includes("" + st)) return; // no pixel definitions -> no tick
-
 		let up = PIXELS[this.x][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
+		let up2 = PIXELS[this.x][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
 		let down = PIXELS[this.x][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
 		let left = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][this.y];
 		let right = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][this.y];
@@ -194,10 +235,16 @@ class Pixel {
 				let targets = [up, left, right, down, upleft, upright, downleft, downright];
 				for (let t in targets) {
 					if (PIXEL_DEF.combustible.includes(targets[t].type)) {
-						if (Math.random() >= 0.98) { // turn to fire
+						if (Math.random() >= 0.95) { // turn to fire
 							targets[t].setType(FIRE);
 						}
 					}
+				}
+			}
+
+			if (rule === VOLATILE) {
+				if (Math.random() >= 0.98 || atTop == true) { // turn to air
+					this.setType(AIR);
 				}
 			}
 
@@ -207,23 +254,56 @@ class Pixel {
 			this.doTick = true;
 			return;
 		}
-
-		let atBottom = false;
-
-		if (this.y == PIXELS[0].length - 1) {
-			atBottom = true;
-		}
-
-		let atTop = false;
-
-		if (this.y == 0) {
-			atTop = true;
-		}
 		
 		this.didChange = false;
 
 		for (let i = 0; i < PIXEL_DEF[st].length; i++) {
 			let rule = PIXEL_DEF[st][i];
+
+			if (rule === DOUBLE_WATER_RULE) {
+				if (this.type === WATER) {
+					if (up2.type === WATER) {
+						this.setType(DOUBLE_WATER);
+						up2.setType(AIR);
+					}
+					if (down.type === OIL) {
+						this.swap(down);
+					}
+				}
+
+				if (this.type === DOUBLE_WATER) {
+					if (down.type === WATER || down.type === OIL) {
+						this.swap(down);
+					} else if (up.type === AIR) {
+						this.setType(WATER);
+						up.setType(WATER);
+					} else {
+						let targets = [left, right];
+						let r = ~~(Math.random() * targets.length);
+						if (targets[r].type === AIR) {
+							this.setType(WATER);
+							targets[r].setType(WATER);
+						}
+					}
+				}
+			}
+
+			if (rule === DOUBLE_WATER_SPREAD) {
+				if (down.type !== WATER) {
+					if (left.type === WATER || right.type === WATER || left.type === OIL || right.type === OIL) {
+						this.stable = false;
+					}
+					if (Math.random() >= 0.5) {
+						if (left.type === WATER || left.type === OIL) {
+							this.swap(left);
+						}
+					} else {
+						if (right.type === WATER || right.type === OIL) {
+							this.swap(right);
+						}
+					}
+				}
+			}
 
 			if (rule === GRAVITY) {
 				if (down.type === AIR || down.type === STEAM) {
@@ -294,44 +374,44 @@ class Pixel {
 			}
 
 			if (rule === SINK_LIKE_SAND) {
-				if (down.type === WATER && !down.alwaysStable) {
+				if ((down.type === WATER || down.type === DOUBLE_WATER) && !down.alwaysStable) {
 					let r = Math.random();
 					if (r < 0.33334) {
-						if (downleft.type === WATER && !downleft.alwaysStable) {
+						if ((downleft.type === WATER || downleft.type === DOUBLE_WATER) && !downleft.alwaysStable) {
 							this.swap(downleft);
 							break;
 						}
-						if (downright.type === WATER && !downright.alwaysStable) {
+						if ((downright.type === WATER || downright.type === DOUBLE_WATER) && !downright.alwaysStable) {
 							this.swap(downright);
 							break;
 						}
-						if (down.type === WATER && !down.alwaysStable) {
+						if ((down.type === WATER || down.type === DOUBLE_WATER) && !down.alwaysStable) {
 							this.swap(down);
 							break;
 						}
 					} else if (r >= 0.33334 && r < 0.66667) {
-						if (downright.type === WATER && !downright.alwaysStable) {
+						if ((downright.type === WATER || downright.type === DOUBLE_WATER) && !downright.alwaysStable) {
 							this.swap(downright);
 							break;
 						}
-						if (downleft.type === WATER && !downleft.alwaysStable) {
+						if ((downleft.type === WATER || downleft.type === DOUBLE_WATER) && !downleft.alwaysStable) {
 							this.swap(downleft);
 							break;
 						}
-						if (down.type === WATER && !down.alwaysStable) {
+						if ((down.type === WATER || down.type === DOUBLE_WATER) && !down.alwaysStable) {
 							this.swap(down);
 							break;
 						}
 					} else if (r >= 0.66667) {
-						if (down.type === WATER && !down.alwaysStable) {
+						if ((down.type === WATER || down.type === DOUBLE_WATER) && !down.alwaysStable) {
 							this.swap(down);
 							break;
 						}
-						if (downleft.type === WATER && !downleft.alwaysStable) {
+						if ((downleft.type === WATER || downleft.type === DOUBLE_WATER) && !downleft.alwaysStable) {
 							this.swap(downleft);
 							break;
 						}
-						if (downright.type === WATER && !downright.alwaysStable) {
+						if ((downright.type === WATER || downright.type === DOUBLE_WATER) && !downright.alwaysStable) {
 							this.swap(downright);
 							break;
 						}
@@ -340,7 +420,7 @@ class Pixel {
 			}
 
 			if (rule === SINK_LIKE_STONE) {
-				if (down.type === SAND || down.type === WATER) {
+				if (down.type === SAND || down.type === WATER || down.type === DOUBLE_WATER) {
 					this.swap(down);
 				}
 			}
@@ -349,9 +429,15 @@ class Pixel {
 				let targets = [up, left, right, down];
 				for (let t in targets) {
 					if (PIXEL_DEF.lava_whitelist.includes(targets[t].type)) {
-						targets[t].setType(STEAM);
-						if (Math.random() >= 0.5) { // burn self?
-							this.setType(STEAM);
+						if (Math.random() >= 0.05) { // eat particle?
+							if (Math.random() >= 0.66667) { // make steam?
+								targets[t].setType(STEAM);
+							} else {
+								targets[t].setType(AIR);
+							}
+							if (Math.random() >= 0.5) { // burn self?
+								this.setType(STEAM);
+							}
 						}
 					}
 				}
@@ -594,28 +680,32 @@ function startTickClock () {
 }
 
 function setupRules() {
-	PIXEL_DEF.add_rule([SAND, STONE, GUNPOWDER, WATER, LAVA, ACID, OIL], GRAVITY); // falling straight through air
+	PIXEL_DEF.add_rule([SAND, STONE, GUNPOWDER, WATER, DOUBLE_WATER, LAVA, ACID, OIL], GRAVITY); // falling straight through air
 
 	PIXEL_DEF.add_rule([SAND, GUNPOWDER], SAND_PILE); // pilage of sand
 	PIXEL_DEF.add_rule([SAND, GUNPOWDER], SINK_LIKE_SAND); // sinkage of sand through water, and spreading
 
-	PIXEL_DEF.add_rule([WATER, ACID, OIL], LIQUID_SPREAD); // spread of water
+	PIXEL_DEF.add_rule([WATER, DOUBLE_WATER, ACID, OIL], LIQUID_SPREAD); // spread of water
 
 	PIXEL_DEF.add_rule([STONE], SINK_LIKE_STONE); // sinkage of stone through sand and water
 
 	PIXEL_DEF.add_rule([LAVA], LAVA_EVAPORATE); // evaporate whitelist
 	PIXEL_DEF.add_rule([LAVA], LAVA_SPREAD); // spread of lava, like water, but slower
-	PIXEL_DEF.lava_whitelist = [WATER]; // whitelist
+	PIXEL_DEF.lava_whitelist = [WATER, DOUBLE_WATER]; // whitelist
 
 	PIXEL_DEF.add_rule([ACID], ACID_EVAPORATE); // evaporate everything thats not in the blacklist
 	PIXEL_DEF.acid_blacklist = [AIR, WALL, ACID, STEAM]; // blacklist
 
-	PIXEL_DEF.add_rule([STEAM], GAS_FLOAT); // steam rises
+	PIXEL_DEF.add_rule([STEAM, FIRE], GAS_FLOAT); // steam rises
 	PIXEL_DEF.add_rule([STEAM], ANTIGRAVITY); // antigravity
 	PIXEL_DEF.add_rule([STEAM], GAS_SPREAD); // spread of gasses
 
-	PIXEL_DEF.add_rule([FIRE], FIRE_SPREAD); // spread of fire
-	PIXEL_DEF.combustible = [WOOD, OIL]; // list of combustible particles
+	PIXEL_DEF.add_rule([FIRE, LAVA], FIRE_SPREAD); // spread of fire
+	PIXEL_DEF.add_rule([FIRE, STEAM], VOLATILE); // dissapear
+	PIXEL_DEF.combustible = [GUNPOWDER, WOOD, OIL]; // list of combustible particles
+
+	PIXEL_DEF.add_rule([WATER, DOUBLE_WATER], DOUBLE_WATER_RULE);
+	PIXEL_DEF.add_rule([DOUBLE_WATER], DOUBLE_WATER_SPREAD);
 }
 
 function setupSandbox() {
@@ -849,8 +939,14 @@ function handleClick(mx, my) {
 				let pixelY = ~~((my / height) * (height / PIXEL_SIZE));
 				let p = PIXELS[clamp(pixelX + xoff, 0, PIXELS.length - 1)][clamp(pixelY + yoff, 0, PIXELS[0].length - 1)];
 
-				p.setType(SELECTED_TYPE);
+				if (p.type === DOUBLE_WATER && SELECTED_TYPE === WATER) {
+					p.setType(DOUBLE_WATER);
+				} else {
+					p.setType(SELECTED_TYPE);
+				}
+
 				p.setAlwaysStable(STABLE_MODE);
+				p.updateNeighbours();
 
 				p.tick();
 			}
