@@ -43,11 +43,13 @@ const FIRE = 10;
 // particles - solids
 const WALL = 100;
 const WOOD = 110;
+const PLANT = 120;
 
 // particles - powders
 const SAND = 300;
 const STONE = 310;
 const GUNPOWDER = 320;
+const SEED = 330;
 
 // particles - liquids
 const WATER = 500;
@@ -140,6 +142,12 @@ class Pixel {
 			break;
 			case STONE:
 				this.fill = color(0, 0, 45 + random(0, 10));
+			break;
+			case SEED:
+				this.fill = color(120, 50, 65 + random(0, 10));
+			break;
+			case PLANT:
+				this.fill = color(120, 80, 30 + random(0, 10))
 			break;
 			case GUNPOWDER:
 				this.fill = color(10 + random(0, 10), 100, 70);
@@ -617,7 +625,13 @@ function exportGridState () {
 	// add pixels into json
 	exportJSON.PIXELS = exportArray;
 
-	return JSON.stringify(exportJSON);
+	let temp = JSON.stringify(exportJSON);
+
+	return temp;
+}
+
+function findLongestRepeatingSubstring (string) {
+	// todo, oof
 }
 
 function preload () {}
@@ -706,6 +720,8 @@ function setupRules() {
 
 	PIXEL_DEF.add_rule([WATER, DOUBLE_WATER], DOUBLE_WATER_RULE);
 	PIXEL_DEF.add_rule([DOUBLE_WATER], DOUBLE_WATER_SPREAD);
+
+	PIXEL_DEF.add_rule([SEED], SEED_STUFF);
 }
 
 function setupSandbox() {
