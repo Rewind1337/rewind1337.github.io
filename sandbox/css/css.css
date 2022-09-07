@@ -4,7 +4,7 @@
   overflow: hidden;
   box-sizing: border-box !important;
   font-family: 'Silkscreen', cursive;
-  scrollbar-color: #ff9b00 #311b00;
+  scrollbar-color: #ddd #333;
   scrollbar-width: thin;
   -moz-user-select: none;
   user-select: none;
@@ -261,6 +261,8 @@ input[type='checkbox']:focus {
 
 #particle-list {
   width: 100%;
+  overflow-x: scroll;
+  flex-wrap: nowrap !important;
 }
 
 .flex-row {
@@ -288,25 +290,41 @@ input[type='checkbox']:focus {
 
 /* Special */
 .particle[data-type='AIR'] .particle-img {background-color: white;}
+
 .particle[data-type='FIRE'] .particle-img {background-color: hsl(10deg, 100%, 50%);}
+
+
 
 /* Powders */
 .particle[data-type='SAND'] .particle-img {background-color: lemonchiffon;}
+
 .particle[data-type='STONE'] .particle-img {background-color: gray;}
+
 .particle[data-type='GUNPOWDER'] .particle-img {background-color: hsL(20deg, 100%, 75%);}
+
 .particle[data-type='EMBER'] .particle-img {background-color: hsL(10deg, 100%, 25%);}
+
 .particle[data-type='SEED'] .particle-img {background-color: hsL(120deg, 50%, 60%);}
+
+
 
 /* Liquids */
 .particle[data-type='WATER'] .particle-img {background-color: deepskyblue;}
+
 .particle[data-type='LAVA'] .particle-img {background-color: hsL(0deg, 100%, 15%);}
 .particle[data-type='LAVA'] .particle-text {color: white;}
-.particle[data-type='ACID'] .particle-img {background-color: hsl(120deg, 100%, 42%);}
+
+.particle[data-type='ACID'] .particle-img {background-color: hsl(80deg, 100%, 42%);}
+
 .particle[data-type='OIL'] .particle-img {background-color: hsl(35deg, 33%, 7.5%);}
 .particle[data-type='OIL'] .particle-text {color: white;}
 
+
+
 /* Gases */
 .particle[data-type='STEAM'] .particle-img {background-color: lightgray;}
+
+
 
 /* Solids */
 .particle[data-type='WALL'] .particle-img {background-color: hsl(0deg, 0%, 10%);}
@@ -314,9 +332,12 @@ input[type='checkbox']:focus {
 
 .particle[data-type='WOOD'] .particle-img {background-color: hsl(25deg, 75%, 31%);}
 
+.particle[data-type='PLANT'] .particle-img {background-color: hsl(120deg, 80%, 40%);}
+
 .particle {
-  padding: 2px;
+  padding: 1px;
   height: 58px;
+  min-width: 58px;
   z-index: 110;
 } 
 
@@ -368,6 +389,7 @@ input[type='checkbox']:focus {
   padding-top: 25px;
   border-top: 1px solid black;
   z-index: 10;
+  min-width: 52px;
 }
 
 #debug-info {
