@@ -165,12 +165,6 @@ input[type='checkbox']:focus {
   flex-wrap: nowrap;
 }
 
-#controls-col {
-  align-content: center;
-  width: 300px;
-  flex-basis: 300px;
-}
-
 #controls-wrapper {
   width: 100%;
   justify-content: center;
@@ -187,7 +181,7 @@ input[type='checkbox']:focus {
   font-size: 30px !important;
 }
 
-#file-bar {
+#controls-bar {
   position: absolute;
   left: 50%;
   bottom: 80px;

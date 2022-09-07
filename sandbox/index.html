@@ -28,9 +28,11 @@
 			</div>
 		</div>
 
-		<div id="file-bar" class="fade-in-at-start">
-			<button id="controls-export" class="control-button" data-tooltip="export current sandbox"><span class="material-icons">download</span></button>
+		<div id="controls-bar" class="fade-in-at-start">
+			<button id="controls-clearsandbox" class="control-button" data-tooltip="clears the sandbox"><span class="material-icons">layers_clear</span></button>
 			<button id="controls-playpause" class="control-button" data-tooltip="pauses / resumes the simulation"><span class="material-icons">pause</span></button>
+			<div style="width: 10px; display: inline;">&nbsp;</div>
+			<button id="controls-export" class="control-button" data-tooltip="export current sandbox"><span class="material-icons">download</span></button>
 			<button id="controls-import" class="control-button" data-tooltip="import sandbox"><span class="material-icons">file_upload</span></button>
 		</div>
 
@@ -140,7 +142,7 @@
 						<div class="particle-text">ember</div>
 					</div>
 				</div>
-				<div data-type="SEED" class="particle particle-wip">
+				<div data-type="SEED" class="particle">
 					<div class="particle-img" data-tooltip="seed">
 						<div class="particle-text">seed</div>
 					</div>
@@ -191,7 +193,7 @@
 					</div>
 				</div>
 
-				<div data-type="PLANT" class="particle particle-wip">
+				<div data-type="PLANT" class="particle">
 					<div class="particle-img" data-tooltip="plant">
 						<div class="particle-text">plant</div>
 					</div>

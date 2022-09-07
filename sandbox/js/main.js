@@ -156,10 +156,10 @@ class Pixel {
 				this.fill = color(10, 90 + random(0,10), 20 + random(10, 20));
 			break;
 			case WATER:
-				this.fill = color(200, 100, 65 + random(0, 15));
+				this.fill = color(200, 100, 65 + random(5, 15));
 			break;
 			case COMPRESSED_WATER:
-				this.fill = color(200, 100, 50);
+				this.fill = color(200, 100, (50 + random(0, 10)));
 			break;
 			case LAVA:
 				this.fill = color(random(0, 10), 100, random(12, 20));
@@ -251,11 +251,21 @@ class Pixel {
 						}
 					}
 				}
+
+				if (up.type === STEAM) {
+					this.swap(up);
+				}
 			}
 
 			if (rule === VOLATILE) {
-				if (Math.random() >= 0.98 || atTop == true) { // turn to air
-					this.setType(AIR);
+				if (this.type === FIRE) {
+					if (Math.random() >= 0.98 || atTop == true) { // turn to air
+						this.setType(STEAM);
+					}
+				} else if (this.type === STEAM) {
+					if (Math.random() >= 0.995 || atTop == true) { // turn to air
+						this.setType(AIR);
+					}
 				}
 			}
 
@@ -342,22 +352,34 @@ class Pixel {
 			}
 
 			if (rule === SEED_RULE) {
-				let targets = [upleft, up, upright, right, downright, down, downleft, left]
+				let targets = [down, downleft, downright]
 				.map(value => ({ value, sort: Math.random() }))
 				.sort((a, b) => a.sort - b.sort)
 				.map(({ value }) => value);
 
-				let makePlant = false;
-				planty:
+				move:
 				for (let t in targets) {
-					if (targets[t] !== AIR || targets[t] !== SEED) {
-						makePlant = true;
-						break;
+					if (targets[t].type === AIR || targets[t].type === STEAM) {
+						this.swap(targets[t]);
+						break move;
 					}
 				}
 
-				if (makePlant == true) {
-					this.setType(PLANT);u
+				let makePlant = false;
+				targets = [up, down, left, right, upleft, upright, downleft, downright];
+
+				planty:
+				for (let t in targets) {
+					if (targets[t].type === PLANT || targets[t].type === WOOD) {
+						makePlant = true;
+						break planty;
+					}
+				}
+
+				if ((atBottom || makePlant) && Math.random() <= 0.25) {
+					this.setType(PLANT);
+				} else {
+					this.setType(AIR)
 				}
 			}
 
@@ -386,15 +408,15 @@ class Pixel {
 			if (rule === LIQUID_SPREAD) {
 				if (down.type !== AIR) {
 					if (true) { // move or not?
-						if (left.type === AIR || right.type === AIR) {
+						if (left.type === AIR || right.type === AIR || left.type === STEAM || right.type === STEAM || left.type === FIRE || right.type === FIRE) {
 							this.stable = false;
 						}
 						if (Math.random() >= 0.5) {
-							if (left.type === AIR) {
+							if (left.type === AIR || left.type === STEAM || left.type === FIRE) {
 								this.swap(left);
 							}
 						} else {
-							if (right.type === AIR) {
+							if (right.type === AIR || right.type === STEAM || right.type === FIRE) {
 								this.swap(right);
 							}
 						}
@@ -492,6 +514,7 @@ class Pixel {
 			}
 
 			if (rule === LAVA_SPREAD) {
+
 				if (down.type !== AIR) {
 					if (left.type === AIR || right.type === AIR) {
 						this.stable = false;
@@ -758,8 +781,8 @@ function setupRules() {
 	PIXEL_DEF.acid_blacklist = [AIR, WALL, ACID, STEAM]; // blacklist
 
 	PIXEL_DEF.add_rule([STEAM, FIRE], GAS_FLOAT); // steam rises
-	PIXEL_DEF.add_rule([STEAM], ANTIGRAVITY); // antigravity
-	PIXEL_DEF.add_rule([STEAM], GAS_SPREAD); // spread of gasses
+	PIXEL_DEF.add_rule([STEAM, FIRE], ANTIGRAVITY); // antigravity
+	PIXEL_DEF.add_rule([STEAM, FIRE], GAS_SPREAD); // spread of gasses
 
 	PIXEL_DEF.add_rule([FIRE, LAVA, EMBER], FIRE_SPREAD); // spread of fire
 	PIXEL_DEF.add_rule([FIRE, STEAM], VOLATILE); // dissapear
@@ -896,6 +919,10 @@ function bindSettings () {
 			clearInterval(globalTimer);
 		}
 	}).change();
+
+	$("#controls-clearsandbox").click(function () {
+		setupSandbox();
+	})
 
 	$("#controls-export").click(function () {
 		let bool = confirm("Export current Sandbox?");
