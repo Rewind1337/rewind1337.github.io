@@ -246,7 +246,7 @@ class Pixel {
 				let targets = [up, left, right, down, upleft, upright, downleft, downright];
 				for (let t in targets) {
 					if (PIXEL_DEF.combustible.includes(targets[t].type)) {
-						if (Math.random() >= 0.95) { // turn to fire
+						if (Math.random() >= 0.925) { // turn to fire
 							targets[t].setType(FIRE);
 						}
 					}
@@ -263,6 +263,17 @@ class Pixel {
 				if (Math.random() >= 0.99 && this.timeAlive >= 45) { // turn to fire
 					this.setType(FIRE);
 				}
+
+				let targets = [up, left, right, down, upleft, upright, downleft, downright];
+				for (let t in targets) {
+					if (targets[t].type === WATER || targets[t].type === COMPRESSED_WATER) {
+						if (Math.random() >= 0.9) { // turn to stone
+							this.setType(STONE);
+							targets[t].setType(STEAM);
+						}
+					}
+				}
+
 			}
 
 		}
@@ -457,7 +468,7 @@ class Pixel {
 			}
 
 			if (rule === SINK_LIKE_STONE) {
-				if (down.type === SAND || down.type === WATER || down.type === COMPRESSED_WATER) {
+				if (down.type === SAND || down.type === WATER || down.type === COMPRESSED_WATER || down.type === EMBER) {
 					this.swap(down);
 				}
 			}
