@@ -49,7 +49,8 @@ const PLANT = 120;
 const SAND = 300;
 const STONE = 310;
 const GUNPOWDER = 320;
-const SEED = 330;
+const EMBER = 330;
+const SEED = 340;
 
 // particles - liquids
 const WATER = 500;
@@ -76,6 +77,7 @@ const GAS_FLOAT = "gasFloat";
 const GAS_SPREAD = "gasSpread";
 const FIRE_SPREAD = "fireSpread";
 const VOLATILE = "volatile";
+const EMBER_VOLATILE = "emberVolatile";
 
 const DOUBLE_WATER_RULE = "testPleaseIgnore";
 
@@ -152,6 +154,9 @@ class Pixel {
 			case GUNPOWDER:
 				this.fill = color(10 + random(0, 10), 100, 70);
 			break;
+			case EMBER:
+				this.fill = color(10, 90 + random(0,10), 20 + random(10, 20));
+			break;
 			case WATER:
 				this.fill = color(200, 100, 65 + random(0, 15));
 			break;
@@ -159,7 +164,7 @@ class Pixel {
 				this.fill = color(200, 100, 50);
 			break;
 			case LAVA:
-				this.fill = color(random(0, 10), 100, 20 + random(0, 15));
+				this.fill = color(random(0, 10), 100, random(12, 20));
 			break;
 			case ACID:
 				this.fill = color(120, 75 + random(0, 25), 50 + random(0, 25));
@@ -256,6 +261,12 @@ class Pixel {
 				}
 			}
 
+			if (rule === EMBER_VOLATILE) {
+				if (Math.random() >= 0.97) { // turn to fire
+					this.setType(FIRE);
+				}
+			}
+
 		}
 
 		if (!this.doTick) {
@@ -314,7 +325,7 @@ class Pixel {
 			}
 
 			if (rule === GRAVITY) {
-				if (down.type === AIR || down.type === STEAM) {
+				if (down.type === AIR || down.type === STEAM || down.type === FIRE) {
 					this.swap(down);
 				} else {
 					this.stable = true;
@@ -685,18 +696,18 @@ function startTickClock () {
 	globalTimer = setInterval(function () {
 		for (let x = 0; x < width/PIXEL_SIZE; x++) {
 			for (let y = 0; y < height/PIXEL_SIZE; y++) {
-				if (!PIXELS[x][y].stable) {
+				// if (!PIXELS[x][y].stable) {
 					PIXELS[x][y].tick();
-				}
+				// }
 			}
 		}
 	}, 1000 / TPS)
 }
 
 function setupRules() {
-	PIXEL_DEF.add_rule([SAND, STONE, GUNPOWDER, WATER, DOUBLE_WATER, LAVA, ACID, OIL], GRAVITY); // falling straight through air
+	PIXEL_DEF.add_rule([SAND, STONE, GUNPOWDER, EMBER, SEED, WATER, DOUBLE_WATER, LAVA, ACID, OIL], GRAVITY); // falling straight through air
 
-	PIXEL_DEF.add_rule([SAND, GUNPOWDER], SAND_PILE); // pilage of sand
+	PIXEL_DEF.add_rule([SAND, GUNPOWDER, EMBER], SAND_PILE); // pilage of sand
 	PIXEL_DEF.add_rule([SAND, GUNPOWDER], SINK_LIKE_SAND); // sinkage of sand through water, and spreading
 
 	PIXEL_DEF.add_rule([WATER, DOUBLE_WATER, ACID, OIL], LIQUID_SPREAD); // spread of water
@@ -714,14 +725,15 @@ function setupRules() {
 	PIXEL_DEF.add_rule([STEAM], ANTIGRAVITY); // antigravity
 	PIXEL_DEF.add_rule([STEAM], GAS_SPREAD); // spread of gasses
 
-	PIXEL_DEF.add_rule([FIRE, LAVA], FIRE_SPREAD); // spread of fire
+	PIXEL_DEF.add_rule([FIRE, LAVA, EMBER], FIRE_SPREAD); // spread of fire
 	PIXEL_DEF.add_rule([FIRE, STEAM], VOLATILE); // dissapear
+	PIXEL_DEF.add_rule([EMBER], EMBER_VOLATILE); // turn to fire
 	PIXEL_DEF.combustible = [GUNPOWDER, WOOD, OIL]; // list of combustible particles
 
 	PIXEL_DEF.add_rule([WATER, DOUBLE_WATER], DOUBLE_WATER_RULE);
 	PIXEL_DEF.add_rule([DOUBLE_WATER], DOUBLE_WATER_SPREAD);
 
-	PIXEL_DEF.add_rule([SEED], SEED_STUFF);
+	// PIXEL_DEF.add_rule([SEED], SEED_STUFF);
 }
 
 function setupSandbox() {

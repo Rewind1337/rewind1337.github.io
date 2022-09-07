@@ -294,11 +294,13 @@ input[type='checkbox']:focus {
 .particle[data-type='SAND'] .particle-img {background-color: lemonchiffon;}
 .particle[data-type='STONE'] .particle-img {background-color: gray;}
 .particle[data-type='GUNPOWDER'] .particle-img {background-color: hsL(20deg, 100%, 75%);}
+.particle[data-type='EMBER'] .particle-img {background-color: hsL(10deg, 100%, 25%);}
 .particle[data-type='SEED'] .particle-img {background-color: hsL(120deg, 50%, 60%);}
 
 /* Liquids */
 .particle[data-type='WATER'] .particle-img {background-color: deepskyblue;}
-.particle[data-type='LAVA'] .particle-img {background-color: darkred;}
+.particle[data-type='LAVA'] .particle-img {background-color: hsL(0deg, 100%, 15%);}
+.particle[data-type='LAVA'] .particle-text {color: white;}
 .particle[data-type='ACID'] .particle-img {background-color: hsl(120deg, 100%, 42%);}
 .particle[data-type='OIL'] .particle-img {background-color: hsl(35deg, 33%, 7.5%);}
 .particle[data-type='OIL'] .particle-text {color: white;}
