@@ -444,47 +444,12 @@ class Pixel {
 			}
 
 			if (rule === SINK_LIKE_SAND) {
-				if ((down.type === WATER || down.type === COMPRESSED_WATER) && !down.alwaysStable) {
-					let r = Math.random();
-					if (r < 0.33334) {
-						if ((downleft.type === WATER || downleft.type === COMPRESSED_WATER) && !downleft.alwaysStable) {
-							this.swap(downleft);
-							break;
-						}
-						if ((downright.type === WATER || downright.type === COMPRESSED_WATER) && !downright.alwaysStable) {
-							this.swap(downright);
-							break;
-						}
-						if ((down.type === WATER || down.type === COMPRESSED_WATER) && !down.alwaysStable) {
-							this.swap(down);
-							break;
-						}
-					} else if (r >= 0.33334 && r < 0.66667) {
-						if ((downright.type === WATER || downright.type === COMPRESSED_WATER) && !downright.alwaysStable) {
-							this.swap(downright);
-							break;
-						}
-						if ((downleft.type === WATER || downleft.type === COMPRESSED_WATER) && !downleft.alwaysStable) {
-							this.swap(downleft);
-							break;
-						}
-						if ((down.type === WATER || down.type === COMPRESSED_WATER) && !down.alwaysStable) {
-							this.swap(down);
-							break;
-						}
-					} else if (r >= 0.66667) {
-						if ((down.type === WATER || down.type === COMPRESSED_WATER) && !down.alwaysStable) {
-							this.swap(down);
-							break;
-						}
-						if ((downleft.type === WATER || downleft.type === COMPRESSED_WATER) && !downleft.alwaysStable) {
-							this.swap(downleft);
-							break;
-						}
-						if ((downright.type === WATER || downright.type === COMPRESSED_WATER) && !downright.alwaysStable) {
-							this.swap(downright);
-							break;
-						}
+				if (down.type === WATER || down.type === COMPRESSED_WATER) {
+					let targets = [down, downleft, downright]
+					let r = ~~(Math.random() ~ targets.length);
+					if (targets[r].type === WATER || targets[r].type === COMPRESSED_WATER) {
+						this.swap(upleft);
+						break;
 					}
 				}
 			}
@@ -556,52 +521,6 @@ class Pixel {
 					this.swap(up);
 				} else {
 					this.stable = true;
-				}
-			}
-
-			if (rule === GAS_FLOAT) {
-				if (up.type === AIR) {
-					let r = Math.random();
-					if (r < 0.33334) {
-						if (upleft.type === AIR) {
-							this.swap(upleft);
-							break;
-						}
-						if (upright.type === AIR) {
-							this.swap(upright);
-							break;
-						}
-						if (up.type === AIR) {
-							this.swap(up);
-							break;
-						}
-					} else if (r >= 0.33334 && r < 0.66667) {
-						if (upright.type === AIR) {
-							this.swap(upright);
-							break;
-						}
-						if (upleft.type === AIR) {
-							this.swap(upleft);
-							break;
-						}
-						if (up.type === AIR) {
-							this.swap(up);
-							break;
-						}
-					} else if (r >= 0.66667) {
-						if (up.type === AIR) {
-							this.swap(up);
-							break;
-						}
-						if (upleft.type === AIR) {
-							this.swap(upleft);
-							break;
-						}
-						if (upright.type === AIR) {
-							this.swap(upright);
-							break;
-						}
-					}
 				}
 			}
 		}
@@ -780,7 +699,6 @@ function setupRules() {
 	PIXEL_DEF.add_rule([ACID], ACID_EVAPORATE); // evaporate everything thats not in the blacklist
 	PIXEL_DEF.acid_blacklist = [AIR, WALL, ACID, STEAM]; // blacklist
 
-	PIXEL_DEF.add_rule([STEAM, FIRE], GAS_FLOAT); // steam rises
 	PIXEL_DEF.add_rule([STEAM, FIRE], ANTIGRAVITY); // antigravity
 	PIXEL_DEF.add_rule([STEAM, FIRE], GAS_SPREAD); // spread of gasses
 
