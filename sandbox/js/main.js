@@ -446,7 +446,7 @@ class Pixel {
 			if (rule === SINK_LIKE_SAND) {
 				if (down.type === WATER || down.type === COMPRESSED_WATER) {
 					let targets = [down, downleft, downright]
-					let r = ~~(Math.random() ~ targets.length);
+					let r = ~~(Math.random() * targets.length);
 					if (targets[r].type === WATER || targets[r].type === COMPRESSED_WATER) {
 						this.swap(upleft);
 						break;
