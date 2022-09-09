@@ -480,6 +480,12 @@ class Pixel {
 
 			if (rule === LAVA_SPREAD) {
 
+				if (up.type === AIR) {
+					if (Math.random() <= 0.01) {
+						up.setType(FIRE);
+					}
+				}
+
 				if (down.type !== AIR) {
 					if (left.type === AIR || right.type === AIR) {
 						this.stable = false;
