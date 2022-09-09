@@ -104,6 +104,8 @@ class Pixel {
 		this.didChange = true;
 		this.timeAlive = 0;
 
+		this.depth = 0;
+
 		this.setType(type);
 
 		this.doTick = true;
@@ -124,12 +126,7 @@ class Pixel {
 		this.alwaysStable = bool;
 	}
 
-	setType (type) {
-		this.type = type;
-		
-		this.stable = false;
-		this.timeAlive = 0;
-
+	updateFill() {
 		switch (this.type) {
 			case AIR:
 				this.fill = color(0, 0, 99.5 + random(0, 0.5));
@@ -156,10 +153,10 @@ class Pixel {
 				this.fill = color(10, 90 + random(0,10), 20 + random(10, 20));
 			break;
 			case WATER:
-				this.fill = color(200, 100, 65 + random(5, 15));
+				this.fill = color(200, 100, max(5, 60 - this.depth) + this.watertemp);
 			break;
 			case COMPRESSED_WATER:
-				this.fill = color(200, 100, (50 + random(0, 10)));
+				this.fill = color(200, 100, max(3, 50 - this.depth) + this.watertemp);
 			break;
 			case LAVA:
 				this.fill = color(random(0, 10), 100, random(12, 20));
@@ -179,6 +176,19 @@ class Pixel {
 			case WOOD:
 				this.fill = color(25, 75, 25 + random(0, 10));
 			break;
+		}
+	}
+
+	setType (type) {
+		this.type = type;
+		
+		this.stable = false;
+		this.timeAlive = 0;
+
+		this.updateFill();
+
+		if (this.type === COMPRESSED_WATER || this.type === WATER) {
+			this.watertemp = random(0, 3);
 		}
 
 		this.doTick = false;
@@ -209,6 +219,25 @@ class Pixel {
 	}
 
 	tick () {
+		if (this.type === COMPRESSED_WATER || this.type === WATER) {
+			let blocksAbove = 0;
+			for (let i = this.y; i > 0; i--) {
+				let upN = PIXELS[this.x][clamp(i, 0, PIXELS[0].length - 1)];
+				if (upN.type === WATER || upN.type === COMPRESSED_WATER) {
+					blocksAbove += 1;
+				} else if (upN.type === WALL || upN.type === WOOD) {
+					blocksAbove += 1000;
+					break;
+				} else if (upN.type !== AIR) {
+					blocksAbove += 9;
+				} else {
+					break;
+				}
+			}
+			this.depth = blocksAbove;
+			this.updateFill();
+		}
+
 		let atBottom = false;
 
 		if (this.y == PIXELS[0].length - 1) {
@@ -353,16 +382,10 @@ class Pixel {
 
 			if (rule === SEED_RULE) {
 				let targets = [down, downleft, downright]
-				.map(value => ({ value, sort: Math.random() }))
-				.sort((a, b) => a.sort - b.sort)
-				.map(({ value }) => value);
 
-				move:
-				for (let t in targets) {
-					if (targets[t].type === AIR || targets[t].type === STEAM) {
-						this.swap(targets[t]);
-						break move;
-					}
+				let r = ~~(Math.random() * targets.length);
+				if (targets[r].type === AIR || targets[r].type === STEAM) {
+					this.swap(targets[r]);
 				}
 
 				let makePlant = false;
@@ -448,7 +471,7 @@ class Pixel {
 					let targets = [down, downleft, downright]
 					let r = ~~(Math.random() * targets.length);
 					if (targets[r].type === WATER || targets[r].type === COMPRESSED_WATER) {
-						this.swap(upleft);
+						this.swap(targets[r]);
 						break;
 					}
 				}
@@ -480,7 +503,7 @@ class Pixel {
 
 			if (rule === LAVA_SPREAD) {
 
-				if (up.type === AIR) {
+				if (up.type === AIR || up.type === STEAM) {
 					if (Math.random() <= 0.01) {
 						up.setType(FIRE);
 					}
@@ -500,6 +523,12 @@ class Pixel {
 								this.swap(right);
 							}
 						}
+					}
+				}
+
+				if (up.type === AIR) {
+					if (Math.random() <= 0.0001) {
+						this.setType(STONE);
 					}
 				}
 			}
