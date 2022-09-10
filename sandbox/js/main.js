@@ -185,11 +185,15 @@ class Pixel {
 		this.stable = false;
 		this.timeAlive = 0;
 
-		this.updateFill();
-
-		if (this.type === COMPRESSED_WATER || this.type === WATER) {
+		if (this.type === COMPRESSED_WATER) {
 			this.watertemp = random(0, 3);
 		}
+		
+		if (this.type === WATER) {
+			this.watertemp = random(5, 10);
+		}
+
+		this.updateFill();
 
 		this.doTick = false;
 
