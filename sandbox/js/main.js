@@ -279,8 +279,22 @@ class Pixel {
 				let targets = [up, left, right, down, upleft, upright, downleft, downright];
 				for (let t in targets) {
 					if (PIXEL_DEF.combustible.includes(targets[t].type)) {
-						if (Math.random() >= 0.925) { // turn to fire
-							targets[t].setType(FIRE);
+						switch (targets[t].type) {
+							case OIL:
+								if (Math.random() >= 0.75) { // turn to fire
+									targets[t].setType(FIRE);
+								}
+							break;
+							case GUNPOWDER:
+								if (Math.random() >= 0.85) { // turn to fire
+									targets[t].setType(FIRE);
+								}
+							break;
+							default:
+								if (Math.random() >= 0.95) { // turn to fire
+									targets[t].setType(FIRE);
+								}
+							break;
 						}
 					}
 				}
@@ -511,6 +525,10 @@ class Pixel {
 					if (Math.random() <= 0.01) {
 						up.setType(FIRE);
 					}
+				}
+
+				if (down.type === STEAM) {
+					this.swap(down);
 				}
 
 				if (down.type !== AIR) {
@@ -746,10 +764,10 @@ function setupRules() {
 	PIXEL_DEF.add_rule([EMBER], EMBER_VOLATILE); // turn to fire
 	PIXEL_DEF.combustible = [GUNPOWDER, WOOD, SEED, PLANT, OIL]; // list of combustible particles
 
-	PIXEL_DEF.add_rule([WATER, COMPRESSED_WATER], COMPRESS_WATER);
-	PIXEL_DEF.add_rule([COMPRESSED_WATER], COMPRESSED_WATER_SPREAD);
+	PIXEL_DEF.add_rule([WATER, COMPRESSED_WATER], COMPRESS_WATER); // water compression rule
+	PIXEL_DEF.add_rule([COMPRESSED_WATER], COMPRESSED_WATER_SPREAD); // heavier water spread
 
-	PIXEL_DEF.add_rule([SEED], SEED_RULE);
+	PIXEL_DEF.add_rule([SEED], SEED_RULE); // seed growth
 }
 
 function setupSandbox() {
