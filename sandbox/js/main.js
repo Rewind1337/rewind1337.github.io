@@ -465,25 +465,6 @@ class Pixel {
 				}
 			}
 
-			if (rule === GAS_SPREAD) {
-				if (up.type !== AIR) {
-					if (true) { // move or not?
-						if (left.type === AIR || right.type === AIR) {
-							this.stable = false;
-						}
-						if (Math.random() >= 0.5) {
-							if (left.type === AIR) {
-								this.swap(left);
-							}
-						} else {
-							if (right.type === AIR) {
-								this.swap(right);
-							}
-						}
-					}
-				}
-			}
-
 			if (rule === SINK_LIKE_SAND) {
 				if (down.type === WATER || down.type === COMPRESSED_WATER) {
 					let targets = [down, downleft, downright]
@@ -580,6 +561,29 @@ class Pixel {
 					this.stable = true;
 				}
 			}
+
+			if (rule === GAS_SPREAD) {
+				let targets = [left, right]
+				let r = ~~(Math.random() * targets.length);
+				switch (this.type) {
+					
+					case FIRE:
+						if (targets[r].type === AIR || targets[r].type === STEAM) {
+							this.swap(targets[r]);
+							break;
+						}
+					break;
+
+					case STEAM:
+						if (targets[r].type === AIR) {
+							this.swap(targets[r]);
+							break;
+						}
+					break;
+
+					default: break;
+				}
+			}
 		}
 		
 		if (this.didChange) {
@@ -664,13 +668,20 @@ function exportGridState () {
 	// add pixels into json
 	exportJSON.PIXELS = exportArray;
 
-	let temp = JSON.stringify(exportJSON);
-
-	return temp;
+	return JSON.stringify(exportJSON);
 }
 
 function findLongestRepeatingSubstring (string) {
 	// todo, oof
+	// in the pixels array, go through every pixel starting with the first one, replace it with 0 along every other instance of it
+	// continue along replacing every other pixel with its own number, aswell as all copies of them.
+	// shorten variables & add _T (tokens) array
+	// fill tokens with the previously defined pixels
+	let before = '{"PIXELS":[[[0,0],[300,0],[300,0],[300,0],[300,0]],[[0,0],[500,0],[300,0],[300,0],[300,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]]],"PIXEL_SIZE":40,"GRID_WIDTH":5,"GRID_HEIGHT":5}';
+	// turns into
+	let after = '{"P":[[0,1,1,1,1],[0,2,1,1,1],[0,2,3,3,3],[0,2,3,3,3],[0,2,3,3,3]],"PS":40,"GW":5,"GH":5, _T: [{a:"0", b:"[0,0]"}, {a:"1", b:"[501,0]"}, {a:"2", b:"[300,0]"}, {a:"3", b:"[100,0]"}]}';
+	// compression rate of a 5x5 mixed pixel grid = 30% smaller
+	// didnt test for bigger grids yet
 }
 
 function preload () {}
