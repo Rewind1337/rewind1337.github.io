@@ -671,7 +671,7 @@ function exportGridState () {
 	return JSON.stringify(exportJSON);
 }
 
-function findLongestRepeatingSubstring (string) {
+function compress (string) {
 	// todo, oof
 	// in the pixels array, go through every pixel starting with the first one, replace it with 0 along every other instance of it
 	// continue along replacing every other pixel with its own number, aswell as all copies of them.
@@ -679,8 +679,11 @@ function findLongestRepeatingSubstring (string) {
 	// fill tokens with the previously defined pixels
 	let before = '{"PIXELS":[[[0,0],[300,0],[300,0],[300,0],[300,0]],[[0,0],[500,0],[300,0],[300,0],[300,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]]],"PIXEL_SIZE":40,"GRID_WIDTH":5,"GRID_HEIGHT":5}';
 	// turns into
-	let after = '{"P":[[0,1,1,1,1],[0,2,1,1,1],[0,2,3,3,3],[0,2,3,3,3],[0,2,3,3,3]],"PS":40,"GW":5,"GH":5, _T: [{a:"0", b:"[0,0]"}, {a:"1", b:"[501,0]"}, {a:"2", b:"[300,0]"}, {a:"3", b:"[100,0]"}]}';
+	let after = '{"P":[[0,1,1,1,1],[0,2,1,1,1],[0,2,3,3,3],[0,2,3,3,3],[0,2,3,3,3]],"PS":40,"GW":5,"GH":5,_T:[{a:"0",b:"[0,0]"},{a:"1",b:"[501,0]"},{a:"2",b:"[300,0]"},{a:"3",b:"[100,0]"}]}';
 	// compression rate of a 5x5 mixed pixel grid = 30% smaller
+	// compression rate of a 5x5 empty(air) pixel grid = 35% smaller
+	// compression rate of a 25x25 mixed pixel grid = 70% smaller
+	// compression rate of a 25x25 empty(air) pixel grid = 64% smaller
 	// didnt test for bigger grids yet
 }
 
