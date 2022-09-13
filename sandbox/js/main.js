@@ -668,17 +668,44 @@ function exportGridState () {
 	// add pixels into json
 	exportJSON.PIXELS = exportArray;
 
+	compress(exportJSON)
+
 	return JSON.stringify(exportJSON);
 }
 
-function compress (string) {
-	// todo, oof
-	// in the pixels array, go through every pixel starting with the first one, replace it with 0 along every other instance of it
-	// continue along replacing every other pixel with its own number, aswell as all copies of them.
-	// shorten variables & add _T (tokens) array
-	// fill tokens with the previously defined pixels
+function compress (jsonObject) {
+	// first pass, tokenize
+	let pixels = jsonObject.PIXELS;
+	let tokens = [];
+	let tokenN = 0;
+	for (let row = 0; row < pixels.length; row++) {
+		for (let col = 0; col < pixels[row].length; col++) {
+			let particle = pixels[row][col];
+			let token = {a: tokenN, b: particle};
+			let unique = true;
+			for (let t in tokens) {
+				if (tokens[t].b[0] == particle[0] && tokens[t].b[1] == particle[1]) {
+					unique = false;
+				}
+			}
+			if (unique) {
+				tokens.push(token);
+				tokenN++;
+			}
+
+			//  if particle in tokens.b
+			// 		replace pixels[row][col] with token.a
+		}
+	}
+
+	console.log(tokens); // works
+
+	// add tokens to jsonObject
+	// replace jsonObject.PIXELS with pixels
+	// shorten variable names
+
+
 	let before = '{"PIXELS":[[[0,0],[300,0],[300,0],[300,0],[300,0]],[[0,0],[500,0],[300,0],[300,0],[300,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]]],"PIXEL_SIZE":40,"GRID_WIDTH":5,"GRID_HEIGHT":5}';
-	// turns into
 	let after = '{"P":[[0,1,1,1,1],[0,2,1,1,1],[0,2,3,3,3],[0,2,3,3,3],[0,2,3,3,3]],"PS":40,"GW":5,"GH":5,_T:[{a:"0",b:"[0,0]"},{a:"1",b:"[501,0]"},{a:"2",b:"[300,0]"},{a:"3",b:"[100,0]"}]}';
 	// compression rate of a 5x5 mixed pixel grid = 30% smaller
 	// compression rate of a 5x5 empty(air) pixel grid = 35% smaller
