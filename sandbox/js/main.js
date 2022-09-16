@@ -51,6 +51,7 @@ const STONE = 310;
 const GUNPOWDER = 320;
 const EMBER = 330;
 const SEED = 340;
+const SNOW = 350;
 
 // particles - liquids
 const WATER = 500;
@@ -64,6 +65,7 @@ const STEAM = 750;
 
 // pixel rules
 const GRAVITY = "gravity";
+const SLOW_GRAVITY = "slowGravity";
 const ANTIGRAVITY = "antigravity";
 const SAND_PILE = "sandPile";
 const LIQUID_SPREAD = "liquidSpread";
@@ -79,7 +81,7 @@ const FIRE_SPREAD = "fireSpread";
 const VOLATILE = "volatile";
 const EMBER_VOLATILE = "emberVolatile";
 const COMPRESS_WATER = "compressWater";
-const SEED_RULE = "seedRuleTemp"
+const SEED_RULE = "seedRuleTemp";
 
 // pixel definitions
 let PIXEL_DEF = {
@@ -151,6 +153,9 @@ class Pixel {
 			break;
 			case EMBER:
 				this.fill = color(10, 90 + random(0,10), 20 + random(10, 20));
+			break;
+			case SNOW:
+				this.fill = color(240, 30, 90 + random(0, 7));
 			break;
 			case WATER:
 				this.fill = color(200, 100, max(5, 60 - this.depth) + this.watertemp);
@@ -271,7 +276,7 @@ class Pixel {
 		let upright = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][clamp(this.y - 1, 0, PIXELS[0].length - 1)];
 		let downleft = PIXELS[clamp(this.x - 1, 0, PIXELS.length - 1)][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
 		let downright = PIXELS[clamp(this.x + 1, 0, PIXELS.length - 1)][clamp(this.y + 1, 0, PIXELS[0].length - 1)];
-
+		
 		for (let i = 0; i < PIXEL_DEF[st].length; i++) {
 			let rule = PIXEL_DEF[st][i];
 
@@ -305,13 +310,21 @@ class Pixel {
 			}
 
 			if (rule === VOLATILE) {
-				if (this.type === FIRE) {
-					if (Math.random() >= 0.98 || atTop == true) { // turn to air
-						this.setType(STEAM);
-					}
-				} else if (this.type === STEAM) {
-					if (Math.random() >= 0.995 || atTop == true) { // turn to air
-						this.setType(AIR);
+				if (atTop == true) {
+					this.setType(AIR);
+				} else {
+					if (this.type === FIRE) {
+						if (Math.random() >= 0.98) { // turn to steam
+							this.setType(STEAM);
+						}
+					} else if (this.type === STEAM) {
+						if (Math.random() >= 0.995) { // turn to air
+							this.setType(AIR);
+						}
+					} else if (this.type === SNOW) {
+						if (Math.random() >= 0.999) { // turn to water
+							this.setType(WATER);
+						}
 					}
 				}
 			}
@@ -398,6 +411,18 @@ class Pixel {
 				}
 			}
 
+			if (rule === SLOW_GRAVITY) {
+				let targets = [down, downleft, downright]
+
+				let r = ~~(Math.random() * targets.length);
+				let r2 = Math.random();
+				if (r2 <= 0.33) {
+					if (targets[r].type === AIR || targets[r].type === STEAM || targets[r].type === WATER || targets[r].type === COMPRESSED_WATER) {
+						this.swap(targets[r]);
+					}
+				}
+			}
+
 			if (rule === SEED_RULE) {
 				let targets = [down, downleft, downright]
 
@@ -477,7 +502,7 @@ class Pixel {
 			}
 
 			if (rule === SINK_LIKE_STONE) {
-				if (down.type === SAND || down.type === WATER || down.type === COMPRESSED_WATER || down.type === EMBER) {
+				if (down.type === SAND || down.type === WATER || down.type === COMPRESSED_WATER || down.type === EMBER || down.type === SNOW) {
 					this.swap(down);
 				}
 			}
@@ -615,9 +640,13 @@ class Pixel {
 			__canvasContext.fill();
 		}
 
-		if (this.alwaysStable) {
-			__canvasContext.strokeStyle = "rgb(255, 0, 0)";
-			__canvasContext.strokeRect(this.x * PIXEL_SIZE, this.y * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+		if (this.alwaysStable && DEBUG_MODE) {
+			__canvasContext.beginPath();
+			__canvasContext.arc(this.x * PIXEL_SIZE + PIXEL_SIZE/2, this.y * PIXEL_SIZE + PIXEL_SIZE/2, PIXEL_SIZE/6, 0, 2 * Math.PI, false);
+			__canvasContext.fillStyle = 'rgba(255, 255, 255, 0.4)';
+			__canvasContext.fill();
+			__canvasContext.strokeStyle = 'rgba(255, 0, 0, 0.4)';
+			__canvasContext.stroke();
 		}
 	}
 }
@@ -851,7 +880,7 @@ function setupRules() {
 	PIXEL_DEF.add_rule([STEAM, FIRE], GAS_SPREAD); // spread of gasses
 
 	PIXEL_DEF.add_rule([FIRE, LAVA, EMBER], FIRE_SPREAD); // spread of fire
-	PIXEL_DEF.add_rule([FIRE, STEAM], VOLATILE); // dissapear
+	PIXEL_DEF.add_rule([FIRE, STEAM, SNOW], VOLATILE); // dissapear
 	PIXEL_DEF.add_rule([EMBER], EMBER_VOLATILE); // turn to fire
 	PIXEL_DEF.combustible = [GUNPOWDER, WOOD, SEED, PLANT, OIL]; // list of combustible particles
 
@@ -859,6 +888,8 @@ function setupRules() {
 	PIXEL_DEF.add_rule([COMPRESSED_WATER], COMPRESSED_WATER_SPREAD); // heavier water spread
 
 	PIXEL_DEF.add_rule([SEED], SEED_RULE); // seed growth
+
+	PIXEL_DEF.add_rule([SNOW], SLOW_GRAVITY); // snow slow fall
 }
 
 function setupSandbox() {

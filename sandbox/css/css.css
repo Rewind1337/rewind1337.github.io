@@ -300,6 +300,8 @@ input[type='checkbox']:focus {
 
 .particle[data-type='SEED'] .particle-img {background-color: hsL(120deg, 50%, 60%);}
 
+.particle[data-type='SNOW'] .particle-img {background-color: hsL(240deg, 50%, 90%);}
+
 
 
 /* Liquids */
