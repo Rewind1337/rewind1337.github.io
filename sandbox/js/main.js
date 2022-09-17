@@ -41,7 +41,7 @@ class Pixel {
 	updateFill() {
 		switch (this.type) {
 			case AIR:
-				this.fill = color(COLORS[AIR].h, COLORS[AIR].s, COLORS[AIR].l);
+				this.fill = color(0, 0, 100);
 			break;
 			case FIRE:
 				this.fill = color(random(0, 25), 100, 55);
