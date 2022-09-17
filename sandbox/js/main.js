@@ -16,6 +16,8 @@ class Pixel {
 
 		this.depth = 0;
 
+		this.colorOffset = {h: 0, s: 0, l: 0};
+
 		this.setType(type);
 
 		this.doTick = true;
@@ -39,7 +41,7 @@ class Pixel {
 	updateFill() {
 		switch (this.type) {
 			case AIR:
-				this.fill = color(0, 0, 99.5 + random(0, 0.5));
+				this.fill = color(COLORS[AIR].h, COLORS[AIR].s, COLORS[AIR].l);
 			break;
 			case FIRE:
 				this.fill = color(random(0, 25), 100, 55);
@@ -66,10 +68,10 @@ class Pixel {
 				this.fill = color(240, 30, 90 + random(0, 7));
 			break;
 			case WATER:
-				this.fill = color(200, 100, max(5, 60 - this.depth) + this.watertemp);
+				this.fill = color(200, 100, max(5, 60 - this.depth) + this.colorOffset.l);
 			break;
 			case COMPRESSED_WATER:
-				this.fill = color(200, 100, max(3, 50 - this.depth) + this.watertemp);
+				this.fill = color(200, 100, max(3, 50 - this.depth) + this.colorOffset.l);
 			break;
 			case LAVA:
 				this.fill = color(random(0, 10), 100, random(12, 20));
@@ -99,11 +101,11 @@ class Pixel {
 		this.timeAlive = 0;
 
 		if (this.type === COMPRESSED_WATER) {
-			this.watertemp = random(0, 3);
+			this.colorOffset.l = random(0, 3);
 		}
 		
 		if (this.type === WATER) {
-			this.watertemp = random(5, 10);
+			this.colorOffset.l = random(5, 10);
 		}
 
 		this.updateFill();

@@ -45,7 +45,8 @@ const EMBER_VOLATILE = "emberVolatile";
 const COMPRESS_WATER = "compressWater";
 const SEED_RULE = "seedRuleTemp";
 
-// pixel definitions
+let COLORS = {};
+
 let PIXEL_DEF = {
 	add_rule: (sourceTypes, rule) => {
 		for (let st = 0; st < sourceTypes.length; st++) {
@@ -58,7 +59,14 @@ let PIXEL_DEF = {
 	},
 }
 
+function setupColors() {
+	COLORS[AIR] = {h: 0, s: 0, l: 100};
+	// etc
+}
+
 function setupRules() {
+	setupColors();
+
 	PIXEL_DEF.add_rule([SAND, STONE, GUNPOWDER, EMBER, SEED, WATER, COMPRESSED_WATER, LAVA, ACID, OIL], GRAVITY); // falling straight through air
 
 	PIXEL_DEF.add_rule([SAND, GUNPOWDER, EMBER], SAND_PILE); // pilage of sand
