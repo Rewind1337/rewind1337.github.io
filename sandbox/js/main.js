@@ -1,100 +1,8 @@
-// p5 canvas
-let canvas;
-let __canvas;
-
-let __canvasContext;
-
-// pixelarray
+let canvas; //p5
+let __canvas; //html
+let __canvasContext; //html context
 let PIXELS;
-
-// tick timer
 let globalTimer;
-
-// tooltip stuff
-let tooltipTimeout;
-let tooltipContent = "";
-let tooltipOpen = false;
-
-// modal stuff
-let modalOpen = false;
-
-// ui stuff
-let SELECTED_TYPE = 0;
-let PIXEL_SIZE = 20;
-let BRUSH_SIZE = 2;
-
-// toggles
-let DRAW_HOVER = true;
-let DRAW_GRID = false;
-let DEBUG_MODE = true;
-let STABLE_MODE = false;
-
-// amount of pixels per side
-let GRID_WIDTH = 60;
-let GRID_HEIGHT = 60;
-
-// ticks per second
-let TPS = 60;
-
-// particles - special
-const AIR = 0;
-const FIRE = 10;
-
-// particles - solids
-const WALL = 100;
-const WOOD = 110;
-const PLANT = 120;
-
-// particles - powders
-const SAND = 300;
-const STONE = 310;
-const GUNPOWDER = 320;
-const EMBER = 330;
-const SEED = 340;
-const SNOW = 350;
-
-// particles - liquids
-const WATER = 500;
-const COMPRESSED_WATER = 501;
-const LAVA = 510;
-const ACID = 520;
-const OIL = 530;
-
-// particles - gases
-const STEAM = 750;
-
-// pixel rules
-const GRAVITY = "gravity";
-const SLOW_GRAVITY = "slowGravity";
-const ANTIGRAVITY = "antigravity";
-const SAND_PILE = "sandPile";
-const LIQUID_SPREAD = "liquidSpread";
-const COMPRESSED_WATER_SPREAD = "doubleWaterSpread";
-const SINK_LIKE_STONE = "sinkLikeStone";
-const SINK_LIKE_SAND = "sinkLikeSand";
-const LAVA_EVAPORATE = "lavaEvaporate";
-const LAVA_SPREAD = "lavaSpread";
-const ACID_EVAPORATE = "acidEvaporate";
-const GAS_FLOAT = "gasFloat";
-const GAS_SPREAD = "gasSpread";
-const FIRE_SPREAD = "fireSpread";
-const VOLATILE = "volatile";
-const EMBER_VOLATILE = "emberVolatile";
-const COMPRESS_WATER = "compressWater";
-const SEED_RULE = "seedRuleTemp";
-
-// pixel definitions
-let PIXEL_DEF = {
-	add_rule: (sourceTypes, rule) => {
-		for (let st = 0; st < sourceTypes.length; st++) {
-			if (sourceTypes[st] in PIXEL_DEF) {
-				PIXEL_DEF[sourceTypes[st]].push(rule);
-			} else {
-				PIXEL_DEF[sourceTypes[st]] = [rule];
-			}
-		}
-	},
-}
 
 class Pixel {
 	constructor (type, x, y) {
@@ -286,17 +194,17 @@ class Pixel {
 					if (PIXEL_DEF.combustible.includes(targets[t].type)) {
 						switch (targets[t].type) {
 							case OIL:
-								if (Math.random() >= 0.75) { // turn to fire
+								if (Math.random() >= 0.75) {
 									targets[t].setType(FIRE);
 								}
 							break;
 							case GUNPOWDER:
-								if (Math.random() >= 0.85) { // turn to fire
+								if (Math.random() >= 0.85) {
 									targets[t].setType(FIRE);
 								}
 							break;
 							default:
-								if (Math.random() >= 0.95) { // turn to fire
+								if (Math.random() >= 0.95) {
 									targets[t].setType(FIRE);
 								}
 							break;
@@ -314,30 +222,43 @@ class Pixel {
 					this.setType(AIR);
 				} else {
 					if (this.type === FIRE) {
-						if (Math.random() >= 0.98) { // turn to steam
+						if (Math.random() >= 0.98) {
 							this.setType(STEAM);
 						}
 					} else if (this.type === STEAM) {
-						if (Math.random() >= 0.995) { // turn to air
+						if (Math.random() >= 0.995) {
 							this.setType(AIR);
 						}
 					} else if (this.type === SNOW) {
-						if (Math.random() >= 0.999) { // turn to water
-							this.setType(WATER);
+						let targets = [up, left, right, down, upleft, upright, downleft, downright];
+						let water = 0;
+						for (let t in targets) {
+							if (targets[t].type === WATER || targets[t].type === COMPRESSED_WATER) {
+								water ++;
+							}
+						}
+						if (water >= 5) {
+							if (Math.random() >= 0.95) {
+								this.setType(WATER);
+							}
+						} else {
+							if (Math.random() >= 0.999) {
+								this.setType(WATER);
+							}
 						}
 					}
 				}
 			}
 
 			if (rule === EMBER_VOLATILE) {
-				if (Math.random() >= 0.99 && this.timeAlive >= 45) { // turn to fire
+				if (Math.random() >= 0.99 && this.timeAlive >= 45) {
 					this.setType(FIRE);
 				}
 
 				let targets = [up, left, right, down, upleft, upright, downleft, downright];
 				for (let t in targets) {
 					if (targets[t].type === WATER || targets[t].type === COMPRESSED_WATER) {
-						if (Math.random() >= 0.9) { // turn to stone
+						if (Math.random() >= 0.9) {
 							this.setType(STONE);
 							targets[t].setType(STEAM);
 						}
@@ -451,7 +372,7 @@ class Pixel {
 
 			if (rule === SAND_PILE) {
 				if (down.type != AIR) {
-					if (Math.random() > 0.7 && !atBottom) { // move or not?
+					if (Math.random() > 0.7 && !atBottom) {
 						if (Math.random() >= 0.5) {
 							if (downleft.type === AIR) {
 								this.swap(downleft);
@@ -473,7 +394,7 @@ class Pixel {
 
 			if (rule === LIQUID_SPREAD) {
 				if (down.type !== AIR) {
-					if (true) { // move or not?
+					if (true) {
 						if (left.type === AIR || right.type === AIR || left.type === STEAM || right.type === STEAM || left.type === FIRE || right.type === FIRE) {
 							this.stable = false;
 						}
@@ -511,13 +432,13 @@ class Pixel {
 				let targets = [up, left, right, down];
 				for (let t in targets) {
 					if (PIXEL_DEF.lava_whitelist.includes(targets[t].type)) {
-						if (Math.random() >= 0.05) { // eat particle?
-							if (Math.random() >= 0.66667) { // make steam?
+						if (Math.random() >= 0.05) {
+							if (Math.random() >= 0.66667) {
 								targets[t].setType(STEAM);
 							} else {
 								targets[t].setType(AIR);
 							}
-							if (Math.random() >= 0.5) { // burn self?
+							if (Math.random() >= 0.5) {
 								this.setType(STEAM);
 							}
 						}
@@ -541,7 +462,7 @@ class Pixel {
 					if (left.type === AIR || right.type === AIR) {
 						this.stable = false;
 					}
-					if (Math.random() >= 0.5) { // move or not?
+					if (Math.random() >= 0.5) {
 						if (Math.random() >= 0.5) {
 							if (left.type === AIR) {
 								this.swap(left);
@@ -565,13 +486,13 @@ class Pixel {
 				let targets = [up, left, right, down];
 				for (let t in targets) {
 					if (!PIXEL_DEF.acid_blacklist.includes(targets[t].type)) {
-						if (Math.random() >= 0.75) { // eat particle?
-							if (Math.random() >= 0.66667) { // make steam?
+						if (Math.random() >= 0.75) {
+							if (Math.random() >= 0.66667) {
 								targets[t].setType(STEAM);
 							} else {
 								targets[t].setType(AIR);
 							}
-							if (Math.random() >= 0.5) { // burn self?
+							if (Math.random() >= 0.5) {
 								this.setType(STEAM);
 							}
 						}
@@ -651,148 +572,6 @@ class Pixel {
 	}
 }
 
-function importGridState (string) {
-	clearInterval(globalTimer);
-
-	let importJSON = JSON.parse(string);
-	let isCompressed = (importJSON.T !== undefined ? true : false);
-
-	if (isCompressed) {
-		importJSON = uncompress(importJSON);
-	}
-
-	GRID_WIDTH = importJSON.GRID_WIDTH;
-	GRID_HEIGHT = importJSON.GRID_HEIGHT;
-	PIXEL_SIZE = importJSON.PIXEL_SIZE;
-
-	let _PIXELS = importJSON.PIXELS;
-
-	setupSandbox();
-
-	for (let x = 0; x < GRID_WIDTH; x++) {
-		for (let y = 0; y < GRID_HEIGHT; y++) {
-			PIXELS[x][y].setType(_PIXELS[x][y][0]);
-			PIXELS[x][y].setAlwaysStable((_PIXELS[x][y][1] === 1 ? true : false));
-		}
-	}
-
-	startTickClock();
-}
-
-function exportGridState () {
-	// setup json for export
-	let exportJSON = {
-		PIXELS: undefined,
-		PIXEL_SIZE: PIXEL_SIZE,
-		GRID_WIDTH: GRID_WIDTH,
-		GRID_HEIGHT: GRID_HEIGHT,
-	}
-
-	// setup array of pixels
-	let exportArray = [];
-	for (let x = 0; x < PIXELS.length; x++) {
-		exportArray.push([]);
-		for (let y = 0; y < PIXELS[0].length; y++) {
-			exportArray[x].push([]);
-			let P = PIXELS[x][y];
-			exportArray[x][y] = [P.type, (P.alwaysStable === true ? 1 : 0)];
-		}
-	}
-
-	// add pixels into json
-	exportJSON.PIXELS = exportArray;
-	let uncompressedExportJSON = copy(exportJSON);
-	let compressedExportJSON = compress(exportJSON);
-
-	if (JSON.stringify(compressedExportJSON).length < JSON.stringify(uncompressedExportJSON).length) {
-		return JSON.stringify(compressedExportJSON);
-	} else {
-		return JSON.stringify(uncompressedExportJSON);
-	}
-}
-
-function uncompress (compressedJsonObject) {
-	// '{"P":[[0,1,1,1,1],[0,2,1,1,1],[0,2,3,3,3],[0,2,3,3,3],[0,2,3,3,3]],"PS":40,"GW":5,"GH":5,T:[{a:"0",b:"[0,0]"},{a:"1",b:"[501,0]"},{a:"2",b:"[300,0]"},{a:"3",b:"[100,0]"}]}';
-	// turns into
-	// '{"PIXELS":[[[0,0],[300,0],[300,0],[300,0],[300,0]],[[0,0],[500,0],[300,0],[300,0],[300,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]]],"PIXEL_SIZE":40,"GRID_WIDTH":5,"GRID_HEIGHT":5}';
-	
-	let pixels = compressedJsonObject.P;
-	let tokens = compressedJsonObject.T;
-	for (let row = 0; row < pixels.length; row++) {
-		for (let col = 0; col < pixels[row].length; col++) {
-			let particle = pixels[row][col];
-
-			tokencheck:
-			for (let t in tokens) {
-				if (tokens[t].a == particle) {
-					particle = tokens[t].b;
-					pixels[row][col] = particle;
-				}
-			}
-		}
-	}
-
-	let uncompressedJsonObject = {
-		PIXELS: pixels,
-		PIXEL_SIZE: compressedJsonObject.PS,
-		GRID_WIDTH: compressedJsonObject.GW,
-		GRID_HEIGHT: compressedJsonObject.GH
-	}
-
-	return uncompressedJsonObject;
-}
-
-function compress (jsonObject) {
-	// '{"PIXELS":[[[0,0],[300,0],[300,0],[300,0],[300,0]],[[0,0],[500,0],[300,0],[300,0],[300,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]],[[0,0],[500,0],[310,0],[310,0],[310,0]]],"PIXEL_SIZE":40,"GRID_WIDTH":5,"GRID_HEIGHT":5}';
-	// turns into
-	// '{"P":[[0,1,1,1,1],[0,2,1,1,1],[0,2,3,3,3],[0,2,3,3,3],[0,2,3,3,3]],"PS":40,"GW":5,"GH":5,T:[{a:"0",b:"[0,0]"},{a:"1",b:"[501,0]"},{a:"2",b:"[300,0]"},{a:"3",b:"[100,0]"}]}';
-
-	let pixels = copy(jsonObject.PIXELS);
-	let tokens = [];
-	let tokenN = 0;
-	for (let row = 0; row < pixels.length; row++) {
-		for (let col = 0; col < pixels[row].length; col++) {
-			let particle = pixels[row][col];
-			let token = {a: tokenN, b: particle};
-			let unique = true;
-
-			uniquecheck:
-			for (let t in tokens) {
-				if (tokens[t].b[0] == particle[0] && tokens[t].b[1] == particle[1]) {
-					unique = false;
-					break uniquecheck;
-				}
-			}
-
-			if (unique) {
-				tokens.push(token);
-				tokenN++;
-			}
-
-			for (let t in tokens) {
-				if (tokens[t].b[0] == particle[0] && tokens[t].b[1] == particle[1]) {
-					pixels[row][col] = tokens[t].a;
-				}
-			}
-		}
-	}
-
-	let compressedJsonObject = {
-		P: pixels,
-		PS: jsonObject.PIXEL_SIZE,
-		GW: jsonObject.GRID_WIDTH,
-		GH: jsonObject.GRID_HEIGHT,
-		T: tokens,
-	}
-
-	return compressedJsonObject;
-	
-	// compression rate of a 5x5 mixed pixel grid, no fixed particles = 30% smaller
-	// compression rate of a 5x5 empty(air) pixel grid, no fixed particles = 35% smaller
-	// compression rate of a 25x25 mixed pixel grid, no fixed particles = 70% smaller
-	// compression rate of a 25x25 empty(air) pixel grid, no fixed particles = 64% smaller
-}
-
 function preload () {}
 
 function setup () {
@@ -851,45 +630,13 @@ function startTickClock () {
 	globalTimer = setInterval(function () {
 		for (let x = 0; x < width/PIXEL_SIZE; x++) {
 			for (let y = 0; y < height/PIXEL_SIZE; y++) {
+				// commented out as a workout for always-ticking pixels
 				// if (!PIXELS[x][y].stable) {
 					PIXELS[x][y].tick();
 				// }
 			}
 		}
 	}, 1000 / TPS)
-}
-
-function setupRules() {
-	PIXEL_DEF.add_rule([SAND, STONE, GUNPOWDER, EMBER, SEED, WATER, COMPRESSED_WATER, LAVA, ACID, OIL], GRAVITY); // falling straight through air
-
-	PIXEL_DEF.add_rule([SAND, GUNPOWDER, EMBER], SAND_PILE); // pilage of sand
-	PIXEL_DEF.add_rule([SAND, GUNPOWDER], SINK_LIKE_SAND); // sinkage of sand through water, and spreading
-
-	PIXEL_DEF.add_rule([WATER, COMPRESSED_WATER, ACID, OIL], LIQUID_SPREAD); // spread of water
-
-	PIXEL_DEF.add_rule([STONE], SINK_LIKE_STONE); // sinkage of stone through sand and water
-
-	PIXEL_DEF.add_rule([LAVA], LAVA_EVAPORATE); // evaporate whitelist
-	PIXEL_DEF.add_rule([LAVA], LAVA_SPREAD); // spread of lava, like water, but slower
-	PIXEL_DEF.lava_whitelist = [WATER, COMPRESSED_WATER]; // whitelist
-
-	PIXEL_DEF.add_rule([ACID], ACID_EVAPORATE); // evaporate everything thats not in the blacklist
-	PIXEL_DEF.acid_blacklist = [AIR, WALL, ACID, STEAM]; // blacklist
-
-	PIXEL_DEF.add_rule([STEAM, FIRE], ANTIGRAVITY); // antigravity
-	PIXEL_DEF.add_rule([STEAM, FIRE], GAS_SPREAD); // spread of gasses
-
-	PIXEL_DEF.add_rule([FIRE, LAVA, EMBER], FIRE_SPREAD); // spread of fire
-	PIXEL_DEF.add_rule([FIRE, STEAM, SNOW], VOLATILE); // dissapear
-	PIXEL_DEF.add_rule([EMBER], EMBER_VOLATILE); // turn to fire
-	PIXEL_DEF.combustible = [GUNPOWDER, WOOD, SEED, PLANT, OIL]; // list of combustible particles
-
-	PIXEL_DEF.add_rule([WATER, COMPRESSED_WATER], COMPRESS_WATER); // water compression rule
-	PIXEL_DEF.add_rule([COMPRESSED_WATER], COMPRESSED_WATER_SPREAD); // heavier water spread
-
-	PIXEL_DEF.add_rule([SEED], SEED_RULE); // seed growth
-
-	PIXEL_DEF.add_rule([SNOW], SLOW_GRAVITY); // snow slow fall
 }
 
 function setupSandbox() {
@@ -911,159 +658,6 @@ function setupSandbox() {
 	}
 }
 
-function bindTooltip () {
-	$('[data-tooltip]').hover(function () {
-		let tttext = $(this).attr("data-tooltip");
-		if (tttext.length > 0) {
-			$("#tooltip").text($(this).attr("data-tooltip"));
-		} else {
-			$("#tooltip").text("no tooltip yet :(");
-		}
-
-		tooltipTimeout = setTimeout(function () {
-			tooltipOpen = true;
-			if (winMouseY < windowHeight/2) {
-				$("#tooltip").css({"top": (winMouseY + 50) + "px", "left": winMouseX + "px", "display": "block"}).animate({"opacity": 1}, 1000);
-			} else {
-				$("#tooltip").css({"top": (winMouseY - 50) + "px", "left": winMouseX + "px", "display": "block", "transform": "translate(-50%, -100%)"}).animate({"opacity": 1}, 1000);
-			}
-		}, 1500);
-	}, stopTooltipTimer)
-}
-
-function stopTooltipTimer () {
-	clearTimeout(tooltipTimeout);
-	if (tooltipOpen) {
-		$("#tooltip").css({"opacity": 0, "top": "-10000px", "left": "-10000px", "display": "none"});
-	}
-}
- 
-function bindToolbar () {
-	$(".particle:not(.particle-wip)").click(function () {
-		let type = eval($(this).attr("data-type"));
-		SELECTED_TYPE = type;
-		$(".particle").removeClass("selected");
-		$(this).addClass("selected");
-	})
-}
-
-function bindSettings () {
-	$("#setting-pixelsize").change(function () {
-		let v = Number($(this).val());
-		PIXEL_SIZE = v;
-		setupSandbox();
-	}).change();
-
-	$("#setting-brushsize").change(function () {
-		let v = Number($(this).val());
-		BRUSH_SIZE = v;
-	}).change();
-
-	$("#setting-gridwidth").change(function () {
-		let v = Number($(this).val());
-		GRID_WIDTH = v;
-		setupSandbox();
-	}).change();
-
-	$("#setting-gridheight").change(function () {
-		let v = Number($(this).val());
-		GRID_HEIGHT = v;
-		setupSandbox();
-	}).change();
-
-	$("#setting-maxtps").change(function () {
-		let v = Number($(this).val());
-		TPS = v;
-		frameRate(TPS);
-		startTickClock();
-	}).change();
-
-	$("#setting-drawgrid").change(function () {
-		let v = $(this).prop("checked");
-		DRAW_GRID = v;
-		for (let x = PIXELS.length - 1; x >= 0; x--) {
-			for (let y = PIXELS[0].length - 1; y >= 0; y--) {
-				let p = PIXELS[x][y];
-				p.draw();
-			}
-		}
-	}).change();
-
-	$("#setting-drawhover").change(function () {
-		let v = $(this).prop("checked");
-		DRAW_HOVER = v;
-	}).change();
-
-	$("#setting-stablemode").change(function () {
-		let v = $(this).prop("checked");
-		STABLE_MODE = v;
-	}).change();
-
-	$("#setting-debugmode").change(function () {
-		let v = $(this).prop("checked");
-		DEBUG_MODE = v;
-	}).change();
-
-	$("#controls-playpause").click(function () {
-		let v = $(this).hasClass("paused")
-		if (v === true) {
-			$(this).removeClass("paused");
-			$(this).find(".material-icons").html("pause");
-			startTickClock();
-		} else {
-			$(this).addClass("paused");
-			$(this).find(".material-icons").html("play_arrow");
-			clearInterval(globalTimer);
-		}
-	}).change();
-
-	$("#controls-clearsandbox").click(function () {
-		setupSandbox();
-	})
-
-	$("#controls-export").click(function () {
-		let bool = confirm("Export current Sandbox?");
-		if (bool) {
-			let json = exportGridState();
-			$("#file-modal").css({"display": "block"}).animate({"opacity": 1}, 200);
-			$("#file-in-out").prop("readonly", true).val(json);
-			$("#file-in-confirm").hide();
-			$("#file-in-cancel").hide();
-			$("#file-out-confirm").show();
-			modalOpen = true;
-		}
-	})
-
-	$("#controls-import").click(function () {
-		let bool = confirm("Do you want to import a Sandbox?");
-		if (bool) {
-			$("#file-modal").css({"display": "block"}).animate({"opacity": 1}, 200);
-			$("#file-in-out").prop("readonly", false).val("");
-			$("#file-in-confirm").show();
-			$("#file-in-cancel").show();
-			$("#file-out-confirm").hide();
-			modalOpen = true;
-		}
-	})
-
-	$("#file-in-confirm").click(function () {
-		let string = $("#file-in-out").val();
-		importGridState(string);
-		$("#file-modal").animate({"opacity": 0}, 200).css({"display": "none"});
-		modalOpen = false;
-	})
-
-	$("#file-in-cancel").click(function () {
-		$("#file-modal").animate({"opacity": 0}, 200).css({"display": "none"});
-		modalOpen = false;
-	})
-
-	$("#file-out-confirm").click(function () {
-		$("#file-modal").animate({"opacity": 0}, 200).css({"display": "none"});
-		modalOpen = false;
-	})
-}
-
 function draw () {
 	let particleCount = 0;
 	let unstableCount = 0;
@@ -1072,19 +666,13 @@ function draw () {
 		for (let y = PIXELS[0].length - 1; y >= 0; y--) {
 			let p = PIXELS[x][y];
 			p.timeAlive ++;
-			if (!p.stable) {
-				p.draw();
-			}
-
-			// debug count of particles
+			if (!p.stable) {p.draw(); unstableCount ++;}
 			if (p.type !== AIR) {particleCount ++;}
-			if (!p.stable) {unstableCount ++;}
 		}
 	}
 
 	image(__canvas, 0, 0, width, height);
 
-	// hover
 	if (DRAW_HOVER) {
 		drawingContext.strokeStyle = "rgb(0, 0, 0)";
 		let mx = ~~(((mouseX - 4) / width) * (width / PIXEL_SIZE));
@@ -1142,12 +730,10 @@ function handleClick(mx, my) {
 	}
 }
 
-// on click
 function mousePressed () {
 	handleClick(mouseX - 4, mouseY - 4);
 }
 
-// on drag
 function mouseDragged () {
 	handleClick(mouseX - 4, mouseY - 4);
 }
