@@ -1,0 +1,28 @@
+* {
+	margin: 0;
+	padding: 0;
+  overflow: hidden;
+  box-sizing: border-box !important;
+  font-family: 'Silkscreen', cursive;
+  scrollbar-color: #ddd #333;
+  scrollbar-width: thin;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+canvas {
+  cursor: crosshair;
+  border: 3px double rgba(0, 0, 0, 0.5);
+}
+
+html, body {
+  background-color: rgb(40, 40, 40);
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
