@@ -1,0 +1,77 @@
+button {
+    font-family: "Bangers", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 4px;
+    padding: 6px 12px;
+}
+
+button.round {
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    padding: 4px;
+    margin-right: 4px;
+    aspect-ratio: 1/1 !important;
+}
+
+button.round img.icon {
+    filter: invert();
+    width: 40px;
+    border-radius: 40%;
+    transform: translate(-1px, -2px);
+}
+
+button > p {
+    font-family: "Bangers", system-ui;
+    font-size: 24px;
+    transform: translate(-2px, 0);
+    text-shadow: 0 0 2px black;
+    filter: drop-shadow(1.5px 1.5px black);
+    white-space: nowrap;
+}
+
+button.disabled > p {
+    opacity: 0.5;
+    font-size: 24px;
+    transform: translate(-2px, 0);
+    text-shadow: 0 0 2px black;
+    filter: drop-shadow(1.5px 1.5px black);
+}
+
+button:not(.disabled):hover {
+    scale: 1.02;
+}
+
+.item-slot:not(.selected):hover, .hero-slot:not(.selected):hover {
+    scale: 1.05;
+    cursor: pointer;
+}
+
+.item-slot.empty:hover, .hero-slot.empty:hover {
+    cursor: pointer;
+    background: linear-gradient(324deg,rgb(245, 245, 245) 0%, rgb(199, 199, 199));
+}
+
+.empty-plus.empty-back {
+    font-size: 40px !important;
+    transform: translate(-4px, 90%) !important
+}
+
+button:not(.disabled) {background: var(--button-gradient)} 
+button:not(.disabled):hover {cursor: pointer; background: var(--button-gradient-hover)}  
+button:not(.disabled):hover:active {background: var(--button-gradient-click)}
+
+button:not(.disabled).bg-success {background: var(--success-gradient);}
+button:not(.disabled).bg-success:hover {background: var(--success-gradient-hover);}
+button:not(.disabled).bg-success:hover:active {background: var(--success-gradient-click);}
+
+button:not(.disabled).bg-secondary {background: var(--secondary-gradient);}
+button:not(.disabled).bg-secondary:hover {background: var(--secondary-gradient-hover);}
+button:not(.disabled).bg-secondary:hover:active {background: var(--secondary-gradient-click);}
+
+button.disabled {
+    background-color: rgb(124, 124, 124);
+    border: 2px solid rgb(0, 0, 0);
+}

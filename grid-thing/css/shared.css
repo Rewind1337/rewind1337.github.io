@@ -1,0 +1,390 @@
+:root {
+	/* CSS HSL */
+	--blue: hsl(180, 50%, 40%);
+	--lightblue: hsl(180, 50%, 70%);
+	--darkblue: hsl(180, 40%, 25%);
+	--blackblue: hsl(180, 40%, 2%);
+	--green: hsl(120, 50%, 40%);
+	--lightgreen: hsl(120, 50%, 70%);
+	--darkgreen: hsl(120, 40%, 25%);
+	--blackgreen: hsl(120, 40%, 2%);
+	--purple: hsl(270, 50%, 40%);
+	--lightpurple: hsl(270, 50%, 70%);
+	--darkpurple: hsl(270, 40%, 25%);
+	--blackpurple: hsl(270, 40%, 2%);
+}
+
+ul { list-style: none }
+
+* {
+	box-sizing: border-box !important; 
+	margin: 0; 
+	padding: 0;
+	user-select: none;
+
+	font-family: "Open Sans", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+	font-size: 24px;
+}
+
+html, body {
+	background-color: black;
+	color: lightgoldenrodyellow;
+}
+
+.flex-column {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	flex-grow: 1;
+}
+
+img {
+	background-color: white;
+	padding: 2px;
+	border: 1px solid rgba(255, 255, 255, 0.33);
+}
+
+/*
+	- - - RESOURCE - - - 
+*/
+
+#resource-list {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.resource {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	gap: 16px;
+
+	padding: 2px;
+	border: 1px solid rgba(255, 255, 255, 0.33);
+}
+
+.resource img {
+	aspect-ratio: 1/1;
+	width: 50px;
+	margin: 4px;
+}
+
+.resource .resource-name {align-self: center; font-size: 16px; flex-grow: 1}
+.resource .resource-amount {align-self: center; font-size: 16px; white-space: nowrap;}
+.resource .resource-persec {align-self: center; font-size: 14px; white-space: nowrap; padding-right: 10px}
+
+/*
+	- - - STRUCTURE - - - 
+*/
+
+#structure-list {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.structure {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	padding: 2px;
+	border: 1px solid rgba(255, 255, 255, 0.33);
+}
+
+.structure[data-unlocked=false] {border-style: dashed;}
+.structure[data-unlocked=false] .button,
+.structure[data-unlocked=false] .structure-effect {
+	display: none;
+}
+.structure[data-unlocked=false] .structure-name {
+	color: gray;
+	text-decoration: none;
+}
+
+.structure img {
+	aspect-ratio: 1/1;
+	width: 100px;
+	margin-right: 2px;
+}
+
+.structure .flex-group {display: grid; align-items: center; }
+.structure .flex-column {flex-grow: 1; padding-inline: 2px;}
+.structure .structure-name {text-decoration: underline; white-space: nowrap;}
+.structure .structure-effect {font-size: 14px; flex-grow: 1;}
+
+.structure-group {
+	display: flex;
+	flex-direction: row;
+	gap: 2px;
+	justify-content: space-between;
+	padding: 2px;
+}
+
+/*
+	- - - UTILITY - - -
+*/
+
+.utility {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: row;
+	justify-content: space-evenly;
+	padding: 2px;
+	border: 1px solid rgba(255, 255, 255, 0.33);
+}
+
+.utility .utility-name {flex-grow: 1; padding: 4px; font-size: 12px; white-space: nowrap;}
+
+.utility[data-unlocked=false] {border-style: dashed;}
+.utility[data-unlocked=false] .button,
+.utility[data-unlocked=false] .utility-effect {
+	display: none;
+}
+.utility[data-unlocked=false] .utility-name {
+	color: gray;
+	text-decoration: none;
+}
+
+.utility img {
+	aspect-ratio: 1/1;
+	width: 50px;
+	margin-right: 2px;
+}
+
+#nav-bar, #bottom-bar {
+	height: 6vh;
+	padding: 4px;
+	border: 1px solid white;
+	display: flex;
+	flex-direction: row;
+	gap: 4px;
+}
+
+.nav-tab {
+	padding-inline: 12px;
+}
+.nav-tab[data-unlocked=false] {
+	color: gray;
+	cursor: default !important;
+	border: 1px dashed rgba(255, 255, 255, 0.66) !important;
+}
+
+#ui-grid-main {display: grid}
+
+#ui-grid-main {
+	height: calc(calc(100vh - 12vh) - 8px);
+	margin-top: 4px;
+	margin-bottom: 4px;
+	display: grid;
+	grid-template-columns: 2fr 5fr 3fr;
+	grid-template-rows: 1fr 1fr 100px;
+	grid-column-gap: 4px;
+	grid-row-gap: 4px;
+}
+
+#ui-grid-main > div {
+	padding: 4px;
+	border: 1px solid white;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+}
+
+#ui-grid-main .topleft { grid-area: 1 / 1 / 2 / 2; }
+#ui-grid-main .center { grid-area: 1 / 2 / 3 / 3; }
+#ui-grid-main .topright { grid-area: 1 / 3 / 3 / 4; background-color: var(--blackblue);}
+#ui-grid-main .left { grid-area: 2 / 1 / 4 / 2; }
+#ui-grid-main .bottom { grid-area: 3 / 2 / 4 / 4; } 
+
+#ui-grid-research {
+	height: calc(calc(100vh - 12vh) - 8px);
+	margin-top: 4px;
+	margin-bottom: 4px;
+	display: none;
+	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: repeat(5, 1fr);
+	grid-column-gap: 4px;
+	grid-row-gap: 4px;
+}
+
+#ui-grid-research > div {
+	padding: 4px;
+	border: 1px solid white;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+}
+
+#ui-grid-research .topleft { grid-area: 1 / 1 / 4 / 3; }
+#ui-grid-research .topright { grid-area: 1 / 3 / 4 / 6; }
+#ui-grid-research .bottom { grid-area: 4 / 1 / 6 / 6; }
+
+#research-tree-container {
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+#research-tree {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	flex-wrap: nowrap;
+	gap: 4px;
+	height: 100%;
+	background-color: var(--blackpurple);
+}
+
+.research-row {
+	flex-grow: 1;
+	display: flex;
+	flex-wrap: nowrap;
+	gap: 4px;
+}
+
+.research-node {
+	border: 1px solid rgba(255, 255, 255, 0.75);
+	border-radius: 4px;
+	flex-grow: 1;
+	align-self: center;
+	align-content: center;
+	display: grid;
+	height: 100%;
+}
+
+.research-node[data-available="true"] {
+	background-color: var(--purple);
+}
+
+.research-node:not(.empty):not([data-available="false"]):hover {
+	cursor: pointer;
+	background-color: var(--lightpurple);
+}
+.research-node:not(.empty):not([data-available="false"]):hover:active {
+	background-color: var(--darkpurple);
+}
+
+.research-node.empty {opacity: 0 !important;}
+.research-node[data-available="false"] {border: 1px dashed rgba(255, 255, 255, 0.25);}
+.research-node[data-available="false"] img {
+	opacity: 0.2 !important;
+	filter: blur(2px);
+}
+
+.research-node img {
+	aspect-ratio: 1/1;
+	margin-inline: auto;
+	width: 50px;
+}
+
+
+.button {
+	font-size: 16px;
+	border: 1px solid rgba(255, 255, 255, 0.66);
+	display: grid;
+	align-items: center;
+	text-align: center;
+
+	cursor: pointer;
+}
+
+.button:hover {border: 1px solid rgba(255, 255, 255, 0.85);}
+.button:hover:active {border: 1px solid rgba(255, 255, 255, 1);}
+
+.button-unlock {background-color: var(--green);}
+.button-unlock:hover, .button-unlock.toggled:hover, .button-unlock.toggled {background-color: var(--lightgreen);}
+.button-unlock:hover:active {
+	background-color: var(--darkgreen);
+	border: 1px solid rgba(255, 255, 255, 1);
+}
+
+.button-build {background-color: var(--blue);}
+.button-build:hover, .button-build.toggled:hover, .button-build.toggled {background-color: var(--lightblue);}
+.button-build:hover:active {
+	background-color: var(--darkblue);
+	border: 1px solid rgba(255, 255, 255, 1);
+}
+
+#game-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	height: 100%;
+	width: 100%;
+}
+
+.game-row {
+	display: flex;
+	flex-direction: row;
+	gap: 4px;
+
+	height: 20%;
+}
+
+.game-cell {
+	border: 1px solid rgba(255, 255, 255, 0.33);
+	width: 20%;
+	padding: 4px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.cell-type {
+	font-size: 17px;
+	color: gray;
+}
+.cell-locked {
+	font-size: 12px;
+}
+
+.game-cell[data-unlocked=false] {border-style: dashed; background-color: rgb(15, 15, 15);}
+.game-cell[data-unlocked=true] {border: 1px solid rgba(255, 255, 255, 0.85);}
+
+.game-cell[data-terrain] {
+	background-size: 64px !important;
+	image-rendering: pixelated;
+}
+
+.game-cell[data-terrain][data-unlocked=true] .cell-type {
+	color: white;
+}
+
+.game-cell[data-terrain="grassland"] {
+	background: url("./../assets/terrain/grassland.png")
+}
+
+.game-cell[data-terrain="grassland"][data-unlocked=false] {
+	background: linear-gradient(rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)), url("./../assets/terrain/grassland.png");
+}
+
+.game-cell[data-terrain="mountain"] {
+	background: url("./../assets/terrain/mountain.png")
+}
+
+.game-cell[data-terrain="mountain"][data-unlocked=false] {
+	background: linear-gradient(rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)), url("./../assets/terrain/mountain.png");
+}
+
+.game-cell[data-terrain="water"] {
+	background: url("./../assets/terrain/water.png")
+}
+
+.game-cell[data-terrain="water"][data-unlocked=false] {
+	background: linear-gradient(rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)), url("./../assets/terrain/water.png");
+}
+
+#custom-context {
+	position: absolute;
+	top: 0px;
+	left: -10000px;
+	border: 1px solid white;
+	background-color: rgba(255, 255, 255, 0.8);
+	width: 120px;
+}

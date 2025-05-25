@@ -1,0 +1,125 @@
+#hero-tooltip {
+    left: 450px;
+}
+
+#item-tooltip {
+    left: 25px;
+}
+
+.tooltip {
+    display: none;
+    z-index: 1000;
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    transform: translate(-50%, 32px);
+    padding: 8px;
+    background: linear-gradient(152deg, hsla(205, 100%, 25%, 75%) 0%, hsla(205, 100%, 15%, 75%) 100%);
+    border: 2px solid black;
+    border-radius: 16px;
+}
+
+.tooltip-header h1 {
+    padding-inline: 24px;
+}
+
+.tooltip-content {
+    justify-content: space-around;
+}
+
+.tooltip .hero-slot.selected,
+.tooltip .item-slot.selected {
+    margin: 16px;
+}
+
+.tooltip-footer {
+    justify-content: space-around !important;
+}
+
+.tooltip-footer .hero-badge {
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 58px;
+    padding: 4px;
+    aspect-ratio: 1/1 !important;
+    background: var(--secondary-gradient)
+}
+
+.hero-badge img.icon {
+    transform: translate(3px, 4px);
+    width: 40px;
+}
+
+
+
+#perk-selection-modal {
+    display: none;
+}
+
+.modal-backdrop {
+    display: none;
+}
+
+.modal {
+    z-index: 1000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 16px;
+    background: var(--primary-gradient-hover);
+    border: 2px solid black;
+    border-radius: 16px;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-header {}
+
+.modal-content {
+    flex-grow: 1;
+}
+
+.modal-footer {
+    justify-content: space-around !important;
+}
+
+
+
+#perk-selection-modal ul {
+    margin-top: 2px;
+    margin-bottom: 12px;
+    padding-inline: 16px;
+}
+
+#perk-selection-modal ul.ul-perks p {
+    color: rgb(255, 226, 151) !important;
+    white-space: nowrap;
+}
+
+#perk-selection-modal ul.ul-perks>li:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.2);
+    outline: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+#perk-selection-modal ul li {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    padding: 2px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+#perk-selection-modal ul li * {
+    font-size: 24px;
+}

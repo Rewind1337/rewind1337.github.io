@@ -1,0 +1,83 @@
+h1,
+h2 {
+    font-family: "Bangers", system-ui;
+    font-style: normal;
+}
+
+h3,
+h4,
+h5,
+h6,
+li,
+li p {
+    font-family: "Poetsen One", sans-serif;
+    font-style: normal;
+}
+
+*,
+p,
+a {
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+}
+
+h1 {
+    font-size: 48px;
+    font-weight: 400;
+    text-shadow: 0 0 12px black;
+}
+
+h2 {
+    font-size: 40px;
+    font-weight: 400;
+}
+
+h3 {
+    font-size: 32px;
+    font-weight: 400;
+    text-shadow: 0 0 8px black;
+}
+
+h4 {
+    font-size: 26px;
+    font-weight: 400;
+}
+
+h5 {
+    font-size: 20px;
+    text-shadow: 0 0 4px black;
+    font-weight: 400;
+}
+
+h6 {
+    font-size: 16px;
+    font-weight: 300;
+}
+
+p {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+bold {
+    font-weight: 600;
+}
+
+.font-bangers {
+    font-family: "Bangers", system-ui;
+}
+
+.font-poetson {
+    font-family: "Poetsen One", sans-serif;
+}
+
+.font-roboto {
+    font-family: "Roboto", sans-serif;
+}
