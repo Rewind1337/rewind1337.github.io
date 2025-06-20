@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<!-- meta -->
+<!-- meta -->
 	<title>Mobile Dungeon Toolkit</title>
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -12,7 +12,7 @@
 	<meta name="robots" content="index, follow">
 	<meta name="language" content="English">
 
-	<!-- css, fonts -->
+<!-- css, fonts -->
 	<link rel="stylesheet" href="./css/css.css">
 	<link rel="stylesheet" href="./css/utility.css">
 	<link rel="stylesheet" href="./css/page-grids.css">
@@ -22,14 +22,13 @@
 	<link rel="stylesheet" href="./css/heroes.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link
-		href="https://fonts.googleapis.com/css2?family=Bangers&family=Poetsen+One&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-		rel="stylesheet">
-	<link rel="stylesheet"
-		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=swords" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&family=Poetsen+One&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=swords" />
+	<link rel="stylesheet" href="./css/mobile.css">
+	<link rel="stylesheet" href="./css/breakpoints.css">
 	<link rel="stylesheet" href="./css/fonts.css">
 
-	<!-- share media -->
+<!-- share media -->
 	<meta property="og:title" content="Rewind1337's Github Index">
 	<meta property="og:type" content="website" />
 	<meta property="og:description" content="A Collection of things made by a dude">
@@ -38,11 +37,12 @@
 </head>
 
 <body>
-	<!-- page start -->
+
+<!-- page start -->
 	<div class="container" id="page-container">
 
-		<!-- top navigation bar -->
-		<div id="navbar">
+<!-- top navigation bar (DESKTOP) -->
+		<div id="desktop-navbar">
 			<div class="flex-first">v0.0</div>
 			<div class="flex-middle">
 				<h1 class="navbar-title">Mobile Dungeon Toolkit</h1>
@@ -50,11 +50,23 @@
 			<div class="flex-last"></div>
 		</div>
 
-		<!-- page center -->
+<!-- top navigation bar (MOBILE) -->
+		<div id="mobile-navbar">
+			<div class="flex-first flex-row">
+				<img class="logo" src="sprites/logo.png"/>
+				<h1 class="navbar-title">Mobile Dungeon Toolkit</h1>
+			</div>
+			<div class="flex-middle"></div>
+			<div class="flex-last"></div>
+		</div>
+
+<!-- page -->
 		<div class="container flex-center">
-			<!-- sidebar -->
-			<div id="sidebar" class="collapsed">
+
+<!-- sidebar (DESKTOP) -->
+			<div id="desktop-sidebar" class="collapsed">
 				<div class="flex-first">
+					<img class="logo" src="sprites/logo.png"/>
 					<h1 class="sidebar-title">Mobile Dungeon Toolkit</h1>
 					<h1 class="sidebar-title collapsed">MDT</h1>
 				</div>
@@ -112,8 +124,25 @@
 				<div class="flex-last"></div>
 			</div>
 
+<!-- bottom navigation bar (MOBILE) -->
+		<div id="mobile-sidebar">
+			<div class="flex-first">&nbsp;</div>
+			<div class="sidebar-buttons flex-middle">
+				<button data-target="heroes">
+					<p><img class="icon" src="images/hero.svg"/></p>
+				</button>
+				<button data-target="equipment">
+					<p><img class="icon" src="images/sword.svg"/></p>
+				</button>
+				<button data-target="teams">
+					<p><img class="icon" src="images/team.svg"/></p>
+				</button>
+			</div>
+			<div class="flex-last">&nbsp;</div>
+		</div>
 
-			<!-- page content landing page / overview -->
+
+<!-- page content landing page / overview -->
 			<div id="page-landing" class="page-content">
 				<div class="landing-guide">
 					<div class="fancy-header">
@@ -184,15 +213,17 @@
 			</div>
 
 
-			<!-- page content teams -->
+<!-- page content teams -->
 			<div id="page-teams" class="page-content">
 				teams
 			</div>
 
 
-			<!-- page content equipment -->
+<!-- page content equipment -->
 			<div id="page-equipment" class="page-content">
-				<div class="page-col items-col">
+
+<!-- item list / left column -->
+				<div id="items-col" class="page-col items-col">
 					<div class="col-header fancy-header">
 						<h1>Your Items</h1>
 					</div>
@@ -233,7 +264,9 @@
 						</div>
 					</div>
 				</div>
-				<div class="page-col selected-item-col">
+
+<!-- item view / right column -->
+				<div id="selected-item-col" class="page-col selected-item-col">
 					<div class="col-header fancy-header">
 						<h1>Selected Item</h1>
 					</div>
@@ -371,9 +404,10 @@
 			</div>
 
 
-			<!-- page content heroes -->
+<!-- page content heroes -->
 			<div id="page-heroes" class="page-content">
-				<!-- left hero column -->
+
+<!-- hero list / left column -->
 				<div id="heroes-col" class="page-col heroes-col">
 					<div class="col-header fancy-header">
 						<h1>Your Heroes</h1>
@@ -406,7 +440,8 @@
 						</div>
 					</div>
 				</div>
-				<!-- middle equipment column -->
+
+<!-- equipment / middle column -->
 				<div id="selected-hero-col" class="page-col selected-hero-col empty">
 					<div class="col-header fancy-header">
 						<h1>Selected Hero</h1>
@@ -510,7 +545,8 @@
 						</div>
 					</div>
 				</div>
-				<!-- right stats column -->
+
+<!-- stats / right column -->
 				<div id="stats-col" class="page-col stats-col empty">
 					<div class="col-header fancy-header">
 						<h1>Selected Hero Stats</h1>
@@ -636,7 +672,8 @@
 			</div>
 		</div>
 
-		<div id="footer" class="flex-row">
+<!-- page footer -->
+		<div id="footer" class="flex-row text-center">
 			<div>
 				<p>
 					<a>
@@ -674,6 +711,7 @@
 			</div>
 		</div>
 
+<!-- item tooltip -->
 		<div id="item-tooltip" class="tooltip">
 			<div class="tooltip-header">
 				<h1 class="fancy-header">Light Axe</h1>
@@ -700,6 +738,7 @@
 			</div>
 		</div>
 
+<!-- hero tooltip -->
 		<div id="hero-tooltip" class="tooltip">
 			<div class="tooltip-header">
 				<h1 class="fancy-header">Arachnotaur</h1>
@@ -720,6 +759,7 @@
 			</div>
 		</div>
 
+<!-- perk modal -->
 		<div class="modal-backdrop"></div>
 		<div id="perk-selection-modal" class="modal">
 			<div class="modal-header">
@@ -832,15 +872,14 @@
 			</div>
 		</div>
 	</div>
-	<!-- page end -->
+<!-- page end -->
 </body>
 
 <!-- scripts -->
 <script type="text/javascript" src="./js/enum.js"></script>
 <script type="text/javascript" src="./js/heroes.js"></script>
 <script type="text/javascript" src="./js/items.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-	integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script defer type="text/javascript" src="./js/main.js"></script>
 
 </html>

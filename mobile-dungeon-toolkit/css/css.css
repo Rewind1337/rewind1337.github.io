@@ -47,6 +47,12 @@ img.icon {
   width: 20px;
 }
 
+img.logo {
+  width: 100%;
+  max-width: 100px;
+  margin: auto;
+}
+
 .fancy-header {
   font-size: 36px;
   background: var(--secondary-gradient);
@@ -125,7 +131,7 @@ img.icon {
   flex-wrap: wrap;
   justify-content: flex-start;
   align-content: start;
-  height: calc(calc(100% - 192px));
+  height: calc(calc(100% - 120px));
 
   transition: height 0.125s ease, opacity 0.125s ease;
 }
@@ -146,10 +152,6 @@ img.icon {
   height: 0;
   opacity: 0;
   overflow: scroll;
-}
-
-.page-content.squished {
-  height: calc(100vh - 78px);
 }
 
 .saved-hero-row {
@@ -189,7 +191,7 @@ img.icon {
 }
 
 .items-col, .selected-item-col, .stats-col, .selected-hero-col, .heroes-col {
-  height: 91vh;
+  height: auto;
   overflow-y: auto;
 }
 

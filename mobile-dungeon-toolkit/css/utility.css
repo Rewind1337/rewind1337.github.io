@@ -14,9 +14,9 @@
     justify-content: center;
 }
 
-.flex-first {order: 0;}
-.flex-middle {order: 1;}
-.flex-last {order: 10000000;}
+.flex-first {order: 0; text-align: center; align-self: center;}
+.flex-middle {order: 1; text-align: center; align-self: center;}
+.flex-last {order: 10000000; text-align: center; align-self: center;}
 .flex-grow {flex-grow: 1; flex-basis: 125%;}
 .flex-center {align-items: center;}
 

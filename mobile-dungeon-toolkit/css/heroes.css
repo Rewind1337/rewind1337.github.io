@@ -35,7 +35,6 @@
 .hero-slot.selected {
     outline: 2px solid gold;
     scale: 1.05;
-    margin: 16px;
     align-self: center;
 }
 

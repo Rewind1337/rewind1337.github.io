@@ -36,19 +36,10 @@ $(document).ready(() => {
     console.log("items loaded")
 
     // sidebar 
-    $("#sidebar").hover(() => {
-        $("#sidebar").removeClass("collapsed")
+    $("#desktop-sidebar").hover(() => {
+        $("#desktop-sidebar").removeClass("collapsed")
     }, () => {
-        $("#sidebar").addClass("collapsed")
-    })
-
-    // navbar 
-    $("#navbar").hover(() => {
-        $("#sidebar").addClass("squished")
-        $(".page-content").addClass("squished")
-    }, () => {
-        $("#sidebar").removeClass("squished")
-        $(".page-content").removeClass("squished")
+        $("#desktop-sidebar").addClass("collapsed")
     })
 
     // tab switch buttons
@@ -284,6 +275,10 @@ $(document).ready(() => {
         }
         if (mouseX + width >= window.innerWidth) {
             $(tooltipId).css({ "transform": "translate(-110%, -50%)" })
+            return;
+        }
+        if (mouseX <= 150) {
+            $(tooltipId).css({ "transform": "translate(10%, -50%)" })
             return;
         }
         $(tooltipId).css({ "transform": "translate(-50%, 32px)" })

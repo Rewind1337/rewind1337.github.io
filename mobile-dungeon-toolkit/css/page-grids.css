@@ -57,10 +57,11 @@
 }
 
 
-#navbar {
+#desktop-navbar {
     display: flex;
     flex-direction: row;
     align-self: center;
+    align-content: center;
     justify-content: space-between;
     width: 100vw;
     height: 32px;
@@ -71,16 +72,12 @@
     transition: height 0.125s ease;
 }
 
-#navbar:hover {
-    height: 48px;
-}
-
 .navbar-title {
     font-size: 22px;
     white-space: nowrap;
 }
 
-#sidebar {
+#desktop-sidebar {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -94,15 +91,15 @@
     transition: width 0.125s ease, height 0.125s ease;
 }
 
-#sidebar.squished {
+#desktop-sidebar.squished {
     height: calc(100vh - 78px);
 }
 
-#sidebar.collapsed {
+#desktop-sidebar.collapsed {
     width: 120px;
 }
 
-#sidebar > * {
+#desktop-sidebar > * {
     width: 100%;
 }
 
@@ -115,22 +112,22 @@
     margin-bottom: 4px;
 }
 
-#sidebar > .flex-first {
+#desktop-sidebar > .flex-first {
     border-bottom: 2px solid black;
 }
 
-#sidebar h1,
-#sidebar p {
+#desktop-sidebar h1,
+#desktop-sidebar p {
     display: none;
 }
 
-#sidebar:not(.collapsed) h1:not(.collapsed),
-#sidebar:not(.collapsed) p:not(.collapsed) {
+#desktop-sidebar:not(.collapsed) h1:not(.collapsed),
+#desktop-sidebar:not(.collapsed) p:not(.collapsed) {
     display: block;
 }
 
-#sidebar.collapsed h1.collapsed,
-#sidebar.collapsed p.collapsed {
+#desktop-sidebar.collapsed h1.collapsed,
+#desktop-sidebar.collapsed p.collapsed {
     display: block;
 }
 
