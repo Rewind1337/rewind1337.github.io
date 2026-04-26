@@ -3,7 +3,8 @@ let viewportWidth = 1000;
 
 let global_timer;
 
-let firstTimeExpand = {a: false, b: false, c: false, d: false, e: false,
+let firstTimeExpand = {
+  a: false, b: false, c: false, d: false, e: false,
   typeOutA: function () {
     setTimeout(function () {
       typeOut("Placeholder", false, "#a-1-1");
@@ -52,33 +53,38 @@ let firstTimeExpand = {a: false, b: false, c: false, d: false, e: false,
 let gameList = {
   idleclicker: [],
   minigames: [],
-  simulations: [],
+  simulations: [
+    {
+      id: "mobile-dungeon-toolkit",
+      name: "Mobile Dungeon Toolkit",
+      link: "",
+    },
+    {
+      id: "sandbox",
+      name: "Particle Sandbox",
+      link: "",
+    },
+  ],
   other: [],
 };
 
 for (let cat in gameList) {
   for (let i = 0; i < gameList[cat].length; i++) {
     let game = gameList[cat][i];
-    game.link = "./pages/" + game.id + "/index.html";
+    game.link = "./" + game.id + "/index.html";
   }
 }
 
 let toolList = {
   design: [],
   function: [],
-  other: [
-    {
-      id: "literal-canvas",
-      name: "Literal Canvas",
-      link: "",
-    },
-  ],
+  other: [],
 };
 
 for (let cat in toolList) {
   for (let i = 0; i < toolList[cat].length; i++) {
     let tool = toolList[cat][i];
-    tool.link = "./pages/" + tool.id + "/index.html";
+    tool.link = "./" + tool.id + "/index.html";
   }
 }
 
@@ -88,33 +94,33 @@ $(document).ready(function () {
 
   $("section:not(.expanded)").find(".sec-expanded").hide();
 
-  $("#sec-a").delay(100).animate({"opacity": 1}, 500);
-  $("#sec-b").delay(200).animate({"opacity": 1}, 500);
-  $("#sec-c").delay(300).animate({"opacity": 1}, 500);
-  $("#sec-d").delay(400).animate({"opacity": 1}, 500);
-  $("#sec-e").delay(500).animate({"opacity": 1}, 500);
+  $("#sec-a").delay(100).animate({ "opacity": 1 }, 500);
+  $("#sec-b").delay(200).animate({ "opacity": 1 }, 500);
+  $("#sec-c").delay(300).animate({ "opacity": 1 }, 500);
+  $("#sec-d").delay(400).animate({ "opacity": 1 }, 500);
+  $("#sec-e").delay(500).animate({ "opacity": 1 }, 500);
 
-  $("#piz-a").delay(200).animate({"opacity": 1}, 500);
-  $("#piz-b").delay(300).animate({"opacity": 1}, 500);
-  $("#piz-c").delay(400).animate({"opacity": 1}, 500);
-  $("#piz-d").delay(500).animate({"opacity": 1}, 500);
-  $("#piz-e").delay(600).animate({"opacity": 1}, 500);
+  $("#piz-a").delay(200).animate({ "opacity": 1 }, 500);
+  $("#piz-b").delay(300).animate({ "opacity": 1 }, 500);
+  $("#piz-c").delay(400).animate({ "opacity": 1 }, 500);
+  $("#piz-d").delay(500).animate({ "opacity": 1 }, 500);
+  $("#piz-e").delay(600).animate({ "opacity": 1 }, 500);
 
-  setTimeout(function () {typeOut("Rewind's Github Index", true, "#title-a", 100)}, 300)
-  setTimeout(function () {typeOut("Game Corner", true, "#title-b", 120)}, 600)
-  setTimeout(function () {typeOut("Tool Box", true, "#title-c", 130)}, 900)
-  setTimeout(function () {typeOut("Contact Me", true, "#title-d", 140)}, 1200)
-  setTimeout(function () {typeOut("The End", true, "#title-e", 150)}, 1500)
+  setTimeout(function () { typeOut("Rewind's Github Index", true, "#title-a", 100) }, 300)
+  setTimeout(function () { typeOut("Game Corner", true, "#title-b", 120) }, 600)
+  setTimeout(function () { typeOut("Tool Box", true, "#title-c", 130) }, 900)
+  setTimeout(function () { typeOut("Contact Me", true, "#title-d", 140) }, 1200)
+  setTimeout(function () { typeOut("The End", true, "#title-e", 150) }, 1500)
 
-  setTimeout(function () {typeOut("- about me -", true, "#subtitle-a", 80)}, 750)
-  setTimeout(function () {typeOut("- all kinds of games -", true, "#subtitle-b", 80)}, 1050)
-  setTimeout(function () {typeOut("- tools and things -", true, "#subtitle-c", 80)}, 1350)
-  setTimeout(function () {typeOut("- jolly cooperation -", true, "#subtitle-d", 80)}, 1650)
-  setTimeout(function () {typeOut("- social links and more -", true, "#subtitle-e", 80)}, 1950)
-  
-  $("*").animate({"opacity": 1}, 200);
+  setTimeout(function () { typeOut("- about me -", true, "#subtitle-a", 80) }, 750)
+  setTimeout(function () { typeOut("- all kinds of games -", true, "#subtitle-b", 80) }, 1050)
+  setTimeout(function () { typeOut("- tools and things -", true, "#subtitle-c", 80) }, 1350)
+  setTimeout(function () { typeOut("- jolly cooperation -", true, "#subtitle-d", 80) }, 1650)
+  setTimeout(function () { typeOut("- social links and more -", true, "#subtitle-e", 80) }, 1950)
 
-  $("body").scroll(function () {updateScrolls();})
+  $("*").animate({ "opacity": 1 }, 200);
+
+  $("body").scroll(function () { updateScrolls(); })
 
   $("section").click(function () {
     sectionClick($(this));
@@ -128,7 +134,7 @@ $(document).ready(function () {
     // fill list, typeOut content from array
     let category = $(this).attr("data-category");
     if (gameList[category].length < 1) return;
-    
+
     $("#game-list").empty();
 
     for (let i = 0; i < gameList[category].length; i++) {
@@ -145,7 +151,11 @@ $(document).ready(function () {
       e.stopPropagation();
 
       //open link
+      let url = $(this).attr("data-url");
+      let bool = confirm()
+      if (!bool) return;
 
+      location = url;
     })
 
     $("#game-list").show();
@@ -201,7 +211,7 @@ $(document).ready(function () {
   })
 
   $(document).resize(function () {
-    let a = setInterval(function () {updateScrolls();}, 1)
+    let a = setInterval(function () { updateScrolls(); }, 1)
     setTimeout(function () {
       clearInterval(a);
     }, 1000)
@@ -212,46 +222,46 @@ $(document).ready(function () {
   };
 
   $("#piz-b").hover(function () {
-    $(this).css({"background-color": "var(--one-alt)"})
-    $("#sec-b").css({"background-color": "var(--one-alt)", "box-shadow": "0 0 0 100vmax var(--one-alt)"})
+    $(this).css({ "background-color": "var(--one-alt)" })
+    $("#sec-b").css({ "background-color": "var(--one-alt)", "box-shadow": "0 0 0 100vmax var(--one-alt)" })
   }, function () {
-    $(this).css({"background-color": "var(--one)"})
-    $("#sec-b").css({"background-color": "var(--one)", "box-shadow": "0 0 0 100vmax var(--one)"})
+    $(this).css({ "background-color": "var(--one)" })
+    $("#sec-b").css({ "background-color": "var(--one)", "box-shadow": "0 0 0 100vmax var(--one)" })
   }).click(function () {
     sectionClick("#sec-b");
   })
 
   $("#piz-c").hover(function () {
-    $(this).css({"background-color": "var(--two-alt)"})
-    $("#sec-c").css({"background-color": "var(--two-alt)", "box-shadow": "0 0 0 100vmax var(--two-alt)"})
+    $(this).css({ "background-color": "var(--two-alt)" })
+    $("#sec-c").css({ "background-color": "var(--two-alt)", "box-shadow": "0 0 0 100vmax var(--two-alt)" })
   }, function () {
-    $(this).css({"background-color": "var(--two)"})
-    $("#sec-c").css({"background-color": "var(--two)", "box-shadow": "0 0 0 100vmax var(--two)"})
+    $(this).css({ "background-color": "var(--two)" })
+    $("#sec-c").css({ "background-color": "var(--two)", "box-shadow": "0 0 0 100vmax var(--two)" })
   }).click(function () {
     sectionClick("#sec-c");
   })
 
   $("#piz-d").hover(function () {
-    $(this).css({"background-color": "var(--three-alt)"})
-    $("#sec-d").css({"background-color": "var(--three-alt)", "box-shadow": "0 0 0 100vmax var(--three-alt)"})
+    $(this).css({ "background-color": "var(--three-alt)" })
+    $("#sec-d").css({ "background-color": "var(--three-alt)", "box-shadow": "0 0 0 100vmax var(--three-alt)" })
   }, function () {
-    $(this).css({"background-color": "var(--three)"})
-    $("#sec-d").css({"background-color": "var(--three)", "box-shadow": "0 0 0 100vmax var(--three)"})
+    $(this).css({ "background-color": "var(--three)" })
+    $("#sec-d").css({ "background-color": "var(--three)", "box-shadow": "0 0 0 100vmax var(--three)" })
   }).click(function () {
     sectionClick("#sec-d");
   })
 
   $("#piz-e").hover(function () {
-    $(this).css({"background-color": "var(--four-alt)"})
-    $("#sec-e").css({"background-color": "var(--four-alt)", "box-shadow": "0 0 0 100vmax var(--four-alt)"})
+    $(this).css({ "background-color": "var(--four-alt)" })
+    $("#sec-e").css({ "background-color": "var(--four-alt)", "box-shadow": "0 0 0 100vmax var(--four-alt)" })
   }, function () {
-    $(this).css({"background-color": "var(--four)"})
-    $("#sec-e").css({"background-color": "var(--four)", "box-shadow": "0 0 0 100vmax var(--four)"})
+    $(this).css({ "background-color": "var(--four)" })
+    $("#sec-e").css({ "background-color": "var(--four)", "box-shadow": "0 0 0 100vmax var(--four)" })
   }).click(function () {
     sectionClick("#sec-e");
   })
 
-  let a = setInterval(function () {updateScrolls();}, 1)
+  let a = setInterval(function () { updateScrolls(); }, 1)
   setTimeout(function () {
     clearInterval(a);
   }, 1000)
@@ -266,16 +276,16 @@ function sectionClick(el) {
 
   if ($(that).attr("id") == "sec-d" && expanded == false) {
     let _h = $("#sec-d")[0].getBoundingClientRect().top;
-    $("body").css({"paddingBottom": _h + "px"})
+    $("body").css({ "paddingBottom": _h + "px" })
     setTimeout(function () {
-      $("body").css({"paddingBottom": "0"})
+      $("body").css({ "paddingBottom": "0" })
     }, 1000)
   }
 
   if ($(that).attr("id") == "sec-e" && expanded == false) {
-    $("body").css({"paddingBottom": "100vh"})
+    $("body").css({ "paddingBottom": "100vh" })
     setTimeout(function () {
-      $("body").css({"paddingBottom": "0"})
+      $("body").css({ "paddingBottom": "0" })
     }, 1000)
   }
 
@@ -287,27 +297,27 @@ function sectionClick(el) {
     let _offset = _t + _h;
     _offset = Math.abs(_offset);
 
-    $(that).find(".sec-expanded").show().css({"height": "calc(96vh - 300px)"});
+    $(that).find(".sec-expanded").show().css({ "height": "calc(96vh - 300px)" });
     $(that).addClass("expanded");
-    document.getElementById(href).scrollIntoView({behavior: 'smooth'});
+    document.getElementById(href).scrollIntoView({ behavior: 'smooth' });
 
     if (firstTimeExpand[_letter] == false) {
       switch (_letter) {
         case "a":
           firstTimeExpand.typeOutA();
-        break;
+          break;
         case "b":
           firstTimeExpand.typeOutB();
-        break;
+          break;
         case "c":
           firstTimeExpand.typeOutC();
-        break;
+          break;
         case "d":
           firstTimeExpand.typeOutD();
-        break;
+          break;
         case "e":
           firstTimeExpand.typeOutE();
-        break;
+          break;
       }
       firstTimeExpand[_letter] = true;
     }
@@ -315,31 +325,31 @@ function sectionClick(el) {
   } else {
     $(that).removeClass("expanded");
     global_timer = setTimeout(function () {
-      $(that).find(".sec-expanded").css({"display": "none", "height": "300px"})
+      $(that).find(".sec-expanded").css({ "display": "none", "height": "300px" })
     }, 1000)
   }
 
-  let a = setInterval(function () {updateScrolls();}, 1)
+  let a = setInterval(function () { updateScrolls(); }, 1)
   setTimeout(function () {
     clearInterval(a);
   }, 1000)
 }
 
-function updateScrolls () {
+function updateScrolls() {
   viewportHeight = window.innerHeight;
   viewportWidth = window.innerWidth;
 
   let b = $("#sec-b")[0].getBoundingClientRect().top
-  $("#piz-b").css({"height": Math.min(b, viewportHeight) + "px"})
+  $("#piz-b").css({ "height": Math.min(b, viewportHeight) + "px" })
 
   let c = $("#sec-c")[0].getBoundingClientRect().top
-  $("#piz-c").css({"height": Math.min(c, viewportHeight) + "px"})
+  $("#piz-c").css({ "height": Math.min(c, viewportHeight) + "px" })
 
   let d = $("#sec-d")[0].getBoundingClientRect().top
-  $("#piz-d").css({"height": Math.min(d, viewportHeight) + "px"})
+  $("#piz-d").css({ "height": Math.min(d, viewportHeight) + "px" })
 
   let e = $("#sec-e")[0].getBoundingClientRect().top
-  $("#piz-e").css({"height": Math.min(e, viewportHeight) + "px"})
+  $("#piz-e").css({ "height": Math.min(e, viewportHeight) + "px" })
 }
 
 function typeOut(word, spaceToNbsp = false, destination, speed) {
