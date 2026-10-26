@@ -1,0 +1,54 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page not found</title>
+</head>
+<body>
+  <main id="fallback">
+    <h1>404 — Page not found</h1>
+    <p>The requested page could not be found.</p>
+    <p><a href="/">Return to the homepage</a></p>
+  </main>
+
+  <script>
+    (async function () {
+      const path = window.location.pathname;
+      const appPath = "/mobile-dungeon-toolkit";
+
+      // Only use the Mobile Dungeon app for its own routes.
+      if (path !== appPath && !path.startsWith(appPath + "/")) {
+        return;
+      }
+
+      try {
+        // Fetch the current app entry point so asset filenames
+        // stay up to date when Vite generates a new build.
+        const response = await fetch(appPath + "/index.html");
+
+        if (!response.ok) {
+          throw new Error("Could not load the app entry point.");
+        }
+
+        const html = await response.text();
+
+        // Replace this 404 document with the app's HTML.
+        // The browser stays on the original requested URL,
+        // allowing React Router logic in App.jsx to handle it.
+        document.open();
+        document.write(html);
+        document.close();
+      } catch (error) {
+        document.getElementById("fallback").innerHTML = `
+          <h1>Unable to load Mobile Dungeon Toolkit</h1>
+          <p>Please try again or return to
+            <a href="${appPath}/">the app homepage</a>.
+          </p>
+        `;
+      }
+    })();
+  </script>
+</body>
+</html>
