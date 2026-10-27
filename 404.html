@@ -4,13 +4,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page not found</title>
+  <meta name="theme-color" content="#0b0b12">
+  <title>Loading Mobile Dungeon Toolkit...</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: #f3f0ff;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100dvh;
+      background: linear-gradient(-45deg, #140500, #020014, #000f14, #0d1400);
+      background-size: 400% 400%;
+      animation: gradient 150s ease-in-out infinite;
+      overflow: hidden;
+    }
+
+    body::after {
+      content: "";
+      background: url("/src/sprites/seagull.webp");
+      opacity: 0.33;
+      mix-blend-mode: multiply;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100vw;
+      aspect-ratio: 4/3;
+      animation: endlessScroll 60s linear infinite;
+      z-index: -1;
+    }
+
+@keyframes endlessScroll {
+  from {
+    width: 100vw;
+  }
+
+  to {
+    width: calc(100vw + 2320px);
+  }
+}
+
+    #fallback {
+      text-align: center;
+      padding: 32px 20px;
+    }
+
+    .loader {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto 24px;
+      border: 3px solid #383047;
+      border-top-color: #b49aff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.25rem, 4vw, 1.75rem);
+      font-weight: 650;
+      letter-spacing: -0.035em;
+    }
+
+    p {
+      margin: 10px 0 0;
+      color: #aaa2bd;
+      font-size: 0.95rem;
+    }
+
+    a {
+      color: #c4adff;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .loader {
+        animation: none;
+      }
+    }
+  </style>
 </head>
 <body>
   <main id="fallback">
-    <h1>404 — Page not found</h1>
-    <p>The requested page could not be found.</p>
-    <p><a href="/">Return to the homepage</a></p>
+    <div class="loader" aria-hidden="true"></div>
+    <h1>Mobile Dungeon Toolkit</h1>
+    <p>Preparing your adventure...</p>
   </main>
 
   <script>
@@ -18,14 +124,18 @@
       const path = window.location.pathname;
       const appPath = "/mobile-dungeon-toolkit";
 
-      // Only use the Mobile Dungeon app for its own routes.
+      // Only handle routes belonging to Mobile Dungeon Toolkit.
       if (path !== appPath && !path.startsWith(appPath + "/")) {
+        document.querySelector(".loader")?.remove();
+        document.querySelector("#fallback h1").textContent =
+          "Page unavailable";
+        document.querySelector("#fallback p").innerHTML =
+          'This page isn’t available. <a href="/">Return home</a>';
+        document.title = "Page unavailable";
         return;
       }
 
       try {
-        // Fetch the current app entry point so asset filenames
-        // stay up to date when Vite generates a new build.
         const response = await fetch(appPath + "/index.html");
 
         if (!response.ok) {
@@ -34,19 +144,16 @@
 
         const html = await response.text();
 
-        // Replace this 404 document with the app's HTML.
-        // The browser stays on the original requested URL,
-        // allowing React Router logic in App.jsx to handle it.
+        // Load the app while keeping the originally requested URL.
         document.open();
         document.write(html);
         document.close();
       } catch (error) {
-        document.getElementById("fallback").innerHTML = `
-          <h1>Unable to load Mobile Dungeon Toolkit</h1>
-          <p>Please try again or return to
-            <a href="${appPath}/">the app homepage</a>.
-          </p>
-        `;
+        document.querySelector(".loader")?.remove();
+        document.querySelector("#fallback h1").textContent =
+          "Something went wrong";
+        document.querySelector("#fallback p").innerHTML =
+          `We couldn’t load the toolkit. <a href="${appPath}/">Try again</a>`;
       }
     })();
   </script>
