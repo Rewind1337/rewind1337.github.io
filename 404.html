@@ -1,11 +1,11 @@
-
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0b0b12">
-  <title>Loading Mobile Dungeon Toolkit...</title>
+  <title>Loading application...</title>
 
   <style>
     :root {
@@ -27,20 +27,14 @@
 
     body {
       min-height: 100vh;
+      min-width: 320px;
       display: grid;
       place-items: center;
       overflow: hidden;
       color: #f3f0ff;
-    }
-
-    body {
-      margin: 0;
-      min-width: 320px;
-      min-height: 100dvh;
       background: linear-gradient(-45deg, #140500, #020014, #000f14, #0d1400);
       background-size: 400% 400%;
       animation: gradient 150s ease-in-out infinite;
-      overflow: hidden;
     }
 
     body::after {
@@ -57,15 +51,15 @@
       z-index: -1;
     }
 
-@keyframes endlessScroll {
-  from {
-    width: 100vw;
-  }
+    @keyframes endlessScroll {
+      from {
+        width: 100vw;
+      }
 
-  to {
-    width: calc(100vw + 2320px);
-  }
-}
+      to {
+        width: calc(100vw + 2320px);
+      }
+    }
 
     #fallback {
       text-align: center;
@@ -109,23 +103,43 @@
       .loader {
         animation: none;
       }
+
+      body,
+      body::after {
+        animation: none;
+      }
     }
   </style>
 </head>
+
 <body>
   <main id="fallback">
     <div class="loader" aria-hidden="true"></div>
-    <h1>Mobile Dungeon Toolkit</h1>
+    <h1>Loading application...</h1>
     <p>Preparing your adventure...</p>
   </main>
 
   <script>
     (async function () {
       const path = window.location.pathname;
-      const appPath = "/mobile-dungeon-toolkit";
 
-      // Only handle routes belonging to Mobile Dungeon Toolkit.
-      if (path !== appPath && !path.startsWith(appPath + "/")) {
+      const apps = [
+        {
+          path: "/mobile-dungeon-toolkit",
+          title: "Mobile Dungeon Toolkit",
+        },
+        {
+          path: "/idle-omnimancer",
+          title: "Omnimancer Idle",
+        },
+      ];
+
+      const app = apps.find(({ path: appPath }) =>
+        path === appPath || path.startsWith(appPath + "/")
+      );
+
+      // Only handle routes belonging to one of the hosted applications.
+      if (!app) {
         document.querySelector(".loader")?.remove();
         document.querySelector("#fallback h1").textContent =
           "Page unavailable";
@@ -135,8 +149,11 @@
         return;
       }
 
+      document.querySelector("#fallback h1").textContent = app.title;
+      document.title = `Loading ${app.title}...`;
+
       try {
-        const response = await fetch(appPath + "/index.html");
+        const response = await fetch(app.path + "/index.html");
 
         if (!response.ok) {
           throw new Error("Could not load the app entry point.");
@@ -153,9 +170,10 @@
         document.querySelector("#fallback h1").textContent =
           "Something went wrong";
         document.querySelector("#fallback p").innerHTML =
-          `We couldn’t load the toolkit. <a href="${appPath}/">Try again</a>`;
+          `We couldn’t load the application. <a href="${app.path}/">Try again</a>`;
       }
     })();
   </script>
 </body>
+
 </html>
